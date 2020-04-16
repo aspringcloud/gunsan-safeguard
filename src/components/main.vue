@@ -1,41 +1,47 @@
 <template>
   <div id="main">
-    
     <div class="main-header">
       <div>
-        <div class="header-title text-blue"><span class="text-blue">SpringGo</span> 안전요원</div>
+        <div class="header-title text-blue">
+          <span class="text-blue">SpringGo</span> 안전요원
+        </div>
       </div>
       <div class="header-right">
         <span>{{user.info.first_name}}</span>님 안녕하세요!
         <button @click="openSetting()">
-          <img src="setting.png" alt="setting button">
-          환경설정</button>
+          <img src="setting.png" alt="setting button" />
+          환경설정
+        </button>
         <button @click="logout()">
-          <img src="loggout.png" alt="logout button">
-          로그아웃</button>
+          <img src="loggout.png" alt="logout button" />
+          로그아웃
+        </button>
       </div>
       <div class="header-mobile">
-        <img @click="closeMobileSetting()" src="menu.png" alt="mobile menu">
+        <img @click="closeMobileSetting()" src="menu.png" alt="mobile menu" />
       </div>
     </div>
 
-    
     <div class="small-menu" v-if="openHam">
-      <div class="small-menu-title"><b>{{user.info.first_name}}</b> 님 안녕하세요</div>
+      <div class="small-menu-title">
+        <b>{{user.info.first_name}}</b> 님 안녕하세요
+      </div>
       <div class="small-menu-menus">
         <button @click="openSetting()">로그인 정보</button>
-        <button @click="openmobilepw()">비밀번호 변경 </button>
-        <button @click="logout()">로그아웃 </button>
+        <button @click="openmobilepw()">비밀번호 변경</button>
+        <button @click="logout()">로그아웃</button>
       </div>
     </div>
 
     <div class="mobile-setting-modal" v-if="sloginInfo">
       <div class="mobile-setting-modal-title">
-        <div>로그인 정보</div> 
-        <button @click="sloginInfo=false;"><img width="18px;" src="close.png" alt="close button"></button>
+        <div>로그인 정보</div>
+        <button @click="sloginInfo=false;">
+          <img width="18px;" src="close.png" alt="close button" />
+        </button>
       </div>
       <div class="setting-login-img">
-        <img src="profile.png" alt="user profile image">
+        <img src="profile.png" alt="user profile image" />
         <div>
           <div class="setting-username">{{user.info.last_name}} {{user.info.first_name}}</div>
           <button class="setting-btn">사진 변경하기</button>
@@ -52,87 +58,98 @@
         <div class="mobile-loginInfo-info">{{user.profile.level}}</div>
       </div>
     </div>
-    
+
     <div class="mobile-setting-modal" v-if="schangePw">
       <div class="mobile-setting-modal-title">
-        <div>비밀번호 변경</div> 
-        <button @click="schangePw=false;"><img width="18px;" src="close.png" alt="close button"></button>
+        <div>비밀번호 변경</div>
+        <button @click="schangePw=false;">
+          <img width="18px;" src="close.png" alt="close button" />
+        </button>
       </div>
       <div class="setting-content">
         <form class="setting-infos" @submit.prevent="resetPw">
           <label for="currentPw">현재 비밀번호</label>
-          <input id="currentPw" value="1234567890" disabled type="password" name="newPw">
+          <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
           <label for="newPw">새 비밀번호</label>
-          <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요.">
+          <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
           <label for="renewPw">새 비밀번호 확인</label>
-          <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요.">
+          <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
           <div v-if="errmsg" class="errmsg errmsg-pos">{{errmsg}}</div>
           <div v-if="successmsg" class="text-blue errmsg-pos">{{successmsg}}</div>
           <div class="setting-pwrule">
-            ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.<br>
-            ※ 비밀번호는 8글자 이상이어야 합니다.<br>
-            ※ 비밀번호는 숫자로만 입력은 불가능합니다.
+            ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
+            <br />※ 비밀번호는 8글자 이상이어야 합니다.
+            <br />※ 비밀번호는 숫자로만 입력은 불가능합니다.
           </div>
           <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
         </form>
       </div>
-
     </div>
 
-      <div v-if="isSetting" class="modalBox modalBox-setting">
-        <button class="setting-closebtn" @click="isSetting = false">
-          <img src="closebtn.png" alt="close button">
-        </button>
-        <div class="setting-tab">
-          <button class="setting-tab-login" :class="{'setting-activetab': loginInfo}" @click="loginInfo=true">로그인 정보</button>
-          <div class="setting-tab-divider"></div>
-          <button class="setting-tab-pw" :class="{'setting-activetab': !loginInfo}" @click="loginInfo=false">비밀번호 변경</button>
-        </div>
-        <div v-if="loginInfo" class="setting-content setting-loginInfo">
-          <div class="setting-login-img">
-            <img src="profile.png" alt="user profile image">
-            <div>
-              <div class="setting-username">{{user.info.last_name}} {{user.info.first_name}}</div>
-              <button class="setting-btn">사진 변경하기</button>
-            </div>
-          </div>
-          <div class="setting-infos">
-            <label for="email">이메일 ID</label>
-            <input name="email" type="text" :value="user.info.email" readonly>
-            <label for="team">팀</label>
-            <input name="team" type="text" :value="user.profile.team" readonly>
-            <label for="phone">휴대폰</label>
-            <input name="phone" type="text" :value="user.profile.phone" readonly>
-            <label for="auth">권한</label>
-            <input name="auth" type="text" :value="user.profile.level" readonly>
+    <div v-if="isSetting" class="modalBox modalBox-setting">
+      <button class="setting-closebtn" @click="isSetting = false">
+        <img src="closebtn.png" alt="close button" />
+      </button>
+      <div class="setting-tab">
+        <button
+          class="setting-tab-login"
+          :class="{'setting-activetab': loginInfo}"
+          @click="loginInfo=true"
+        >로그인 정보</button>
+        <div class="setting-tab-divider"></div>
+        <button
+          class="setting-tab-pw"
+          :class="{'setting-activetab': !loginInfo}"
+          @click="loginInfo=false"
+        >비밀번호 변경</button>
+      </div>
+      <div v-if="loginInfo" class="setting-content setting-loginInfo">
+        <div class="setting-login-img">
+          <img src="profile.png" alt="user profile image" />
+          <div>
+            <div class="setting-username">{{user.info.last_name}} {{user.info.first_name}}</div>
+            <button class="setting-btn">사진 변경하기</button>
           </div>
         </div>
-
-        <div v-if="!loginInfo" class="setting-content">
-          <form class="setting-infos" @submit.prevent="resetPw">
-            <label for="currentPw">현재 비밀번호</label>
-            <input id="currentPw" value="1234567890" disabled type="password" name="newPw">
-            <label for="newPw">새 비밀번호</label>
-            <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요.">
-            <label for="renewPw">새 비밀번호 확인</label>
-            <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요.">
-            <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
-            <div v-if="errmsg" class="errmsg errmsg-pos">{{errmsg}}</div>
-            <div v-if="successmsg" class="text-blue errmsg-pos">{{successmsg}}</div>
-          </form>
-          <div class="setting-pwrule">
-            ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.<br>
-            ※ 비밀번호는 8글자 이상이어야 합니다.<br>
-            ※ 비밀번호는 숫자로만 입력은 불가능합니다.
-          </div>
+        <div class="setting-infos">
+          <label for="email">이메일 ID</label>
+          <input name="email" type="text" :value="user.info.email" readonly />
+          <label for="team">팀</label>
+          <input name="team" type="text" :value="user.profile.team" readonly />
+          <label for="phone">휴대폰</label>
+          <input name="phone" type="text" :value="user.profile.phone" readonly />
+          <label for="auth">권한</label>
+          <input name="auth" type="text" :value="user.profile.level" readonly />
         </div>
       </div>
+
+      <div v-if="!loginInfo" class="setting-content">
+        <form class="setting-infos" @submit.prevent="resetPw">
+          <label for="currentPw">현재 비밀번호</label>
+          <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
+          <label for="newPw">새 비밀번호</label>
+          <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
+          <label for="renewPw">새 비밀번호 확인</label>
+          <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
+          <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
+          <div v-if="errmsg" class="errmsg errmsg-pos">{{errmsg}}</div>
+          <div v-if="successmsg" class="text-blue errmsg-pos">{{successmsg}}</div>
+        </form>
+        <div class="setting-pwrule">
+          ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
+          <br />※ 비밀번호는 8글자 이상이어야 합니다.
+          <br />※ 비밀번호는 숫자로만 입력은 불가능합니다.
+        </div>
+      </div>
+    </div>
 
     <div class="modal" v-if="isDash">
       <div class="modalBox modalBox-submit">
         <div class="modal-content">
           <div>차량</div>
-          <div class="modal-txt"><span class="text-blue" style="font-size: 24px;">{{selectedCar.name}}</span> 을 선택합니까?</div>
+          <div class="modal-txt">
+            <span class="text-blue" style="font-size: 24px;">{{selectedCar.name}}</span> 을 선택합니까?
+          </div>
         </div>
         <div class="modalBtn">
           <button class="modalBtn-cancel text-blue" @click="resetCar()">취소</button>
@@ -140,49 +157,64 @@
         </div>
       </div>
     </div>
-    
+
     <div class="selectCar" v-if="!dashboard">
-      <img src="shuttle.png" alt="shuttle image">
+      <img src="shuttle.png" alt="shuttle image" />
       <div>
-        <div class="selectCar-title">운행하시는 차량을<br> 선택해주세요.</div>
+        <div class="selectCar-title">
+          운행하시는 차량을
+          <br />선택해주세요.
+        </div>
         <select v-model="selectedCar" name="selectCar" id="selectCar">
-            <option value="">차량을 선택하세요.</option>
-            <option v-for="car in cars" :key="car.name" :value="car">{{car.name}}</option>
+          <option value>차량을 선택하세요.</option>
+          <option v-for="car in cars" :key="car.name" :value="car">{{car.name}}</option>
         </select>
       </div>
     </div>
 
     <div v-if="isSubmit" class="modal">
       <div class="modalBox modalBox-submit">
-        <div class="modal-content"> 
+        <div class="modal-content">
           <div>{{selectedCar.name}}</div>
-          <div class="modal-txt"><span>{{modalTitle}}</span> 변경하시겠습니까?</div>
+          <div class="modal-txt">
+            <span>{{modalTitle}}</span> 변경하시겠습니까?
+          </div>
         </div>
         <div class="modalBtn">
-            <button class="modalBtn-cancel text-blue" @click="isSubmit=false">취소</button>
-            <button class="modalBtn-save" @click="submitModal()">변경하기</button>
+          <button class="modalBtn-cancel text-blue" @click="isSubmit=false">취소</button>
+          <button class="modalBtn-save" @click="submitModal()">변경하기</button>
         </div>
       </div>
     </div>
 
     <div v-if="isMsg" class="modal">
-        <div class="modalBox modalBox-msg">
-          <div class="msg-content">
-            <div class="msg-title"><b>사이트</b> 통합관제 화면으로 전송</div>
-            <textarea @keydown="calcbyte()" @keyup="calcbyte" v-model="msgtxt" name="msgtxt" id="msgtxt" cols="30" rows="10"></textarea>
-            <div class="msg-byte">{{byte}}/200bytes</div>
+      <div class="modalBox modalBox-msg">
+        <div class="msg-content">
+          <div class="msg-title">
+            <b>사이트</b> 통합관제 화면으로 전송
           </div>
-          <div class="modalBtn">
-            <button class="modalBtn-cancel text-blue" @click="closeMsg()">취소</button>
-            <button class="modalBtn-save" @click="sendMsg()">보내기</button>
-          </div>
+          <textarea
+            @keydown="calcbyte()"
+            @keyup="calcbyte"
+            v-model="msgtxt"
+            name="msgtxt"
+            id="msgtxt"
+            cols="30"
+            rows="10"
+          ></textarea>
+          <div class="msg-byte">{{byte}}/200bytes</div>
         </div>
+        <div class="modalBtn">
+          <button class="modalBtn-cancel text-blue" @click="closeMsg()">취소</button>
+          <button class="modalBtn-save" @click="sendMsg()">보내기</button>
+        </div>
+      </div>
     </div>
 
     <div v-if="dashboard" class="main-board">
       <div class="board-left">
         <div class="carinfo">
-          <img src="shuttle2.png" alt="shuttle image">
+          <img src="shuttle2.png" alt="shuttle image" />
           <div class="mobile-clock" v-if="windowWidth<980">
             <div class="time">{{clock}}</div>
             <div class="date">{{today}}</div>
@@ -196,21 +228,37 @@
         <div v-if="windowWidth<980" class="mobile-firstContainer">
           <div class="mobile-carChange">
             <div class="info-title">차량</div>
-            <div class="carinfo-txt">{{selectedCar.name}} 
-              <a @click="carChange(selectedCar.name)">차량 변경하기</a> 
+            <div class="carinfo-txt">
+              {{selectedCar.name}}
+              <a @click="carChange(selectedCar.name)">차량 변경하기</a>
             </div>
           </div>
           <div class="mobile-power">
-            <img class="powerbtn" @click="powerOff()" v-if="isOn" src="mobile_poweron.png" alt="switchOFF button" >
-            <img class="powerbtn" @click="powerOn()" v-if="!isOn" src="mobile_poweroff.png" alt="switchOFF button" >
-            <div class="info-title">차량<br>전원</div>
+            <img
+              class="powerbtn"
+              @click="powerOff()"
+              v-if="isOn"
+              src="mobile_poweron.png"
+              alt="switchOFF button"
+            />
+            <img
+              class="powerbtn"
+              @click="powerOn()"
+              v-if="!isOn"
+              src="mobile_poweroff.png"
+              alt="switchOFF button"
+            />
+            <div class="info-title">
+              차량
+              <br />전원
+            </div>
           </div>
         </div>
         <div class="board-info">
           <div class="info-title">현재위치</div>
           <div class="info-txt">{{location}}</div>
         </div>
-        <div class="mobile-drivetime">  
+        <div class="mobile-drivetime">
           <div v-if="isOn" class="board-info">
             <div class="info-title">운행시간</div>
             <div class="info-txt">{{drivetime}}</div>
@@ -222,21 +270,32 @@
         </div>
         <div v-if="windowWidth>=980" class="board-info">
           <div class="info-title">차량 전원</div>
-          <img class="powerbtn" @click="powerOff()" v-if="isOn" src="switchOn.png" alt="switchOFF button" >
-          <img class="powerbtn" @click="powerOn()" v-if="!isOn" src="switchOff.png" alt="switchOFF button" >
+          <img
+            class="powerbtn"
+            @click="powerOff()"
+            v-if="isOn"
+            src="switchOn.png"
+            alt="switchOFF button"
+          />
+          <img
+            class="powerbtn"
+            @click="powerOn()"
+            v-if="!isOn"
+            src="switchOff.png"
+            alt="switchOFF button"
+          />
         </div>
       </div>
-    
 
       <div class="board-right">
-        <div v-if="windowWidth>=980"  class="datetime">
+        <div v-if="windowWidth>=980" class="datetime">
           <div class="time">{{clock}}</div>
           <div class="date">{{today}}</div>
         </div>
         <div class="board-info">
           <div class="info-title">메시지</div>
           <select v-model="msgTo" name="msgTo" id="msgTo">
-            <option value="">사이트 통합관제</option>
+            <option value>사이트 통합관제</option>
             <option v-for="center in centers" :key="center.name" :value="center">{{center.name}}</option>
           </select>
           <button v-if="windowWidth>=980" class="btn-outline msgTo-btn" @click="isMsg=true">보내기</button>
@@ -245,14 +304,16 @@
         <div class="board-info">
           <div class="info-title">탑승객 수</div>
           <div class="psnginfo">
-            <div class="psng-txt"><span>{{psng}}</span> 명</div>
+            <div class="psng-txt">
+              <span>{{psng}}</span> 명
+            </div>
             <div class="psng-cnt">
               <button class="btn-minus" @click="decrease()">
-                <img src="minus.png" alt="minus button">
+                <img src="minus.png" alt="minus button" />
               </button>
-              <input type="number" v-model="psngTemp">
+              <input type="number" v-model="psngTemp" />
               <button class="btn-plus" @click="increase()">
-                <img src="plus.png" alt="plus button">
+                <img src="plus.png" alt="plus button" />
               </button>
             </div>
             <button class="btn-outline psng-save" @click="savePsng()">저장</button>
@@ -278,135 +339,132 @@
 </template>
 
 <script>
-import axios from 'axios'
-import router from '../router'
+import axios from "axios";
+import router from "../router";
 
-const url = "http://115.93.143.2:9103/api/"; 
+const url = "http://115.93.143.2:9103/api/";
 
 export default {
-  name: 'Main',
+  name: "Main",
   data: () => ({
-    dashboard:false,
-    isDash:false,
-    newpw:'',
-    repw:'',
-    user: '',
-    errmsg:'',
-    headers : {
-      'accept' : 'application/json',
-      'authorization' : '',
-      'Content-Type' : 'application/json'
+    dashboard: false,
+    isDash: false,
+    newpw: "",
+    repw: "",
+    user: "",
+    errmsg: "",
+    headers: {
+      accept: "application/json",
+      authorization: "",
+      "Content-Type": "application/json"
     },
     isSetting: false,
     loginInfo: true,
-    sloginInfo:false,
-    schangePw:false,
+    sloginInfo: false,
+    schangePw: false,
     cars: [],
-    selectedCar: '',
-    date: '',
+    selectedCar: "",
+    date: "",
     isOn: 1,
     isSubmit: false,
-    lastOn: '-',
-    location: '경기도 안성시 죽산면 죽산리 343-1',
-    psng:0,
+    lastOn: "-",
+    location: "경기도 안성시 죽산면 죽산리 343-1",
+    psng: 0,
     isAuto: 1,
     isPark: 1,
     isMsg: false,
-    msgtxt:'',
-    modalTitle: '',
-    modalValue:'',
-    msgTo:'',
-    centers:[{name:'사이트 통합관제'}],
-    drivetime:'',
-    successmsg:'',
-    byte:0,
-    today:'',
-    clock:'',
-    openHam:false,
+    msgtxt: "",
+    modalTitle: "",
+    modalValue: "",
+    msgTo: "",
+    centers: [{ name: "사이트 통합관제" }],
+    drivetime: "",
+    successmsg: "",
+    byte: 0,
+    today: "",
+    clock: "",
+    openHam: false,
     windowWidth: 0,
     psngTemp: 0
-
   }),
-  beforeCreate () {
-    if(!this.$session.exists()){
-      router.push({name:'Login'});
+  beforeCreate() {
+    if (!this.$session.exists()) {
+      router.push({ name: "Login" });
     }
   },
-  created () {
-    if(this.$session.exists()) {
-      this.user = this.$session.get('user')
-      this.headers.authorization = 'Basic '+ this.user.basic
-      axios.get(url+'vehicles/', { headers: this.headers })
+  created() {
+    if (this.$session.exists()) {
+      this.user = this.$session.get("user");
+      this.headers.authorization = "Basic " + this.user.basic;
+      axios
+        .get(url + "vehicles/", { headers: this.headers })
         .then(res => {
           var infos = res.data;
-          for(let i = 0; i < infos.length; i++) {
-            this.cars.push({id:infos[i].id, name:infos[i].name});
+          for (let i = 0; i < infos.length; i++) {
+            this.cars.push({ id: infos[i].id, name: infos[i].name });
           }
-        }).catch(err => {
+        })
+        .catch(err => {
           console.log(err);
         });
     }
-    setInterval(this.showClock,1000);
+    setInterval(this.showClock, 1000);
     this.windowWidth = window.innerWidth;
-    console.log(this.windowWidth)
+    console.log(this.windowWidth);
   },
   watch: {
     clock: function() {
-      if(this.lastOn != '-'){
-        this.calcDrivetime(this.lastOn)
+      if (this.lastOn != "-") {
+        this.calcDrivetime(this.lastOn);
       }
     },
     selectedCar: function() {
-      if (this.selectedCar){
-        this.isDash = true;   
+      if (this.selectedCar) {
+        this.isDash = true;
       }
     },
     windowWidth: function() {
-      if(this.windowWidth<980) {
-        if(this.isSetting) {
-          if(this.loginInfo) {
+      if (this.windowWidth < 980) {
+        if (this.isSetting) {
+          if (this.loginInfo) {
             this.sloginInfo = true;
-          }
-          else {
+          } else {
             this.schangePw = true;
           }
         }
         this.isSetting = false;
       } else {
         this.openHam = false;
-        if(this.schangePw) {
+        if (this.schangePw) {
           this.schangePw = false;
           this.isSetting = true;
           this.loginInfo = false;
         }
-        if(this.sloginInfo) {
+        if (this.sloginInfo) {
           this.sloginInfo = false;
           this.isSetting = true;
           this.loginInfo = true;
         }
       }
     }
-    
   },
   mounted() {
     this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize);
-    })
+      window.addEventListener("resize", this.onResize);
+    });
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener("resize", this.onResize);
   },
   methods: {
     closeMobileSetting() {
-      if(this.sloginInfo) {
+      if (this.sloginInfo) {
         this.sloginInfo = false;
         return;
-      } 
-      else if(this.schangePw) {
+      } else if (this.schangePw) {
         this.schangePw = false;
         return;
-      }
-      else {
+      } else {
         this.openHam = !this.openHam;
       }
     },
@@ -414,358 +472,429 @@ export default {
       this.windowWidth = window.innerWidth;
     },
     openmobilepw() {
-      this.errmsg = '';
-      this.successmsg = '';
+      this.errmsg = "";
+      this.successmsg = "";
       this.schangePw = true;
       this.openHam = false;
       this.isModal = true;
     },
     resetCar() {
-      this.selectedCar = '';
+      this.selectedCar = "";
       this.isDash = false;
     },
     submitCar() {
-      axios.get(url+'vehicles/'+this.selectedCar.id, { headers: this.headers })
+      axios
+        .get(url + "vehicles/" + this.selectedCar.id, { headers: this.headers })
         .then(res => {
-          console.log('초기값',res.data)
+          console.log("초기값", res.data);
           this.psng = res.data.passenger;
           this.isOn = res.data.drive;
           this.isAuto = res.data.drive_mode;
-          if(!this.psng) this.psng = 0;
+          if (!this.psng) this.psng = 0;
           this.psngTemp = this.psng;
           this.isPark = res.data.isparked;
-          axios.get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
-          {headers:{
-            Authorization:"KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1"
-          }}).then(res => {
-            this.location = res.data.documents[0].address.address_name;
-          }).catch(err => {
-            console.log(err);
-            this.location = '서비스 에러'
-          })
+          axios
+            .get(
+              `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
+              {
+                headers: {
+                  Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1"
+                }
+              }
+            )
+            .then(res => {
+              this.location = res.data.documents[0].address.address_name;
+            })
+            .catch(err => {
+              console.log(err);
+              this.location = "서비스 에러";
+            });
 
-          this.location = res.data.lat + res.data.lon
-        }).catch(err => {
+          this.location = res.data.lat + res.data.lon;
+        })
+        .catch(err => {
           console.log(err);
         });
 
-        axios.get(url+'oplogs/', { headers: this.headers })
-          .then(res => {
-            const results = res.data.results;
-            var time = '';
-            for(let i = results.length-1; i>=0; i--){
-              if(results[i].vehicle==this.selectedCar.id && time < results[i].time_start){
-                time = results[i].time_start;
-              }
+      axios
+        .get(url + "oplogs/", { headers: this.headers })
+        .then(res => {
+          const results = res.data.results;
+          var time = "";
+          for (let i = results.length - 1; i >= 0; i--) {
+            if (
+              results[i].vehicle == this.selectedCar.id &&
+              time < results[i].time_start
+            ) {
+              time = results[i].time_start;
             }
-            if (time) {
-              time = time.split('-').join('/');
-              time = time.replace("T",' ');
-              time = time.replace('Z','');
-              this.lastOn = time;
-              this.calcDrivetime(time);
-            }
-            else {
-              this.lastOn = '-';
-              this.drivetime = '';
-            }
-          }).catch(err => {
-            console.log(err);
-          });
-          this.isDash = false;
-          this.dashboard = true;
+          }
+          if (time) {
+            time = time.split("-").join("/");
+            time = time.replace("T", " ");
+            time = time.replace("Z", "");
+            this.lastOn = time;
+            this.calcDrivetime(time);
+          } else {
+            this.lastOn = "-";
+            this.drivetime = "";
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      this.isDash = false;
+      this.dashboard = true;
     },
     addZeros(num, digit) {
-      var zero = '';
+      var zero = "";
       num = num.toString();
-      if(num.length < digit) {
-        for(var i=0;i<digit-num.length;i++) {
-          zero += '0';
+      if (num.length < digit) {
+        for (var i = 0; i < digit - num.length; i++) {
+          zero += "0";
         }
       }
       return zero + num;
     },
-    showClock () {
+    showClock() {
       var now = new Date();
       var day = now.getDay();
-      var week = ['일', '월', '화', '수', '목', '금', '토'];
-      this.today = now.getFullYear() + "/" + (now.getMonth()+1) + "/" + now.getDate() + ' ' + week[day] + '요일';
-      var nowH = this.addZeros(now.getHours(),2);
-      var nowMin = this.addZeros(now.getMinutes(),2);
-      var nowSec = this.addZeros(now.getSeconds(),2);
+      var week = ["일", "월", "화", "수", "목", "금", "토"];
+      this.today =
+        now.getFullYear() +
+        "/" +
+        (now.getMonth() + 1) +
+        "/" +
+        now.getDate() +
+        " " +
+        week[day] +
+        "요일";
+      var nowH = this.addZeros(now.getHours(), 2);
+      var nowMin = this.addZeros(now.getMinutes(), 2);
+      var nowSec = this.addZeros(now.getSeconds(), 2);
       this.clock = nowH + ":" + nowMin + ":" + nowSec;
     },
     calcDrivetime(time) {
       var timediff = new Date() - new Date(time);
-      var diffD = parseInt(timediff/86400000);
-      timediff%=86400000;
-      var diffH = parseInt(timediff/3600000);
-      timediff%=3600000;
-      var diffM = parseInt(timediff/60000);
+      var diffD = parseInt(timediff / 86400000);
+      timediff %= 86400000;
+      var diffH = parseInt(timediff / 3600000);
+      timediff %= 3600000;
+      var diffM = parseInt(timediff / 60000);
       this.drivetime = `${diffH}시간 ${diffM}분`;
-      if (diffD) this.drivetime = `${diffD}일 `+this.drivetime;
+      if (diffD) this.drivetime = `${diffD}일 ` + this.drivetime;
     },
-    calcbyte () {
+    calcbyte() {
       var b, i, c;
-      var s = this.msgtxt
-      var l = s.length
-      for(b=i=0;i<l;i++){
+      var s = this.msgtxt;
+      var l = s.length;
+      for (b = i = 0; i < l; i++) {
         c = s.charCodeAt(i);
-        b+=c>>11?3:c>>7?2:1;
-        if(b>200) {
-          this.msgtxt = s.substr(0,i);
-          this.byte = b-(c>>11?3:c>>7?2:1); 
-          alert('메세지는 200byte까지 입력 가능합니다.')
+        b += c >> 11 ? 3 : c >> 7 ? 2 : 1;
+        if (b > 200) {
+          this.msgtxt = s.substr(0, i);
+          this.byte = b - (c >> 11 ? 3 : c >> 7 ? 2 : 1);
+          alert("메세지는 200byte까지 입력 가능합니다.");
           return;
         }
-      this.byte=b;
+        this.byte = b;
       }
       this.byte = b;
     },
-    resetPw() { 
-      axios.post(url+'auth/password/change/',
-      { "new_password1" : this.newpw, 
-      "new_password2" : this.repw},{headers:this.headers})
-       .then(res => {
-         console.log(res.data)
-         this.errmsg = '';
-         this.successmsg = "새로운 비밀번호로 변경되었습니다."
-         var temp = this.$session.get('user');
-         temp.basic = btoa(this.user.info.email+":"+this.newpw);
-         this.$session.set('user', temp);
-         this.headers.authorization = 'Basic ' + this.$session.get('user').basic;
-         this.newpw = '';
-         this.repw = '';
-       }).catch(error => {
-         console.log(error.response.data)
-         var err = error.response.data.new_password2[0];
-         if (err=='This password is too short. It must contain at least 8 characters.'){
-           this.errmsg = '8글자 이상의 비밀번호를 입력하세요.'
-         } else if(err=="The two password fields didn't match."){
-           this.errmsg = "두 개의 비밀번호가 일치하지 않습니다."
-         } else if (err=="This field may not be blank.") {
-           this.errmsg = '비밀번호를 입력해주세요.'
-         } else if (err=="This password is too common.") {
-           this.errmsg = '평범하지 않은 비밀번호를 입력하세요.'
-         } else if(err=="This password is entirely numeric."){
-           this.errmsg = '비밀번호에 숫자 외의 문자를 포함하세요.'
-         } else if(err=="The password is too similar to the email address.") {
-           this.errmsg = "비밀번호가 이메일ID와 너무 유사합니다."
-         } else if(err=="The password is too similar to the username.") {
-           this.errmsg = "비밀번호가 사용자 이름과 너무 유사합니다."
-         } else {
-           console.log(this.errmsg)
-         }
-       })
-    },
-    
-    logout () {
-      axios.post(url+'auth/logout/')
-       .then(res => {
-         console.log(res.data)
-         this.$session.destroy();
-         router.push({name:'Login'});
-       }).catch(err => {
-         console.log(err);
-       });
+    resetPw() {
+      axios
+        .post(
+          url + "auth/password/change/",
+          { new_password1: this.newpw, new_password2: this.repw },
+          { headers: this.headers }
+        )
+        .then(res => {
+          console.log(res.data);
+          this.errmsg = "";
+          this.successmsg = "새로운 비밀번호로 변경되었습니다.";
+          var temp = this.$session.get("user");
+          temp.basic = btoa(this.user.info.email + ":" + this.newpw);
+          this.$session.set("user", temp);
+          this.headers.authorization =
+            "Basic " + this.$session.get("user").basic;
+          this.newpw = "";
+          this.repw = "";
+        })
+        .catch(error => {
+          console.log(error.response.data);
+          var err = error.response.data.new_password2[0];
+          if (
+            err ==
+            "This password is too short. It must contain at least 8 characters."
+          ) {
+            this.errmsg = "8글자 이상의 비밀번호를 입력하세요.";
+          } else if (err == "The two password fields didn't match.") {
+            this.errmsg = "두 개의 비밀번호가 일치하지 않습니다.";
+          } else if (err == "This field may not be blank.") {
+            this.errmsg = "비밀번호를 입력해주세요.";
+          } else if (err == "This password is too common.") {
+            this.errmsg = "평범하지 않은 비밀번호를 입력하세요.";
+          } else if (err == "This password is entirely numeric.") {
+            this.errmsg = "비밀번호에 숫자 외의 문자를 포함하세요.";
+          } else if (
+            err == "The password is too similar to the email address."
+          ) {
+            this.errmsg = "비밀번호가 이메일ID와 너무 유사합니다.";
+          } else if (err == "The password is too similar to the username.") {
+            this.errmsg = "비밀번호가 사용자 이름과 너무 유사합니다.";
+          } else {
+            console.log(this.errmsg);
+          }
+        });
     },
 
-    getTime () {
+    logout() {
+      axios
+        .post(url + "auth/logout/")
+        .then(res => {
+          console.log(res.data);
+          this.$session.destroy();
+          router.push({ name: "Login" });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+
+    getTime() {
       var date = new Date();
-      var timeString = date.getHours() + "시 " + date.getMinutes() + "분 " + date.getSeconds() + "초"
-      var dateString = date.getFullYear() + "년 " + date.getMonth() + "월 " + date.getDate() + "일 " 
+      var timeString =
+        date.getHours() +
+        "시 " +
+        date.getMinutes() +
+        "분 " +
+        date.getSeconds() +
+        "초";
+      var dateString =
+        date.getFullYear() +
+        "년 " +
+        date.getMonth() +
+        "월 " +
+        date.getDate() +
+        "일 ";
       return timeString + dateString;
-
     },
 
-    carChange () {
-      this.modalTitle = '차량';
+    carChange() {
+      this.modalTitle = "차량";
       this.modalValue = this.selectedCar.name;
       this.isSubmit = true;
     },
-    openSetting () {
-      if(!this.user.profile){
-        axios.get(url+'users/'+this.user.info.pk, {headers:this.headers})
-          .then( res => {
+    openSetting() {
+      if (!this.user.profile) {
+        axios
+          .get(url + "users/" + this.user.info.pk, { headers: this.headers })
+          .then(res => {
             this.user.profile = res.data.profile;
-            if(this.windowWidth < 980) {
+            if (this.windowWidth < 980) {
               this.sloginInfo = true;
               this.openHam = false;
-            }
-            else {
+            } else {
               this.isSetting = true;
               this.loginInfo = true;
-              this.errmsg = '';
-              this.successmsg='';
+              this.errmsg = "";
+              this.successmsg = "";
             }
-        }).catch(err => {
-          alert(err, '사용자 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.')
-        })
-      }
-      else {
-        if(this.windowWidth < 980) {
+          })
+          .catch(err => {
+            alert(
+              err,
+              "사용자 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요."
+            );
+          });
+      } else {
+        if (this.windowWidth < 980) {
           this.sloginInfo = true;
           this.openHam = false;
-        }
-        else {
+        } else {
           this.loginInfo = true;
           this.isSetting = true;
-          this.errmsg='';
-          this.successmsg = '';
+          this.errmsg = "";
+          this.successmsg = "";
         }
       }
     },
-    submitModal () {
-        if (this.modalTitle=='차량') {
-            this.selectedCar='';
-            this.dashboard = false;
-            this.isSubmit=false;
-        }
-        else if (this.modalTitle=='전원') {
-          axios.patch(url+'vehicles/'+this.selectedCar.id+'/', {"drive" : !this.isOn}, {headers:this.headers})
-            .then( res => {
-              this.isOn = res.data.drive
-            }).catch(err => {
-              console.log(err);
-              alert(err + '\n문제가 발생하였습니다. 다시 시도해주세요.')
-            })
-          this.isSubmit = false;
-        }
-        else if (this.modalTitle=='주행모드') {
-          if(this.isAuto==1){
-            axios.patch(url+'vehicles/'+this.selectedCar.id+'/', {"drive_mode" : 2 }, {headers:this.headers})
-            .then( res => {
-              console.log(res)
+    submitModal() {
+      if (this.modalTitle == "차량") {
+        this.selectedCar = "";
+        this.dashboard = false;
+        this.isSubmit = false;
+      } else if (this.modalTitle == "전원") {
+        axios
+          .patch(
+            url + "vehicles/" + this.selectedCar.id + "/",
+            { drive: !this.isOn },
+            { headers: this.headers }
+          )
+          .then(res => {
+            this.isOn = res.data.drive;
+          })
+          .catch(err => {
+            console.log(err);
+            alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
+          });
+        this.isSubmit = false;
+      } else if (this.modalTitle == "주행모드") {
+        if (this.isAuto == 1) {
+          axios
+            .patch(
+              url + "vehicles/" + this.selectedCar.id + "/",
+              { drive_mode: 2 },
+              { headers: this.headers }
+            )
+            .then(res => {
+              console.log(res);
               this.isAuto = res.data.drive_mode;
-            }).catch(err => {
-              console.log(err);
-              alert(err + '\n문제가 발생하였습니다. 다시 시도해주세요.')
             })
-          }
-          else if(this.isAuto==2){
-            axios.patch(url+'vehicles/'+this.selectedCar.id+'/', {"drive_mode" : 1 }, {headers:this.headers})
-            .then( res => {
-              console.log(res.data)
+            .catch(err => {
+              console.log(err);
+              alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
+            });
+        } else if (this.isAuto == 2) {
+          axios
+            .patch(
+              url + "vehicles/" + this.selectedCar.id + "/",
+              { drive_mode: 1 },
+              { headers: this.headers }
+            )
+            .then(res => {
+              console.log(res.data);
               this.isAuto = res.data.drive_mode;
-            }).catch(err => {
-              console.log(err);
-              alert(err + '\n문제가 발생하였습니다. 다시 시도해주세요.')
-              })
-          }
-          this.isSubmit = false;
-        }
-        else {
-          axios.patch(url+'vehicles/'+this.selectedCar.id+'/', {"isparked" : !this.ispark }, {headers:this.headers})
-            .then( res => {
-              console.log(res)
-              this.isPark = res.data.isparked;
-              alert('patch isparked param 추가 필요')
-            }).catch(err => {
-              console.log(err);
-              alert(err + '\n문제가 발생하였습니다. 다시 시도해주세요.')
-              
             })
-            this.isSubmit = false;
+            .catch(err => {
+              console.log(err);
+              alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
+            });
         }
+        this.isSubmit = false;
+      } else {
+        axios
+          .patch(
+            url + "vehicles/" + this.selectedCar.id + "/",
+            { isparked: !this.ispark },
+            { headers: this.headers }
+          )
+          .then(res => {
+            console.log(res);
+            this.isPark = res.data.isparked;
+            alert("patch isparked param 추가 필요");
+          })
+          .catch(err => {
+            console.log(err);
+            alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
+          });
+        this.isSubmit = false;
+      }
     },
 
-    powerOn () {
+    powerOn() {
       if (this.isOn) return;
       else {
         this.isSubmit = true;
-        this.modalTitle = '전원';
-        this.modalValue = 'ON'; 
+        this.modalTitle = "전원";
+        this.modalValue = "ON";
       }
     },
 
-    powerOff () {
+    powerOff() {
       if (!this.isOn) return;
       else {
         this.isSubmit = true;
-        this.modalTitle = '전원';
-        this.modalValue='OFF';
+        this.modalTitle = "전원";
+        this.modalValue = "OFF";
       }
     },
 
-    savePsng () {
-      if(this.psngTemp >= 2147483847) {
-        alert('탑승객 수를 확인해주세요.')
-        this.psngTemp = this.psng
+    savePsng() {
+      if (this.psngTemp >= 2147483847) {
+        alert("탑승객 수를 확인해주세요.");
+        this.psngTemp = this.psng;
         return;
       }
-      axios.patch(url+'vehicles/'+this.selectedCar.id+'/', {"passenger" : this.psngTemp}, {headers:this.headers})
-        .then( res => {
-          this.psng = res.data.passenger
-      }).catch(err => {
+      axios
+        .patch(
+          url + "vehicles/" + this.selectedCar.id + "/",
+          { passenger: this.psngTemp },
+          { headers: this.headers }
+        )
+        .then(res => {
+          this.psng = res.data.passenger;
+        })
+        .catch(err => {
           console.log(err);
-          alert(err + '\n문제가 발생하였습니다. 다시 시도해주세요.')
-      })
+          alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
+        });
     },
 
-    autoOn () {
-      if (this.isAuto==2) {
+    autoOn() {
+      if (this.isAuto == 2) {
         this.isSubmit = true;
-        this.modalTitle = '주행모드';
-        this.modalValue = '자동주행';
+        this.modalTitle = "주행모드";
+        this.modalValue = "자동주행";
       }
     },
 
-    autoOff () {
-      if (this.isAuto==1) {
+    autoOff() {
+      if (this.isAuto == 1) {
         this.isSubmit = true;
-        this.modalTitle = '주행모드';
-        this.modalValue = '수동주행';
+        this.modalTitle = "주행모드";
+        this.modalValue = "수동주행";
       }
     },
 
-    parkOn () {
-      if(this.isPark) return;
+    parkOn() {
+      if (this.isPark) return;
       else {
         this.isSubmit = true;
-        this.modalTitle = '주차여부';
-        this.modalValue = '예';
+        this.modalTitle = "주차여부";
+        this.modalValue = "예";
       }
     },
 
-    parkOff () {
-      if(!this.isPark) return;
+    parkOff() {
+      if (!this.isPark) return;
       else {
         this.isSubmit = true;
-        this.modalTitle = '주차여부';
-        this.modalValue = '아니오';
+        this.modalTitle = "주차여부";
+        this.modalValue = "아니오";
       }
     },
-    
-    decrease () {
+
+    decrease() {
       this.psngTemp = parseInt(this.psngTemp);
-      if (this.psngTemp>0) {
+      if (this.psngTemp > 0) {
         this.psngTemp -= 1;
       }
     },
-    increase () {
+    increase() {
       this.psngTemp = parseInt(this.psngTemp);
-      if(this.psngTemp < 2147483847){
+      if (this.psngTemp < 2147483847) {
         this.psngTemp += 1;
-      } else alert('입력값이 초과되었습니다.')
+      } else alert("입력값이 초과되었습니다.");
     },
 
-    sendMsg () {
-      if(!this.msgtxt) {
-        alert('메세지를 입력해주세요.');
+    sendMsg() {
+      if (!this.msgtxt) {
+        alert("메세지를 입력해주세요.");
         return;
       }
-      alert('메세지 기획 필요');
+      alert("메세지 기획 필요");
       this.isMsg = false;
       this.byte = 0;
-      this.msgtxt = '';
+      this.msgtxt = "";
     },
     closeMsg() {
       this.isMsg = false;
       this.byte = 0;
-      this.msgtxt = '';
-    },
+      this.msgtxt = "";
+    }
   }
-}
+};
 </script>
 
  <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -787,7 +916,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   height: 68px;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   padding: 0 36px;
   box-shadow: 0px 0.5px 0px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(27.1828px);
@@ -799,15 +928,15 @@ export default {
 .header-title span {
   font-weight: 800;
   font-size: 24px;
-  font-family: 'NanumSquareRound',sans-serif;
+  font-family: "NanumSquareRound", sans-serif;
 }
 .header-right {
   display: inline-flex;
   align-items: center;
 }
-.header-right button{
+.header-right button {
   border: none;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   margin-left: 26px;
   display: inline-flex;
   align-items: center;
@@ -823,7 +952,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top:186px; 
+  margin-top: 186px;
 }
 .selectCar img {
   margin-top: 34px;
@@ -839,16 +968,16 @@ export default {
   cursor: pointer;
 }
 #selectCar {
-   width: 302px;
-   border: 1px solid #E0E0E0;
-   border-left: none;
-   border-right: none;
-   background-color: transparent;
-   height: 44px;
-   font-size: 16px;
-   color: #828282;
-   padding-left:10px;
-   background: url('../../public/dropdown.png') no-repeat 95% 50%;
+  width: 302px;
+  border: 1px solid #e0e0e0;
+  border-left: none;
+  border-right: none;
+  background-color: transparent;
+  height: 44px;
+  font-size: 16px;
+  color: #828282;
+  padding-left: 10px;
+  background: url("../../public/dropdown.png") no-repeat 95% 50%;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -901,26 +1030,27 @@ export default {
   margin-bottom: 49px;
 }
 .powerbtn {
-  cursor:pointer;
+  cursor: pointer;
   margin-left: 92px;
 }
 .errmsg {
-  color: #EB5757;
+  color: #eb5757;
 }
 .modal {
   position: fixed;
   width: 100%;
   height: 100%;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2;
 }
 .modalBox {
-  background-color: #FFFFFF;
-  box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 24px 38px rgba(0, 0, 0, 0.14);
+  background-color: #ffffff;
+  box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12),
+    0px 24px 38px rgba(0, 0, 0, 0.14);
 }
 .modalBox-msg {
   border-radius: 2px;
@@ -936,14 +1066,14 @@ export default {
   margin-bottom: 26px;
   color: #333333;
   width: 463px;
-  margin-top:40px;
+  margin-top: 40px;
 }
 .msg-content textarea {
   border: none;
   width: 463px;
   height: 148px;
-  background: #FAFAFA;
-  box-shadow: inset -5px -5px 30px #FFFFFF, inset 4px 4px 8px #EDEDED;
+  background: #fafafa;
+  box-shadow: inset -5px -5px 30px #ffffff, inset 4px 4px 8px #ededed;
   border-radius: 4px;
   resize: none;
   font-size: 18px;
@@ -957,7 +1087,7 @@ export default {
   text-align: end;
 }
 .modalBox-setting {
-  z-index:2;
+  z-index: 2;
   border-radius: 14px;
   height: 500px;
   width: 383px;
@@ -983,26 +1113,26 @@ export default {
   margin-bottom: 15px;
 }
 .setting-btn {
-  border: 1px solid #3BBAE2;
+  border: 1px solid #3bbae2;
   border-radius: 4px;
-  color: #3BBAE2;
+  color: #3bbae2;
   font-size: 14px;
   background: transparent;
   width: 117px;
   height: 40px;
 }
 .setting-btn:active {
-  color: #FFFFFF;
-  background-color: #38BAE2;
+  color: #ffffff;
+  background-color: #38bae2;
 }
-.setting-tab button{
-  background: #F3F3F3;
+.setting-tab button {
+  background: #f3f3f3;
   border: none;
   font-size: 18px;
   width: 192px;
 }
-.setting-tab-login{
-  border-radius: 14px 0 0 0 ;
+.setting-tab-login {
+  border-radius: 14px 0 0 0;
 }
 .setting-tab-divider {
   width: 1px;
@@ -1012,7 +1142,7 @@ export default {
   border-radius: 0 14px 0 0;
 }
 .setting-activetab {
-  color: #3BBAE2;
+  color: #3bbae2;
   font-weight: bold;
 }
 .setting-login-img {
@@ -1024,7 +1154,7 @@ export default {
 }
 .setting-content {
   padding-top: 30px;
-  width:100%;
+  width: 100%;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -1044,11 +1174,11 @@ export default {
   margin-top: 30px;
 }
 #currentPw {
-  background: #BDBDBD;
+  background: #bdbdbd;
   color: #666666;
 }
 .rspw-btn-pos {
-  margin-top:43px;
+  margin-top: 43px;
   align-self: flex-end;
 }
 .setting-infos label {
@@ -1058,14 +1188,14 @@ export default {
 }
 .setting-infos input {
   width: 268px;
-  background-color: #F8F8F8;
-  border: 0.2px solid #E0E0E0;
+  background-color: #f8f8f8;
+  border: 0.2px solid #e0e0e0;
   border-radius: 2px;
   height: 30px;
   padding-left: 20px;
 }
 .setting-infos input::placeholder {
-  color: #BDBDBD;
+  color: #bdbdbd;
 }
 .modalBox-submit {
   border-radius: 2px;
@@ -1085,7 +1215,7 @@ export default {
 }
 .modalBtn button {
   border: none;
-  border-top: 0.5px solid #3BBAE2;
+  border-top: 0.5px solid #3bbae2;
   width: 50%;
   height: 61px;
   font-size: 18px;
@@ -1097,14 +1227,13 @@ export default {
   font-weight: bold;
 }
 .modalBtn-cancel {
-  background:#FFFFFF;
+  background: #ffffff;
   border-radius: 0px 0px 0px 2px;
 }
 .modalBtn-save {
-  background-color: #3BBAE2;;
+  background-color: #3bbae2;
   color: white;
   border-radius: 0px 0px 2px 0px;
-
 }
 .datetime {
   margin-top: 7px;
@@ -1129,7 +1258,7 @@ export default {
   padding-left: 16px;
   font-size: 16px;
   margin-left: 58px;
-  background: url('../../public/chevron_right.png') no-repeat 90% 50%;
+  background: url("../../public/chevron_right.png") no-repeat 90% 50%;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -1144,9 +1273,9 @@ export default {
   display: flex;
   margin-left: 28px;
 }
-.psng-cnt button{ 
+.psng-cnt button {
   border: none;
-  background: #F4F4F4;
+  background: #f4f4f4;
   width: 44px;
   height: 43px;
 }
@@ -1177,7 +1306,7 @@ export default {
   margin-left: -44px;
   font-weight: bold;
   font-size: 18px;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   border: none;
@@ -1188,14 +1317,14 @@ export default {
 }
 .btn-outline {
   border: 0.5px solid #828282;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   font-weight: 500;
   font-size: 14px;
 }
 .btn-outline:active {
-  background: #3BBAE2;
-  border-color: #3BBAE2;
-  color: #FFFFFF;
+  background: #3bbae2;
+  border-color: #3bbae2;
+  color: #ffffff;
 }
 .psng-save {
   margin-left: 20px;
@@ -1218,15 +1347,15 @@ export default {
 }
 
 .btnActive {
-  background: #3BBAE2;
-  color: #FFFFFF;
+  background: #3bbae2;
+  color: #ffffff;
 }
 
-@media(max-width:979px) {
+@media (max-width: 979px) {
   #selectCar {
     width: 312px;
     text-align-last: center;
-    background: url('../../public/dropdown.png') no-repeat 80% 50%;
+    background: url("../../public/dropdown.png") no-repeat 80% 50%;
   }
   .header-mobile {
     display: block;
@@ -1237,8 +1366,9 @@ export default {
     right: 0;
     width: 162px;
     height: 249px;
-    background-color: #FFFFFF;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
+    background-color: #ffffff;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12),
+      0px 0px 2px rgba(0, 0, 0, 0.14);
     padding: 20px;
   }
   .small-menu-title {
@@ -1258,7 +1388,7 @@ export default {
     border: none;
     width: 100%;
     padding-right: 15px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
   .small-menu-menus button:active {
     background-color: rgba(0, 0, 0, 0.1);
@@ -1281,7 +1411,7 @@ export default {
     text-align: center;
   }
   .selectCar img {
-    width:234.29px;
+    width: 234.29px;
     margin: 0 0 53.8px 0;
   }
   .selectCar-title {
@@ -1301,12 +1431,13 @@ export default {
     z-index: 2;
     color: #333333;
     font-size: 13px;
-    background: #FFFFFF;
+    background: #ffffff;
     position: fixed;
     width: 312px;
     height: 410px;
     right: 0;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12),
+      0px 0px 2px rgba(0, 0, 0, 0.14);
   }
   .mobile-setting-modal-title {
     display: flex;
@@ -1371,11 +1502,11 @@ export default {
   /* Dash board */
   .main-board {
     flex-direction: column;
-    margin :0;
+    margin: 0;
     padding-top: 20px;
     align-items: center;
   }
-  .board-left{
+  .board-left {
     margin: 0;
     width: 312px;
   }
@@ -1421,7 +1552,7 @@ export default {
   .carinfo-txt a {
     text-decoration-line: underline;
     font-size: 13px;
-    color: #3BBAE2;
+    color: #3bbae2;
     cursor: pointer;
   }
   .mobile-power {
@@ -1451,14 +1582,14 @@ export default {
     width: 150px;
     height: 35px;
     font-size: 14px;
-    margin-left: 0; 
+    margin-left: 0;
     margin-bottom: 6px;
   }
   .msgTo-btn {
     width: 122px;
     height: 35px;
     margin-left: 40px;
-    color: #4F4F4F;
+    color: #4f4f4f;
   }
   .psnginfo {
     margin-left: 61px;
@@ -1488,10 +1619,10 @@ export default {
     border-radius: 17.5px;
     width: 48px;
     height: 35px;
-    color: #4F4F4F;
+    color: #4f4f4f;
   }
   .info-btngroup {
-    margin:0;
+    margin: 0;
     display: flex;
     justify-content: space-evenly;
     padding: 0 10px;
@@ -1521,7 +1652,5 @@ export default {
   .msg-byte {
     width: 272px;
   }
-
 }
-
 </style>
