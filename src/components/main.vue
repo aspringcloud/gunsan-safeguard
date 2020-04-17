@@ -1421,7 +1421,7 @@ export default {
   .selectCar {
     flex-direction: column;
     width: 312px;
-    margin: 58px auto 0 auto;
+    margin: 114px auto 0 auto;
     align-items: center;
     text-align: center;
   }
