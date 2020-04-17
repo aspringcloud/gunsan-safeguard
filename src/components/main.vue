@@ -999,6 +999,7 @@ export default {
 .info-txt {
   height: 26.5px;
   width: 100%;
+  min-width: 126px;
   padding-left: 52px;
   font-size: 18px;
   color: #333333;
@@ -1284,15 +1285,22 @@ export default {
 }
 .psnginfo {
   display: flex;
-  /* margin-left: 58px; */
   justify-content: flex-end;
   align-items: center;
 }
 .psng-txt {
   font-size: 24px;
+  display: flex;
+  align-items: center;
 }
 .psng-txt span {
   font-weight: bold;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 78px;
+  margin-right: 2px;
 }
 .btn-minus {
   z-index: 1;
@@ -1575,6 +1583,7 @@ export default {
     margin: 0;
   }
   .info-txt {
+    padding: 0;
     margin: 0;
     font-size: 14px;
   }
@@ -1599,9 +1608,6 @@ export default {
     margin-left: 40px;
     color: #4f4f4f;
   }
-  .psnginfo {
-    margin-left: 61px;
-  }
   .psng-txt {
     font-size: 18px;
     margin-right: 22px;
@@ -1617,6 +1623,7 @@ export default {
     width: 96px;
     height: 35px;
     margin-left: -33px;
+    padding-left: 5px;
   }
   .btn-plus {
     margin-left: -30px;
