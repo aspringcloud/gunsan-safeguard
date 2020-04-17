@@ -259,7 +259,7 @@
           <div class="info-txt">{{location}}</div>
         </div>
         <div class="mobile-drivetime">
-          <div v-if="isOn" class="board-info">
+          <div class="board-info">
             <div class="info-title">운행시간</div>
             <div class="info-txt">{{drivetime}}</div>
           </div>
@@ -367,7 +367,7 @@ export default {
     date: "",
     isOn: 1,
     isSubmit: false,
-    lastOn: "-",
+    lastOn: " ",
     location: "경기도 안성시 죽산면 죽산리 343-1",
     psng: 0,
     isAuto: 1,
@@ -378,7 +378,7 @@ export default {
     modalValue: "",
     msgTo: "",
     centers: [{ name: "사이트 통합관제" }],
-    drivetime: "",
+    drivetime: " ",
     successmsg: "",
     byte: 0,
     today: "",
@@ -414,7 +414,7 @@ export default {
   },
   watch: {
     clock: function() {
-      if (this.lastOn != "-") {
+      if (this.drivetime != " ") {
         this.calcDrivetime(this.lastOn);
       }
     },
@@ -536,8 +536,8 @@ export default {
             this.lastOn = time;
             this.calcDrivetime(time);
           } else {
-            this.lastOn = "-";
-            this.drivetime = "";
+            this.lastOn = " ";
+            this.drivetime = " ";
           }
         })
         .catch(err => {
@@ -575,14 +575,17 @@ export default {
       this.clock = nowH + ":" + nowMin + ":" + nowSec;
     },
     calcDrivetime(time) {
-      var timediff = new Date() - new Date(time);
-      var diffD = parseInt(timediff / 86400000);
-      timediff %= 86400000;
-      var diffH = parseInt(timediff / 3600000);
-      timediff %= 3600000;
-      var diffM = parseInt(timediff / 60000);
-      this.drivetime = `${diffH}시간 ${diffM}분`;
-      if (diffD) this.drivetime = `${diffD}일 ` + this.drivetime;
+      if (!this.isOn || !this.lastOn) return;
+      else {
+        var timediff = new Date() - new Date(time);
+        var diffD = parseInt(timediff / 86400000);
+        timediff %= 86400000;
+        var diffH = parseInt(timediff / 3600000);
+        timediff %= 3600000;
+        var diffM = parseInt(timediff / 60000);
+        this.drivetime = `${diffH}시간 ${diffM}분`;
+        if (diffD) this.drivetime = `${diffD}일 ` + this.drivetime;
+      }
     },
     calcbyte() {
       var b, i, c;
@@ -899,20 +902,17 @@ export default {
 
  <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.modal-back {
-  width: 100%;
-  background-color: red;
-  height: 90%;
-  position: fixed;
-  top: 10%;
-  left: 0;
-  z-index: 1;
+#main {
+  margin-top: 101px;
 }
 .small-menu {
   display: none;
 }
 .main-header {
+  position: fixed;
+  top: 0;
   display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   height: 68px;
@@ -997,7 +997,9 @@ export default {
   margin-bottom: 19px;
 }
 .info-txt {
-  margin-left: 52px;
+  height: 26.5px;
+  width: 100%;
+  padding-left: 52px;
   font-size: 18px;
   color: #333333;
 }
@@ -1091,7 +1093,8 @@ export default {
   border-radius: 14px;
   height: 500px;
   width: 383px;
-  position: absolute;
+  position: fixed;
+  top: 68px;
   right: 100px;
 }
 .setting-closebtn {
@@ -1352,6 +1355,9 @@ export default {
 }
 
 @media (max-width: 979px) {
+  #main {
+    margin-top: 76px;
+  }
   #selectCar {
     width: 312px;
     text-align-last: center;
@@ -1363,6 +1369,7 @@ export default {
   .small-menu {
     display: block;
     position: fixed;
+    top: 56px;
     right: 0;
     width: 162px;
     height: 249px;
@@ -1433,6 +1440,7 @@ export default {
     font-size: 13px;
     background: #ffffff;
     position: fixed;
+    top: 56px;
     width: 312px;
     height: 410px;
     right: 0;
