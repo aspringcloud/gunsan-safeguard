@@ -493,43 +493,39 @@ export default {
           if (!this.psng) this.psng = 0;
           this.psngTemp = this.psng;
           this.isPark = res.data.isparked;
-          axios
-            .get(
-              `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
-              {
-                headers: {
-                  Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1"
+          if (res.data.lon && res.data.lat) {
+            axios
+              .get(
+                `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
+                {
+                  headers: {
+                    Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1"
+                  }
                 }
-              }
-            )
-            .then(res => {
-              this.location = res.data.documents[0].address.address_name;
-            })
-            .catch(err => {
-              console.log(err);
-              this.location = "서비스 에러";
-            });
-
-          this.location = res.data.lat + res.data.lon;
+              )
+              .then(res => {
+                this.location = res.data.documents[0].address.address_name;
+              })
+              .catch(err => {
+                console.log(err);
+                this.location = "서비스 에러";
+              });
+          } else {
+            this.location = "위치정보 없음";
+          }
         })
         .catch(err => {
           console.log(err);
         });
 
       axios
-        .get(url + "oplogs/", { headers: this.headers })
+        .get(url + "oplogs/vehicle/" + this.selectedCar.id, {
+          headers: this.headers
+        })
         .then(res => {
-          const results = res.data.results;
-          var time = "";
-          for (let i = results.length - 1; i >= 0; i--) {
-            if (
-              results[i].vehicle == this.selectedCar.id &&
-              time < results[i].time_start
-            ) {
-              time = results[i].time_start;
-            }
-          }
-          if (time) {
+          var i = res.data.length;
+          if (i) {
+            var time = res.data[i - 1].time_start;
             time = time.split("-").join("/");
             time = time.replace("T", " ");
             time = time.replace("Z", "");
@@ -779,13 +775,11 @@ export default {
         axios
           .patch(
             url + "vehicles/" + this.selectedCar.id + "/",
-            { isparked: !this.ispark },
+            { isparked: !this.isPark },
             { headers: this.headers }
           )
           .then(res => {
-            console.log(res);
             this.isPark = res.data.isparked;
-            alert("patch isparked param 추가 필요");
           })
           .catch(err => {
             console.log(err);
