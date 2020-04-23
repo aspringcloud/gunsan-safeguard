@@ -34,7 +34,7 @@
       {{errmsg2}}
     </div>
     <div class="join">
-      본 서비스 가입을 위해서는
+      ※ 본 서비스 가입을 위해서는
       <a href="mailto:bcchoi@aspringcloud.com">bcchoi@aspringcloud.com</a>으로
       <br />이메일주소, 이름, 소속, 사진, 전화번호를 보내주시기 바랍니다.
     </div>
