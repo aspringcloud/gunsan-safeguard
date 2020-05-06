@@ -265,7 +265,8 @@ input[id="saveID"]:checked + label:before {
   margin-left: auto;
   text-align: center;
 }
-@media (max-width: 979px) {
+/* 모바일 */
+@media (max-width: 600px) {
   .login-logos {
     margin-top: 71px;
   }
@@ -286,7 +287,6 @@ input[id="saveID"]:checked + label:before {
     margin-top: 51px;
   }
   .login-chkandpw {
-    top: 445px;
     width: 311px;
     font-size: 13px;
     top: 455px;
@@ -307,6 +307,52 @@ input[id="saveID"]:checked + label:before {
     font-size: 10px;
     margin-bottom: 14px;
     width: 311px;
+  }
+}
+/* 태블릿 세로 */
+@media (min-width: 601px) and (max-width: 960px) {
+  .login-logos {
+    margin-top: 200px;
+  }
+  .login-title2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  .login-form input {
+    width: 420px;
+    height: 44px;
+  }
+  .login-btn {
+    width: 420px;
+    height: 56px;
+    font-weight: normal;
+  }
+  .login-btn-pos {
+    margin-top: 77px;
+  }
+  .login-chkandpw {
+    top: 532px;
+    width: 420px;
+    font-size: 13px;
+  }
+  .login-chkbox {
+    font-weight: normal;
+  }
+  .login-errmsg {
+    top: 661px;
+    width: 420px;
+    font-size: 13px;
+  }
+  .join {
+    top: 847px;
+    font-size: 14px;
+    width: 420px;
+  }
+  .copyright {
+    top: 903px;
+    font-size: 14px;
+    width: 420px;
+    margin-bottom: 39px;
   }
 }
 </style>

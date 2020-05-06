@@ -168,7 +168,7 @@ export default {
 .resetpw2-btn-pos {
   margin-top: 144px;
 }
-@media (max-width: 979px) {
+@media (max-width: 600px) {
   .btn-back {
     top: 21px;
     left: 24px;
@@ -213,6 +213,12 @@ export default {
   }
   .resetpw2-btn-pos {
     margin-top: 224px;
+  }
+
+  @media (min-width: 601px) and (max-width: 960px) {
+    .btn-back {
+      top: 60px;
+    }
   }
 }
 </style>
