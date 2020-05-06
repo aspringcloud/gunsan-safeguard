@@ -214,11 +214,31 @@ export default {
   .resetpw2-btn-pos {
     margin-top: 224px;
   }
+}
 
-  @media (min-width: 601px) and (max-width: 960px) {
-    .btn-back {
-      top: 60px;
-    }
+@media (min-width: 601px) and (max-width: 960px) {
+  .btn-back {
+    top: 60px;
+    width: 25px;
+    height: 25px;
+  }
+  .resetpw-title1 {
+    margin-top: 89px;
+  }
+  .resetpw-title2 {
+    margin-bottom: 125px;
+  }
+  .resetpw-txt {
+    width: 420px;
+  }
+  .resetpw-btn-pos {
+    margin-top: 54px;
+  }
+  .resetpw2-txt {
+    margin-top: 75px;
+  }
+  .resetpw2-btn-pos {
+    margin-top: 164px;
   }
 }
 </style>
