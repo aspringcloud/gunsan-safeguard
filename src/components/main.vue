@@ -86,59 +86,62 @@
       </div>
     </div>
 
-    <div v-if="isSetting" class="modalBox modalBox-setting">
-      <button class="setting-closebtn" @click="isSetting = false">
-        <img src="closebtn.png" alt="close button" />
-      </button>
-      <div class="setting-tab">
-        <button
-          class="setting-tab-login"
-          :class="{'setting-activetab': loginInfo}"
-          @click="loginInfo=true"
-        >로그인 정보</button>
-        <div class="setting-tab-divider"></div>
-        <button
-          class="setting-tab-pw"
-          :class="{'setting-activetab': !loginInfo}"
-          @click="loginInfo=false"
-        >비밀번호 변경</button>
-      </div>
-      <div v-if="loginInfo" class="setting-content setting-loginInfo">
-        <div class="setting-login-img">
-          <img src="profile.png" alt="user profile image" />
-          <div>
-            <div class="setting-username">{{user.info.last_name}} {{user.info.first_name}}</div>
-            <button class="setting-btn">사진 변경하기</button>
+    <div v-if="isSetting">
+      <div class="modal-back" v-if="600<windowWidth<961"></div>
+      <div class="modalBox modalBox-setting">
+        <button class="setting-closebtn" @click="isSetting = false">
+          <img src="closebtn.png" alt="close button" />
+        </button>
+        <div class="setting-tab">
+          <button
+            class="setting-tab-login"
+            :class="{'setting-activetab': loginInfo}"
+            @click="loginInfo=true"
+          >로그인 정보</button>
+          <div class="setting-tab-divider"></div>
+          <button
+            class="setting-tab-pw"
+            :class="{'setting-activetab': !loginInfo}"
+            @click="loginInfo=false"
+          >비밀번호 변경</button>
+        </div>
+        <div v-if="loginInfo" class="setting-content setting-loginInfo">
+          <div class="setting-login-img">
+            <img src="profile.png" alt="user profile image" />
+            <div>
+              <div class="setting-username">{{user.info.last_name}} {{user.info.first_name}}</div>
+              <button class="setting-btn">사진 변경하기</button>
+            </div>
+          </div>
+          <div class="setting-infos">
+            <label for="email">이메일 ID</label>
+            <input name="email" type="text" :value="user.info.email" readonly />
+            <label for="team">팀</label>
+            <input name="team" type="text" :value="user.profile.team" readonly />
+            <label for="phone">휴대폰</label>
+            <input name="phone" type="text" :value="user.profile.phone" readonly />
+            <label for="auth">권한</label>
+            <input name="auth" type="text" :value="user.profile.level" readonly />
           </div>
         </div>
-        <div class="setting-infos">
-          <label for="email">이메일 ID</label>
-          <input name="email" type="text" :value="user.info.email" readonly />
-          <label for="team">팀</label>
-          <input name="team" type="text" :value="user.profile.team" readonly />
-          <label for="phone">휴대폰</label>
-          <input name="phone" type="text" :value="user.profile.phone" readonly />
-          <label for="auth">권한</label>
-          <input name="auth" type="text" :value="user.profile.level" readonly />
-        </div>
-      </div>
 
-      <div v-if="!loginInfo" class="setting-content">
-        <form class="setting-infos" @submit.prevent="resetPw">
-          <label for="currentPw">현재 비밀번호</label>
-          <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
-          <label for="newPw">새 비밀번호</label>
-          <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
-          <label for="renewPw">새 비밀번호 확인</label>
-          <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
-          <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
-          <div v-if="errmsg" class="errmsg errmsg-pos">{{errmsg}}</div>
-          <div v-if="successmsg" class="text-blue errmsg-pos">{{successmsg}}</div>
-        </form>
-        <div class="setting-pwrule">
-          ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
-          <br />※ 비밀번호는 8글자 이상이어야 합니다.
-          <br />※ 비밀번호는 숫자로만 입력은 불가능합니다.
+        <div v-if="!loginInfo" class="setting-content">
+          <form class="setting-infos" @submit.prevent="resetPw">
+            <label for="currentPw">현재 비밀번호</label>
+            <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
+            <label for="newPw">새 비밀번호</label>
+            <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
+            <label for="renewPw">새 비밀번호 확인</label>
+            <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
+            <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
+            <div v-if="errmsg" class="errmsg errmsg-pos">{{errmsg}}</div>
+            <div v-if="successmsg" class="text-blue errmsg-pos">{{successmsg}}</div>
+          </form>
+          <div class="setting-pwrule">
+            ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
+            <br />※ 비밀번호는 8글자 이상이어야 합니다.
+            <br />※ 비밀번호는 숫자로만 입력은 불가능합니다.
+          </div>
         </div>
       </div>
     </div>
@@ -424,7 +427,7 @@ export default {
       }
     },
     windowWidth: function() {
-      if (this.windowWidth < 980) {
+      if (this.windowWidth < 601) {
         if (this.isSetting) {
           if (this.loginInfo) {
             this.sloginInfo = true;
@@ -690,7 +693,7 @@ export default {
           .get(url + "users/" + this.user.info.pk, { headers: this.headers })
           .then(res => {
             this.user.profile = res.data.profile;
-            if (this.windowWidth < 980) {
+            if (this.windowWidth < 601) {
               this.sloginInfo = true;
               this.openHam = false;
             } else {
@@ -707,7 +710,7 @@ export default {
             );
           });
       } else {
-        if (this.windowWidth < 980) {
+        if (this.windowWidth < 601) {
           this.sloginInfo = true;
           this.openHam = false;
         } else {
@@ -1356,7 +1359,7 @@ export default {
   color: #ffffff;
 }
 
-@media (max-width: 979px) {
+@media (max-width: 600px) {
   #main {
     margin-top: 76px;
   }
@@ -1660,6 +1663,38 @@ export default {
   }
   .msg-byte {
     width: 272px;
+  }
+}
+@media (min-width: 601px) and (max-width: 960px) {
+  .selectCar {
+    flex-direction: column;
+    /* width: 312px; */
+    margin-top: 235px;
+    align-items: center;
+    text-align: center;
+  }
+  .selectCar img {
+    height: 208px;
+    margin: 0;
+  }
+  .selectCar-title {
+    margin-top: 70px;
+    margin-bottom: 68px;
+  }
+  .modalBox-setting {
+    margin: 0 auto;
+    top: 219px;
+    left: 0;
+    right: 0;
+  }
+  .modal-back {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
   }
 }
 </style>
