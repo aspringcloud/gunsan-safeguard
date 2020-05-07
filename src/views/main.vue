@@ -1,5 +1,6 @@
 <template>
   <div id="main">
+    <!-- Header -->
     <div class="main-header">
       <div>
         <div class="header-title text-blue">
@@ -22,6 +23,7 @@
       </div>
     </div>
 
+    <!-- 햄버거 메뉴 오픈 -->
     <div class="small-menu" v-if="openHam">
       <div class="small-menu-title">
         <b>{{user.info.first_name}}</b> 님 안녕하세요
@@ -33,6 +35,7 @@
       </div>
     </div>
 
+    <!-- 모바일버전 로그인정보 모달-->
     <div class="mobile-setting-modal" v-if="sloginInfo">
       <div class="mobile-setting-modal-title">
         <div>로그인 정보</div>
@@ -59,6 +62,7 @@
       </div>
     </div>
 
+    <!-- 모바일버전 비밀번호 변경 모달-->
     <div class="mobile-setting-modal" v-if="schangePw">
       <div class="mobile-setting-modal-title">
         <div>비밀번호 변경</div>
@@ -86,8 +90,9 @@
       </div>
     </div>
 
+    <!-- 태블릿,PC버전 환경설정 모달 -->
     <div v-if="isSetting">
-      <div class="modal-back" v-if="600<windowWidth<961"></div>
+      <div class="modal-back" v-if="600<windowWidth && windowWidth<=960"></div>
       <div class="modalBox modalBox-setting">
         <button class="setting-closebtn" @click="isSetting = false">
           <img src="closebtn.png" alt="close button" />
@@ -146,6 +151,10 @@
       </div>
     </div>
 
+    <!-- <modal v-if="isDash" :selectedCar="selectedCar" :title="false" @close="resetCar">
+      <slot>gd</slot>
+    </modal>-->
+
     <div class="modal" v-if="isDash">
       <div class="modalBox modalBox-submit">
         <div class="modal-content">
@@ -175,7 +184,8 @@
       </div>
     </div>
 
-    <div v-if="isSubmit" class="modal">
+    <modal v-if="isSubmit" :selectedCar="selectedCar" :title="modalTitle" @close="isSubmit=false"></modal>
+    <!-- <div v-if="isSubmit" class="modal">
       <div class="modalBox modalBox-submit">
         <div class="modal-content">
           <div>{{selectedCar.name}}</div>
@@ -188,10 +198,10 @@
           <button class="modalBtn-save" @click="submitModal()">변경하기</button>
         </div>
       </div>
-    </div>
+    </div>-->
 
-    <div v-if="isMsg" class="modal">
-      <div class="modalBox modalBox-msg">
+    <modal v-if="isMsg" :selectedCar="selectedCar" title="msg" @close="isMsg=false">
+      <slot>
         <div class="msg-content">
           <div class="msg-title">
             <b>사이트</b> 통합관제 화면으로 전송
@@ -207,28 +217,45 @@
           ></textarea>
           <div class="msg-byte">{{byte}}/200bytes</div>
         </div>
+      </slot>
+    </modal>
+
+    <!-- <div v-if="isMsg" class="modal">
+      <div class="modalBox modalBox-msg">
         <div class="modalBtn">
           <button class="modalBtn-cancel text-blue" @click="closeMsg()">취소</button>
           <button class="modalBtn-save" @click="sendMsg()">보내기</button>
         </div>
       </div>
-    </div>
+    </div>-->
 
     <div v-if="dashboard" class="main-board">
       <div class="board-left">
         <div class="carinfo">
           <img src="shuttle2.png" alt="shuttle image" />
-          <div class="mobile-clock" v-if="windowWidth<980">
+          <div class="mobile-clock" v-if="windowWidth<=960">
             <div class="time">{{clock}}</div>
             <div class="date">{{today}}</div>
           </div>
-          <div v-if="windowWidth>=980" class="carinfo-box">
-            <div class="carinfo-title">차량</div>
-            <div class="carinfo-txt">{{selectedCar.name}}</div>
-            <button class="btn-outline carinfo-btn" @click="carChange(selectedCar.name)">차량 변경하기</button>
+          <div v-if="600<windowWidth && windowWidth<=960" class="board-info">
+            <div class="info-title">차량 전원</div>
+            <img
+              class="powerbtn"
+              @click="powerOff()"
+              v-if="isOn"
+              src="switchOn.png"
+              alt="switchOFF button"
+            />
+            <img
+              class="powerbtn"
+              @click="powerOn()"
+              v-if="!isOn"
+              src="switchOff.png"
+              alt="switchOFF button"
+            />
           </div>
         </div>
-        <div v-if="windowWidth<980" class="mobile-firstContainer">
+        <div v-if="windowWidth<600" class="mobile-firstContainer">
           <div class="mobile-carChange">
             <div class="info-title">차량</div>
             <div class="carinfo-txt">
@@ -301,7 +328,7 @@
             <option value>사이트 통합관제</option>
             <option v-for="center in centers" :key="center.name" :value="center">{{center.name}}</option>
           </select>
-          <button v-if="windowWidth>=980" class="btn-outline msgTo-btn" @click="isMsg=true">보내기</button>
+          <button v-if="windowWidth<=600" class="btn-outline msgTo-btn" @click="isMsg=true">보내기</button>
           <button v-else class="btn-outline msgTo-btn" @click="isMsg=true">메시지 보내기</button>
         </div>
         <div class="board-info">
@@ -344,11 +371,13 @@
 <script>
 import axios from "axios";
 import router from "../router";
+import Modal from "../components/modal";
 
 const url = "http://115.93.143.2:9103/api/";
 
 export default {
   name: "Main",
+  components: { Modal },
   data: () => ({
     dashboard: false,
     isDash: false,
@@ -413,7 +442,6 @@ export default {
     }
     setInterval(this.showClock, 1000);
     this.windowWidth = window.innerWidth;
-    console.log(this.windowWidth);
   },
   watch: {
     clock: function() {
@@ -489,7 +517,7 @@ export default {
       axios
         .get(url + "vehicles/" + this.selectedCar.id, { headers: this.headers })
         .then(res => {
-          console.log("초기값", res.data);
+          // console.log("초기값", res.data);
           this.psng = res.data.passenger;
           this.isOn = res.data.drive;
           this.isAuto = res.data.drive_mode;
@@ -611,7 +639,7 @@ export default {
           { headers: this.headers }
         )
         .then(res => {
-          console.log(res.data);
+          console.log(res.data.detail);
           this.errmsg = "";
           this.successmsg = "새로운 비밀번호로 변경되었습니다.";
           var temp = this.$session.get("user");
@@ -654,7 +682,7 @@ export default {
       axios
         .post(url + "auth/logout/")
         .then(res => {
-          console.log(res.data);
+          console.log(res.data.detail);
           this.$session.destroy();
           router.push({ name: "Login" });
         })
@@ -750,7 +778,6 @@ export default {
               { headers: this.headers }
             )
             .then(res => {
-              console.log(res);
               this.isAuto = res.data.drive_mode;
             })
             .catch(err => {
@@ -765,7 +792,6 @@ export default {
               { headers: this.headers }
             )
             .then(res => {
-              console.log(res.data);
               this.isAuto = res.data.drive_mode;
             })
             .catch(err => {
@@ -1668,7 +1694,6 @@ export default {
 @media (min-width: 601px) and (max-width: 960px) {
   .selectCar {
     flex-direction: column;
-    /* width: 312px; */
     margin-top: 235px;
     align-items: center;
     text-align: center;
@@ -1695,6 +1720,19 @@ export default {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.3);
+  }
+  .main-board {
+    flex-direction: column;
+    align-items: center;
+  }
+  .board-left {
+    margin: 0;
+    width: 640px;
+  }
+  .carinfo {
+    width: 100%;
+    display: grid;
+    grid: auto auto auto auto;
   }
 }
 </style>

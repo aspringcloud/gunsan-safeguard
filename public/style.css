@@ -1,0 +1,34 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Noto Sans KR", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.text-blue {
+    color: #3bbae2;
+}
+
+.text-white {
+    color: #FFFFFF;
+}
+
+.blue {
+    background-color: #3bbae2;
+}
+
+.white {
+    background-color: #ffffff;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+a {
+    color: #82c0df;
+}

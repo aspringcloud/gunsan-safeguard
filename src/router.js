@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Main from './components/main.vue'
-import Login from './components/login.vue'
-import Resetpw from './components/resetpw.vue'
+import Main from './views/main.vue'
+import Login from './views/login.vue'
+import Resetpw from './views/resetpw.vue'
 Vue.use(Router)
 
 export default new Router({
