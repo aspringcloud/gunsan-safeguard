@@ -10,8 +10,8 @@
     </div>
     <div class="modal-footer">
       <button class="text-blue" @click="closeModal()">취소</button>
-      <button v-if="title=='msg'" class="blue text-white">보내기</button>
-      <button v-else class="blue text-white">변경하기</button>
+      <button v-if="title=='msg'" @click="submitModal()" class="blue text-white">보내기</button>
+      <button v-else @click="submitModal()" class="blue text-white">변경하기</button>
     </div>
   </div>
 </template>
@@ -23,6 +23,9 @@ export default {
   methods: {
     closeModal() {
       this.$emit("close");
+    },
+    submitModal() {
+      this.$emit("submit");
     }
   }
 };
@@ -56,6 +59,7 @@ export default {
 .modal-msg {
   width: 563px;
   height: 333px;
+  padding-top: 22px;
 }
 .modal-content {
   color: #333333;
@@ -74,12 +78,18 @@ export default {
 .modal-car {
   font-weight: 500;
 }
+
 @media (max-width: 600px) {
-  #modal {
+  .modal-submit {
     width: 290px;
   }
   .modal-footer button {
     font-size: 16px;
+  }
+  .modal-msg {
+    width: 312px;
+    height: 270px;
+    padding-top: 10px;
   }
 }
 </style>

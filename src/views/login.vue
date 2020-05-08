@@ -1,8 +1,8 @@
 <template>
   <div id="login" class="login">
     <div class="login-logos">
-      <img src="Logo_SC.png" alt="스프링고 로고" />
-      <img src="Logo_AM.png" alt="AI모빌리티 로고" />
+      <img src="@/assets/img/Logo_SC.png" alt="스프링고 로고" />
+      <img src="@/assets/img/Logo_AM.png" alt="AI모빌리티 로고" />
     </div>
     <div class="text-blue login-title1">SpringGo</div>
     <div class="text-blue login-title2">안전요원 로그인</div>
@@ -235,7 +235,7 @@ input[id="saveID"] + label:before {
 input[id="saveID"]:checked + label:before {
   background-color: #82c0df;
   border-color: #ffffff;
-  background-image: url("../../public/checked.png");
+  background-image: url("../assets/img/checked.png");
   background-repeat: no-repeat;
   background-position: center center;
 }

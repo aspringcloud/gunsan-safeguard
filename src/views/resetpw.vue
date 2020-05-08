@@ -127,7 +127,7 @@ export default {
   left: 37px;
   width: 27px;
   height: 27px;
-  background-image: url("../../public/back.png");
+  background-image: url("../assets/img/back.png");
 }
 .resetpw-title1 {
   font-weight: 800;
@@ -172,7 +172,7 @@ export default {
   .btn-back {
     top: 21px;
     left: 24px;
-    background-image: url("../../public/back_mobile.png");
+    background-image: url("../assets/img/back_mobile.png");
     width: 18px;
     height: 14px;
   }

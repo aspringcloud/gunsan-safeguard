@@ -1,6 +1,5 @@
 <template>
   <div id="main">
-    <!-- Header -->
     <div class="main-header">
       <div>
         <div class="header-title text-blue">
@@ -10,20 +9,19 @@
       <div class="header-right">
         <span>{{user.info.first_name}}</span>님 안녕하세요!
         <button @click="openSetting()">
-          <img src="@/assets/img/setting.png" alt="setting button" />
+          <img src="setting.png" alt="setting button" />
           환경설정
         </button>
         <button @click="logout()">
-          <img src="@/assets/img/loggout.png" alt="logout button" />
+          <img src="loggout.png" alt="logout button" />
           로그아웃
         </button>
       </div>
       <div class="header-mobile">
-        <img @click="closeMobileSetting()" src="@/assets/img/menu.png" alt="mobile menu" />
+        <img @click="closeMobileSetting()" src="menu.png" alt="mobile menu" />
       </div>
     </div>
 
-    <!-- 햄버거 메뉴 오픈 -->
     <div class="small-menu" v-if="openHam">
       <div class="small-menu-title">
         <b>{{user.info.first_name}}</b> 님 안녕하세요
@@ -35,16 +33,15 @@
       </div>
     </div>
 
-    <!-- 모바일버전 로그인정보 모달-->
     <div class="mobile-setting-modal" v-if="sloginInfo">
       <div class="mobile-setting-modal-title">
         <div>로그인 정보</div>
         <button @click="sloginInfo=false;">
-          <img width="18px;" src="@/assets/img/close.png" alt="close button" />
+          <img width="18px;" src="close.png" alt="close button" />
         </button>
       </div>
       <div class="setting-login-img">
-        <img src="@/assets/img/profile.png" alt="user profile image" />
+        <img src="profile.png" alt="user profile image" />
         <div>
           <div class="setting-username">{{user.info.last_name}} {{user.info.first_name}}</div>
           <button class="setting-btn">사진 변경하기</button>
@@ -62,12 +59,11 @@
       </div>
     </div>
 
-    <!-- 모바일버전 비밀번호 변경 모달-->
     <div class="mobile-setting-modal" v-if="schangePw">
       <div class="mobile-setting-modal-title">
         <div>비밀번호 변경</div>
         <button @click="schangePw=false;">
-          <img width="18px;" src="@/assets/img/close.png" alt="close button" />
+          <img width="18px;" src="close.png" alt="close button" />
         </button>
       </div>
       <div class="setting-content">
@@ -90,86 +86,80 @@
       </div>
     </div>
 
-    <!-- 태블릿,PC버전 환경설정 모달 -->
-    <div v-if="isSetting">
-      <div class="modal-back" v-if="600<windowWidth && windowWidth<=960"></div>
-      <div class="modalBox modalBox-setting">
-        <button class="setting-closebtn" @click="isSetting = false">
-          <img src="@/assets/img/closebtn.png" alt="close button" />
-        </button>
-        <div class="setting-tab">
-          <button
-            class="setting-tab-login"
-            :class="{'setting-activetab': loginInfo}"
-            @click="loginInfo=true"
-          >로그인 정보</button>
-          <div class="setting-tab-divider"></div>
-          <button
-            class="setting-tab-pw"
-            :class="{'setting-activetab': !loginInfo}"
-            @click="loginInfo=false"
-          >비밀번호 변경</button>
-        </div>
-        <div v-if="loginInfo" class="setting-content setting-loginInfo">
-          <div class="setting-login-img">
-            <img src="@/assets/img/profile.png" alt="user profile image" />
-            <div>
-              <div class="setting-username">{{user.info.last_name}} {{user.info.first_name}}</div>
-              <button class="setting-btn">사진 변경하기</button>
-            </div>
-          </div>
-          <div class="setting-infos">
-            <label for="email">이메일 ID</label>
-            <input name="email" type="text" :value="user.info.email" readonly />
-            <label for="team">팀</label>
-            <input name="team" type="text" :value="user.profile.team" readonly />
-            <label for="phone">휴대폰</label>
-            <input name="phone" type="text" :value="user.profile.phone" readonly />
-            <label for="auth">권한</label>
-            <input name="auth" type="text" :value="user.profile.level" readonly />
+    <div v-if="isSetting" class="modalBox modalBox-setting">
+      <button class="setting-closebtn" @click="isSetting = false">
+        <img src="closebtn.png" alt="close button" />
+      </button>
+      <div class="setting-tab">
+        <button
+          class="setting-tab-login"
+          :class="{'setting-activetab': loginInfo}"
+          @click="loginInfo=true"
+        >로그인 정보</button>
+        <div class="setting-tab-divider"></div>
+        <button
+          class="setting-tab-pw"
+          :class="{'setting-activetab': !loginInfo}"
+          @click="loginInfo=false"
+        >비밀번호 변경</button>
+      </div>
+      <div v-if="loginInfo" class="setting-content setting-loginInfo">
+        <div class="setting-login-img">
+          <img src="profile.png" alt="user profile image" />
+          <div>
+            <div class="setting-username">{{user.info.last_name}} {{user.info.first_name}}</div>
+            <button class="setting-btn">사진 변경하기</button>
           </div>
         </div>
+        <div class="setting-infos">
+          <label for="email">이메일 ID</label>
+          <input name="email" type="text" :value="user.info.email" readonly />
+          <label for="team">팀</label>
+          <input name="team" type="text" :value="user.profile.team" readonly />
+          <label for="phone">휴대폰</label>
+          <input name="phone" type="text" :value="user.profile.phone" readonly />
+          <label for="auth">권한</label>
+          <input name="auth" type="text" :value="user.profile.level" readonly />
+        </div>
+      </div>
 
-        <div v-if="!loginInfo" class="setting-content">
-          <form class="setting-infos" @submit.prevent="resetPw">
-            <label for="currentPw">현재 비밀번호</label>
-            <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
-            <label for="newPw">새 비밀번호</label>
-            <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
-            <label for="renewPw">새 비밀번호 확인</label>
-            <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
-            <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
-            <div v-if="errmsg" class="errmsg errmsg-pos">{{errmsg}}</div>
-            <div v-if="successmsg" class="text-blue errmsg-pos">{{successmsg}}</div>
-          </form>
-          <div class="setting-pwrule">
-            ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
-            <br />※ 비밀번호는 8글자 이상이어야 합니다.
-            <br />※ 비밀번호는 숫자로만 입력은 불가능합니다.
-          </div>
+      <div v-if="!loginInfo" class="setting-content">
+        <form class="setting-infos" @submit.prevent="resetPw">
+          <label for="currentPw">현재 비밀번호</label>
+          <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
+          <label for="newPw">새 비밀번호</label>
+          <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
+          <label for="renewPw">새 비밀번호 확인</label>
+          <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
+          <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
+          <div v-if="errmsg" class="errmsg errmsg-pos">{{errmsg}}</div>
+          <div v-if="successmsg" class="text-blue errmsg-pos">{{successmsg}}</div>
+        </form>
+        <div class="setting-pwrule">
+          ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
+          <br />※ 비밀번호는 8글자 이상이어야 합니다.
+          <br />※ 비밀번호는 숫자로만 입력은 불가능합니다.
         </div>
       </div>
     </div>
 
-    <!-- 차량 선택 모달 -->
-    <modal
-      v-if="isDash"
-      :selectedCar="selectedCar"
-      :title="false"
-      @close="resetCar"
-      @submit="submitCar"
-    >
-      <slot>
-        <b>차량</b>
-        <div>
-          <b class="text-blue" style="font-size: 24px;">{{selectedCar.name}}</b> 을 선택합니까?
+    <div class="modal" v-if="isDash">
+      <div class="modalBox modalBox-submit">
+        <div class="modal-content">
+          <div>차량</div>
+          <div class="modal-txt">
+            <span class="text-blue" style="font-size: 24px;">{{selectedCar.name}}</span> 을 선택합니까?
+          </div>
         </div>
-      </slot>
-    </modal>
+        <div class="modalBtn">
+          <button class="modalBtn-cancel text-blue" @click="resetCar()">취소</button>
+          <button class="modalBtn-save" @click="submitCar()">선택하기</button>
+        </div>
+      </div>
+    </div>
 
-    <!-- 차량 선택 화면 -->
     <div class="selectCar" v-if="!dashboard">
-      <img src="@/assets/img/shuttle.png" alt="shuttle image" />
+      <img src="shuttle.png" alt="shuttle image" />
       <div>
         <div class="selectCar-title">
           운행하시는 차량을
@@ -182,75 +172,65 @@
       </div>
     </div>
 
-    <!-- submit 모달 -->
-    <modal
-      v-if="isSubmit"
-      :selectedCar="selectedCar"
-      :title="modalTitle"
-      @close="isSubmit=false"
-      @submit="submitModal"
-    ></modal>
-
-    <!-- msg 모달 -->
-    <modal v-if="isMsg" :selectedCar="selectedCar" title="msg" @close="isMsg=false">
-      <slot>
-        <div class="msg-title">
-          <b>사이트</b> 통합관제 화면으로 전송
+    <div v-if="isSubmit" class="modal">
+      <div class="modalBox modalBox-submit">
+        <div class="modal-content">
+          <div>{{selectedCar.name}}</div>
+          <div class="modal-txt">
+            <span>{{modalTitle}}</span> 변경하시겠습니까?
+          </div>
         </div>
-        <textarea
-          @keydown="calcbyte()"
-          @keyup="calcbyte"
-          v-model="msgtxt"
-          name="msgtxt"
-          id="msgtxt"
-          cols="30"
-          rows="10"
-        ></textarea>
-        <div class="msg-byte">{{byte}}/200bytes</div>
-      </slot>
-    </modal>
+        <div class="modalBtn">
+          <button class="modalBtn-cancel text-blue" @click="isSubmit=false">취소</button>
+          <button class="modalBtn-save" @click="submitModal()">변경하기</button>
+        </div>
+      </div>
+    </div>
 
-    <!-- <div v-if="isMsg" class="modal">
+    <div v-if="isMsg" class="modal">
       <div class="modalBox modalBox-msg">
+        <div class="msg-content">
+          <div class="msg-title">
+            <b>사이트</b> 통합관제 화면으로 전송
+          </div>
+          <textarea
+            @keydown="calcbyte()"
+            @keyup="calcbyte"
+            v-model="msgtxt"
+            name="msgtxt"
+            id="msgtxt"
+            cols="30"
+            rows="10"
+          ></textarea>
+          <div class="msg-byte">{{byte}}/200bytes</div>
+        </div>
         <div class="modalBtn">
           <button class="modalBtn-cancel text-blue" @click="closeMsg()">취소</button>
           <button class="modalBtn-save" @click="sendMsg()">보내기</button>
         </div>
       </div>
-    </div>-->
+    </div>
 
     <div v-if="dashboard" class="main-board">
       <div class="board-left">
         <div class="carinfo">
-          <img src="@/assets/img/shuttle2.png" alt="shuttle image" />
-          <div class="mobile-clock" v-if="windowWidth<=960">
+          <img src="shuttle2.png" alt="shuttle image" />
+          <div class="mobile-clock" v-if="windowWidth<980">
             <div class="time">{{clock}}</div>
             <div class="date">{{today}}</div>
           </div>
-          <div v-if="600<windowWidth && windowWidth<=960" class="board-info">
-            <div class="info-title">차량 전원</div>
-            <img
-              class="powerbtn"
-              @click="powerOff()"
-              v-if="isOn"
-              src="@/assets/img/switchOn.png"
-              alt="switchOFF button"
-            />
-            <img
-              class="powerbtn"
-              @click="powerOn()"
-              v-if="!isOn"
-              src="@/assets/img/switchOff.png"
-              alt="switchOFF button"
-            />
+          <div v-if="windowWidth>=980" class="carinfo-box">
+            <div class="carinfo-title">차량</div>
+            <div class="carinfo-txt">{{selectedCar.name}}</div>
+            <button class="btn-outline carinfo-btn" @click="carChange(selectedCar.name)">차량 변경하기</button>
           </div>
         </div>
-        <div v-if="windowWidth<600" class="mobile-firstContainer">
+        <div v-if="windowWidth<980" class="mobile-firstContainer">
           <div class="mobile-carChange">
             <div class="info-title">차량</div>
             <div class="carinfo-txt">
               {{selectedCar.name}}
-              <a @click="openSubmit('차량')">차량 변경하기</a>
+              <a @click="carChange(selectedCar.name)">차량 변경하기</a>
             </div>
           </div>
           <div class="mobile-power">
@@ -258,14 +238,14 @@
               class="powerbtn"
               @click="powerOff()"
               v-if="isOn"
-              src="@/assets/img/mobile_poweron.png"
+              src="mobile_poweron.png"
               alt="switchOFF button"
             />
             <img
               class="powerbtn"
               @click="powerOn()"
               v-if="!isOn"
-              src="@/assets/img/mobile_poweroff.png"
+              src="mobile_poweroff.png"
               alt="switchOFF button"
             />
             <div class="info-title">
@@ -294,14 +274,14 @@
             class="powerbtn"
             @click="powerOff()"
             v-if="isOn"
-            src="@/assets/img/switchOn.png"
+            src="switchOn.png"
             alt="switchOFF button"
           />
           <img
             class="powerbtn"
             @click="powerOn()"
             v-if="!isOn"
-            src="@/assets/img/switchOff.png"
+            src="switchOff.png"
             alt="switchOFF button"
           />
         </div>
@@ -318,7 +298,7 @@
             <option value>사이트 통합관제</option>
             <option v-for="center in centers" :key="center.name" :value="center">{{center.name}}</option>
           </select>
-          <button v-if="windowWidth<=600" class="btn-outline msgTo-btn" @click="isMsg=true">보내기</button>
+          <button v-if="windowWidth>=980" class="btn-outline msgTo-btn" @click="isMsg=true">보내기</button>
           <button v-else class="btn-outline msgTo-btn" @click="isMsg=true">메시지 보내기</button>
         </div>
         <div class="board-info">
@@ -329,11 +309,11 @@
             </div>
             <div class="psng-cnt">
               <button class="btn-minus" @click="decrease()">
-                <img src="@/assets/img/minus.png" alt="minus button" />
+                <img src="minus.png" alt="minus button" />
               </button>
               <input type="number" v-model="psngTemp" />
               <button class="btn-plus" @click="increase()">
-                <img src="@/assets/img/plus.png" alt="plus button" />
+                <img src="plus.png" alt="plus button" />
               </button>
             </div>
             <button class="btn-outline psng-save" @click="savePsng()">저장</button>
@@ -361,13 +341,11 @@
 <script>
 import axios from "axios";
 import router from "../router";
-import Modal from "../components/modal";
 
 const url = "http://115.93.143.2:9103/api/";
 
 export default {
   name: "Main",
-  components: { Modal },
   data: () => ({
     dashboard: false,
     isDash: false,
@@ -432,6 +410,7 @@ export default {
     }
     setInterval(this.showClock, 1000);
     this.windowWidth = window.innerWidth;
+    console.log(this.windowWidth);
   },
   watch: {
     clock: function() {
@@ -445,7 +424,7 @@ export default {
       }
     },
     windowWidth: function() {
-      if (this.windowWidth < 601) {
+      if (this.windowWidth < 980) {
         if (this.isSetting) {
           if (this.loginInfo) {
             this.sloginInfo = true;
@@ -507,7 +486,7 @@ export default {
       axios
         .get(url + "vehicles/" + this.selectedCar.id, { headers: this.headers })
         .then(res => {
-          // console.log("초기값", res.data);
+          console.log("초기값", res.data);
           this.psng = res.data.passenger;
           this.isOn = res.data.drive;
           this.isAuto = res.data.drive_mode;
@@ -629,7 +608,7 @@ export default {
           { headers: this.headers }
         )
         .then(res => {
-          console.log(res.data.detail);
+          console.log(res.data);
           this.errmsg = "";
           this.successmsg = "새로운 비밀번호로 변경되었습니다.";
           var temp = this.$session.get("user");
@@ -672,7 +651,7 @@ export default {
       axios
         .post(url + "auth/logout/")
         .then(res => {
-          console.log(res.data.detail);
+          console.log(res.data);
           this.$session.destroy();
           router.push({ name: "Login" });
         })
@@ -700,13 +679,18 @@ export default {
       return timeString + dateString;
     },
 
+    carChange() {
+      this.modalTitle = "차량";
+      this.modalValue = this.selectedCar.name;
+      this.isSubmit = true;
+    },
     openSetting() {
       if (!this.user.profile) {
         axios
           .get(url + "users/" + this.user.info.pk, { headers: this.headers })
           .then(res => {
             this.user.profile = res.data.profile;
-            if (this.windowWidth < 601) {
+            if (this.windowWidth < 980) {
               this.sloginInfo = true;
               this.openHam = false;
             } else {
@@ -723,7 +707,7 @@ export default {
             );
           });
       } else {
-        if (this.windowWidth < 601) {
+        if (this.windowWidth < 980) {
           this.sloginInfo = true;
           this.openHam = false;
         } else {
@@ -733,10 +717,6 @@ export default {
           this.successmsg = "";
         }
       }
-    },
-    openSubmit(v) {
-      this.modalTitle = v;
-      this.isSubmit = true;
     },
     submitModal() {
       if (this.modalTitle == "차량") {
@@ -767,6 +747,7 @@ export default {
               { headers: this.headers }
             )
             .then(res => {
+              console.log(res);
               this.isAuto = res.data.drive_mode;
             })
             .catch(err => {
@@ -781,6 +762,7 @@ export default {
               { headers: this.headers }
             )
             .then(res => {
+              console.log(res.data);
               this.isAuto = res.data.drive_mode;
             })
             .catch(err => {
@@ -989,7 +971,7 @@ export default {
   font-size: 16px;
   color: #828282;
   padding-left: 10px;
-  background: url("../assets/img/dropdown.png") no-repeat 95% 50%;
+  background: url("../../public/dropdown.png") no-repeat 95% 50%;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -1067,7 +1049,23 @@ export default {
   box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12),
     0px 24px 38px rgba(0, 0, 0, 0.14);
 }
-#msgtxt {
+.modalBox-msg {
+  border-radius: 2px;
+  width: 563px;
+}
+.msg-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.msg-title {
+  font-size: 18px;
+  margin-bottom: 26px;
+  color: #333333;
+  width: 463px;
+  margin-top: 40px;
+}
+.msg-content textarea {
   border: none;
   width: 463px;
   height: 148px;
@@ -1077,11 +1075,11 @@ export default {
   resize: none;
   font-size: 18px;
   padding: 44px 35px 0 35px;
-  margin-top: 23px;
 }
 .msg-byte {
   color: #828282;
-  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 13px;
   width: 463px;
   text-align: end;
 }
@@ -1197,6 +1195,44 @@ export default {
 .setting-infos input::placeholder {
   color: #bdbdbd;
 }
+.modalBox-submit {
+  border-radius: 2px;
+  width: 323px;
+  /* height: 191px; */
+}
+.modalBox-submit * {
+  font-size: 18px;
+  font-weight: 500;
+}
+.modal-content {
+  color: #333333;
+  padding: 44px 30px 38px 58px;
+}
+.modalBtn {
+  display: flex;
+}
+.modalBtn button {
+  border: none;
+  border-top: 0.5px solid #3bbae2;
+  width: 50%;
+  height: 61px;
+  font-size: 18px;
+}
+.modal-txt {
+  font-weight: normal;
+}
+.modal-txt span {
+  font-weight: bold;
+}
+.modalBtn-cancel {
+  background: #ffffff;
+  border-radius: 0px 0px 0px 2px;
+}
+.modalBtn-save {
+  background-color: #3bbae2;
+  color: white;
+  border-radius: 0px 0px 2px 0px;
+}
 .datetime {
   margin-top: 7px;
   margin-bottom: 31px;
@@ -1220,7 +1256,7 @@ export default {
   padding-left: 16px;
   font-size: 16px;
   margin-left: 58px;
-  background: url("../assets/img/chevron_right.png") no-repeat 90% 50%;
+  background: url("../../public/chevron_right.png") no-repeat 90% 50%;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -1320,14 +1356,14 @@ export default {
   color: #ffffff;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 979px) {
   #main {
     margin-top: 76px;
   }
   #selectCar {
     width: 312px;
     text-align-last: center;
-    background: url("../assets/img/dropdown.png") no-repeat 80% 50%;
+    background: url("../../public/dropdown.png") no-repeat 80% 50%;
   }
   .header-mobile {
     display: block;
@@ -1390,6 +1426,15 @@ export default {
   .selectCar-title {
     font-size: 28px;
     margin-bottom: 61px;
+  }
+  .modalBox-submit {
+    width: 290px;
+  }
+  .modal-content {
+    padding: 44px 0 37px 42px;
+  }
+  .modalBtn button {
+    height: 60px;
   }
   .mobile-setting-modal {
     z-index: 2;
@@ -1590,6 +1635,7 @@ export default {
     display: flex;
     justify-content: space-evenly;
     padding: 0 10px;
+    /* width: 100%; */
   }
   .togglebtn {
     width: 86px;
@@ -1597,14 +1643,16 @@ export default {
     font-size: 14px;
     margin: 0;
   }
+  .modalBox-msg {
+    width: 312px;
+  }
   .msg-title {
+    width: 272px;
     font-size: 16px;
+    margin-top: 23px;
+    margin-bottom: 17px;
   }
-  .msg-title b {
-    font-size: 16px;
-  }
-  #msgtxt {
-    margin-top: 17px;
+  .msg-content textarea {
     width: 272px;
     height: 113px;
     font-size: 14px;
@@ -1612,50 +1660,6 @@ export default {
   }
   .msg-byte {
     width: 272px;
-  }
-}
-@media (min-width: 601px) and (max-width: 960px) {
-  .selectCar {
-    flex-direction: column;
-    margin-top: 235px;
-    align-items: center;
-    text-align: center;
-  }
-  .selectCar img {
-    height: 208px;
-    margin: 0;
-  }
-  .selectCar-title {
-    margin-top: 70px;
-    margin-bottom: 68px;
-  }
-  .modalBox-setting {
-    margin: 0 auto;
-    top: 219px;
-    left: 0;
-    right: 0;
-  }
-  .modal-back {
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.3);
-  }
-  .main-board {
-    flex-direction: column;
-    align-items: center;
-  }
-  .board-left {
-    margin: 0;
-    width: 640px;
-  }
-  .carinfo {
-    width: 100%;
-    display: grid;
-    grid: auto auto auto auto;
   }
 }
 </style>
