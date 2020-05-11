@@ -216,96 +216,9 @@
       </slot>
     </modal>
 
-    <!-- moile && pad -->
-    <div v-if="dashboard && windowWidth <= 960" class="flex-container dash-padding">
-      <!-- shuttle + clock -->
-      <div class="justify-between width-100">
-        <img class="dash-shuttle-size" src="@/assets/img/shuttle2.png" alt="shuttle image" />
-        <div>
-          <div class="time">{{clock}}</div>
-          <div class="date">{{today}}</div>
-        </div>
-      </div>
-      <!-- mobile car + power -->
-      <div
-        v-if="windowWidth <= 600"
-        class="justify-between width-100"
-        style="margin-top:19px;margin-bottom: 37px;"
-      >
-        <div class="mobile-carChange">
-          <div class="text-gray info-title-size">차량</div>
-          <div class="carinfo-txt">
-            {{selectedCar.name}}
-            <a @click="openSubmit('차량')">차량 변경하기</a>
-          </div>
-        </div>
-        <div class="align-center">
-          <img
-            class="powerbtn"
-            @click="powerOff()"
-            v-if="isOn"
-            src="@/assets/img/mobile_poweron.png"
-            alt="switchOFF button"
-          />
-          <img
-            class="powerbtn"
-            @click="powerOn()"
-            v-if="!isOn"
-            src="@/assets/img/mobile_poweroff.png"
-            alt="switchOFF button"
-          />
-          <div class="text-gray info-title-size">
-            차량
-            <br />전원
-          </div>
-        </div>
-      </div>
-      <!-- pad car + power -->
-      <div v-else class="justify-between width-100" style="margin-top:18px; margin-bottom: 35px;">
-        <div class="text-gray info-title-size">차량</div>
-        <div class="mobile-carChange">
-          <div class="align-center">
-            <div class="carinfo-txt">{{selectedCar.name}}</div>
-            <button class="btn-outline car-btn-size" @click="openSubmit('차량')">차량 변경하기</button>
-          </div>
-        </div>
-        <div class="align-center pad-col-width">
-          <!-- <div></div> -->
-          <div class="text-gray info-title-size">차량 전원</div>
-          <img
-            class="powerbtn"
-            @click="powerOff()"
-            v-if="isOn"
-            src="@/assets/img/switchOn.png"
-            alt="switchOFF button"
-          />
-          <img
-            class="powerbtn"
-            @click="powerOn()"
-            v-if="!isOn"
-            src="@/assets/img/switchOff.png"
-            alt="switchOFF button"
-          />
-        </div>
-      </div>
-
-      <!-- mobile+pad loc,time info -->
-      <div>
-        <div class="text-gray info-title-size">현재위치</div>
-        <div class="info-txt">{{location}}</div>
-      </div>
-      <div class="justify-between width-100">
-        <div>
-          <div class="text-gray info-title-size">운행시간</div>
-          <div class="info-txt">{{drivetime}}</div>
-        </div>
-        <div class="pad-col-width">
-          <div class="text-gray info-title-size">마지막 전원 ON</div>
-          <div class="info-txt">{{lastOn}}</div>
-        </div>
-      </div>
-    </div>
-
+    <dashMobile v-if="dashboard && windowWidth<=600"></dashMobile>
+    <dashMid v-if="dashboard && 600<windowWidth && windowWidth<=960"></dashMid>
+    <dashLg v-if="dashboard && 960<windowWidth"></dashLg>
     <div v-if="dashboard" class="main-board">
       <div class="board-left">
         <div class="carinfo">
@@ -315,7 +228,7 @@
             <div class="date">{{today}}</div>
           </div>
           <div v-if="600<windowWidth && windowWidth<=960" class="board-info">
-            <div class="text-gray">차량 전원</div>
+            <div class="info-title">차량 전원</div>
             <img
               class="powerbtn"
               @click="powerOff()"
@@ -402,13 +315,13 @@
         <div class="mobile-wrap">
           <div class="board-info">
             <div class="info-title">메시지</div>
-            <select v-model="msgTo" name="msgTo" id="msgTo">
+            <select v-model="msgTo" name="msgTo" id="msgTo" class="block-component">
               <option value>사이트 통합관제</option>
               <option v-for="center in centers" :key="center.name" :value="center">{{center.name}}</option>
             </select>
             <button
               v-if="windowWidth<=980"
-              class="btn-outline msgTo-btn block-btn"
+              class="btn-outline msgTo-btn"
               @click="isMsg=true"
             >메시지 보내기</button>
             <button v-else class="btn-outline msgTo-btn" @click="isMsg=true">보내기</button>
@@ -459,13 +372,16 @@
 <script>
 import axios from "axios";
 import router from "../router";
-import Modal from "../components/modal";
-import "@/assets/css/mainStyle.css";
+import Modal from "@/components/modal";
+import DashMobile from "@/views/dashMobile";
+import DashMid from "@/views/dashMid";
+import DashLg from "@/views/dashLg";
+
 const url = "http://115.93.143.2:9103/api/";
 
 export default {
   name: "Main",
-  components: { Modal },
+  components: { Modal, DashMobile, DashMid, DashLg },
   data: () => ({
     dashboard: false,
     isDash: false,
@@ -488,7 +404,7 @@ export default {
     isOn: 1,
     isSubmit: false,
     lastOn: " ",
-    location: "경기도 안성시 죽산면 죽산리 343-1",
+    location: "No location info",
     psng: 0,
     isAuto: 1,
     isPark: 1,
@@ -1102,6 +1018,11 @@ export default {
 .board-left {
   margin-right: 186px;
 }
+.info-title {
+  color: #828282;
+  font-size: 16px;
+  margin-bottom: 19px;
+}
 .info-txt {
   height: 26.5px;
   width: 100%;
@@ -1127,6 +1048,7 @@ export default {
 .carinfo-txt {
   font-size: 36px;
   color: #333333;
+  margin-bottom: 11px;
   text-align: center;
 }
 .carinfo-btn {
@@ -1378,7 +1300,17 @@ export default {
   padding-left: 23px;
   text-align: center;
 }
-
+.btn-outline {
+  border: 0.5px solid #828282;
+  background-color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+}
+.btn-outline:active {
+  background: #3bbae2;
+  border-color: #3bbae2;
+  color: #ffffff;
+}
 .psng-save {
   margin-left: 20px;
   width: 52px;
@@ -1404,8 +1336,6 @@ export default {
   background: #3bbae2;
   color: #ffffff;
 }
-
-/* --------------------------------- */
 
 @media (max-width: 600px) {
   #main {
@@ -1571,10 +1501,15 @@ export default {
   .carinfo img {
     width: 134.5px;
   }
-  .time {
+  .mobile-clock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .mobile-clock .time {
     font-size: 28px;
   }
-  .date {
+  .mobile-clock .date {
     font-size: 14px;
   }
   .board-right {
@@ -1603,14 +1538,20 @@ export default {
     color: #3bbae2;
     cursor: pointer;
   }
-
+  .mobile-power {
+    display: flex;
+    align-items: center;
+  }
+  .mobile-power .info-title {
+    margin: 0;
+    margin-left: 7px;
+  }
   .powerbtn {
     margin: 0;
   }
   .info-txt {
     padding: 0;
-    margin-top: 10px;
-    margin-bottom: 15px;
+    margin: 0;
     font-size: 14px;
   }
   .board-info {
@@ -1690,17 +1631,6 @@ export default {
   .msg-byte {
     width: 272px;
   }
-  .dash-padding {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-  .dash-shuttle-size {
-    width: 134.5px;
-  }
-  .info-title-size {
-    font-size: 13px;
-  }
-  /* ------------------------------------- */
 }
 @media (min-width: 601px) and (max-width: 960px) {
   .selectCar {
@@ -1760,36 +1690,11 @@ export default {
     justify-content: space-between;
     margin-bottom: 23px;
   }
-  block-btn {
+  .block-component {
     display: block;
   }
-  .dash-padding {
-    padding-left: 36px;
-    padding-right: 36px;
-  }
-  .dash-shuttle-size {
-    width: 180px;
-  }
-  .info-title-size {
-    font-size: 16px;
-  }
-  .pad-col-width {
-    width: 215px;
-  }
-  .car-btn-size {
-    width: 148px;
-    height: 38px;
-    margin-left: 13px;
-  }
-  .powerbtn {
-    margin-left: 16px;
-    width: 101px;
-  }
-  .info-txt {
-    font-size: 18px;
-    margin-top: 9px;
-    margin-bottom: 30px;
-    padding-left: 15px;
+  .block-btn {
+    /* display: block; */
   }
 }
 </style>

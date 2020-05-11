@@ -1,0 +1,41 @@
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.justify-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.text-gray {
+    color: #828282;
+}
+
+.font-13 {
+    font-size: 13px;
+}
+
+.btn-outline {
+    border: 0.5px solid #828282;
+    background-color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 100px;
+}
+
+.btn-outline:active {
+    background: #3bbae2;
+    border-color: #3bbae2;
+    color: #ffffff;
+}
