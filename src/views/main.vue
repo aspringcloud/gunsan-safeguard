@@ -217,7 +217,7 @@
     </modal>
 
     <!-- moile && pad -->
-    <div v-if="dashboard && windowWidth <= 960" class="flex-container dash-padding">
+    <div v-if="dashboard && windowWidth < 960" class="flex-container dash-padding">
       <!-- shuttle + clock -->
       <div class="justify-between width-100">
         <img class="dash-shuttle-size" src="@/assets/img/shuttle2.png" alt="shuttle image" />
@@ -261,12 +261,14 @@
         </div>
       </div>
       <!-- pad car + power -->
-      <div v-else class="justify-between width-100" style="margin-top:18px; margin-bottom: 35px;">
-        <div class="text-gray info-title-size">차량</div>
-        <div class="mobile-carChange">
-          <div class="align-center">
-            <div class="carinfo-txt">{{selectedCar.name}}</div>
-            <button class="btn-outline car-btn-size" @click="openSubmit('차량')">차량 변경하기</button>
+      <div v-else class="board-section1 justify-between width-100">
+        <div>
+          <div class="text-gray info-title-size">차량</div>
+          <div class="mobile-carChange">
+            <div class="align-center">
+              <div class="carinfo-txt">{{selectedCar.name}}</div>
+              <button class="btn-outline car-btn-size" @click="openSubmit('차량')">차량 변경하기</button>
+            </div>
           </div>
         </div>
         <div class="align-center pad-col-width">
@@ -290,93 +292,93 @@
       </div>
 
       <!-- mobile+pad loc,time info -->
-      <div>
+      <div class="board-section2">
         <div class="text-gray info-title-size">현재위치</div>
         <div class="info-txt">{{location}}</div>
-      </div>
-      <div class="justify-between width-100">
-        <div>
-          <div class="text-gray info-title-size">운행시간</div>
-          <div class="info-txt">{{drivetime}}</div>
+        <div class="justify-between width-100">
+          <div>
+            <div class="text-gray info-title-size">운행시간</div>
+            <div class="info-txt">{{drivetime}}</div>
+          </div>
+          <div class="pad-col-width">
+            <div class="text-gray info-title-size">마지막 전원 ON</div>
+            <div class="info-txt">{{lastOn}}</div>
+          </div>
         </div>
-        <div class="pad-col-width">
-          <div class="text-gray info-title-size">마지막 전원 ON</div>
-          <div class="info-txt">{{lastOn}}</div>
+      </div>
+
+      <!-- msg && pnsgcnt-->
+      <div class="board-section3" :class="{'justify-between':600<windowWidth}">
+        <div>
+          <div class="text-gray info-title-size">메시지</div>
+          <div class="msg-container" :class="{'justify-between':windowWidth<=600}">
+            <select v-model="msgTo" name="msgTo" id="msgTo">
+              <option value>사이트 통합관제</option>
+              <option v-for="center in centers" :key="center.name" :value="center">{{center.name}}</option>
+            </select>
+            <button class="btn-outline msgTo-btn text-gray2" @click="isMsg=true">메시지 보내기</button>
+          </div>
+        </div>
+
+        <div :class="{'pad-col-width':600<windowWidth}">
+          <div class="text-gray info-title-size">탑승객 수</div>
+          <div class="psng-container">
+            <div class="psnginfo">
+              <div class="psng-txt">
+                <span>{{psng}}</span> 명
+              </div>
+              <div class="psng-cnt">
+                <button class="btn-minus" @click="decrease()">
+                  <img src="@/assets/img/minus.png" alt="minus button" />
+                </button>
+                <input type="number" v-model="psngTemp" />
+                <button class="btn-plus" @click="increase()">
+                  <img src="@/assets/img/plus.png" alt="plus button" />
+                </button>
+              </div>
+            </div>
+            <button v-if="600<windowWidth" class="btn-outline psng-save" @click="savePsng()">저장하기</button>
+            <button v-else class="btn-outline psng-save" @click="savePsng()">저장</button>
+          </div>
+        </div>
+      </div>
+      <div class="board-section4">
+        <div class="text-gray info-title-size">주행모드</div>
+        <div class="info-btngroup">
+          <button class="togglebtn" :class="{btnActive: isAuto==1}" @click="autoOn()">자동주행</button>
+          <button class="togglebtn" :class="{btnActive: isAuto==2}" @click="autoOff()">수동주행</button>
+        </div>
+        <div class="text-gray info-title-size">주차여부</div>
+        <div class="info-btngroup">
+          <button class="togglebtn" :class="{btnActive: isPark}" @click="parkOn()">예</button>
+          <button class="togglebtn" :class="{btnActive: !isPark}" @click="parkOff()">아니오</button>
         </div>
       </div>
     </div>
 
-    <div v-if="dashboard" class="main-board">
-      <div class="board-left">
-        <div class="carinfo">
+    <div v-if="dashboard && 960<=windowWidth" class="justify-center dash-padding">
+      <div class="lg-section1">
+        <!-- select car -->
+        <div class="justify-between align-center board-section1">
           <img src="@/assets/img/shuttle2.png" alt="shuttle image" />
-          <div class="mobile-clock" v-if="windowWidth<=960">
-            <div class="time">{{clock}}</div>
-            <div class="date">{{today}}</div>
-          </div>
-          <div v-if="600<windowWidth && windowWidth<=960" class="board-info">
-            <div class="text-gray">차량 전원</div>
-            <img
-              class="powerbtn"
-              @click="powerOff()"
-              v-if="isOn"
-              src="@/assets/img/switchOn.png"
-              alt="switchOFF button"
-            />
-            <img
-              class="powerbtn"
-              @click="powerOn()"
-              v-if="!isOn"
-              src="@/assets/img/switchOff.png"
-              alt="switchOFF button"
-            />
-          </div>
-        </div>
-        <div v-if="windowWidth<600" class="mobile-firstContainer">
-          <div class="mobile-carChange">
-            <div class="info-title">차량</div>
-            <div class="carinfo-txt">
-              {{selectedCar.name}}
-              <a @click="openSubmit('차량')">차량 변경하기</a>
-            </div>
-          </div>
-          <div class="mobile-power">
-            <img
-              class="powerbtn"
-              @click="powerOff()"
-              v-if="isOn"
-              src="@/assets/img/mobile_poweron.png"
-              alt="switchOFF button"
-            />
-            <img
-              class="powerbtn"
-              @click="powerOn()"
-              v-if="!isOn"
-              src="@/assets/img/mobile_poweroff.png"
-              alt="switchOFF button"
-            />
-            <div class="info-title">
-              차량
-              <br />전원
+          <div>
+            <div class="text-gray">차량</div>
+            <div class="flex-container">
+              <div class="carinfo-txt">{{selectedCar.name}}</div>
+              <button class="btn-outline car-btn-size" @click="openSubmit('차량')">차량 변경하기</button>
             </div>
           </div>
         </div>
-        <div class="board-info">
-          <div class="info-title">현재위치</div>
+
+        <!-- 현재 위치~차량전원 -->
+        <div class="board-section2">
+          <div class="text-gray">현재위치</div>
           <div class="info-txt">{{location}}</div>
-        </div>
-        <div class="mobile-wrap">
-          <div class="board-info">
-            <div class="info-title">운행시간</div>
-            <div class="info-txt">{{drivetime}}</div>
-          </div>
-          <div class="board-info">
-            <div class="info-title">마지막 전원 ON</div>
-            <div class="info-txt">{{lastOn}}</div>
-          </div>
-        </div>
-        <div v-if="windowWidth>=980" class="board-info">
-          <div class="info-title">차량 전원</div>
+          <div class="text-gray">운행시간</div>
+          <div class="info-txt">{{drivetime}}</div>
+          <div class="text-gray">마지막 전원 ON</div>
+          <div class="info-txt">{{lastOn}}</div>
+          <div class="text-gray">차량 전원</div>
           <img
             class="powerbtn"
             @click="powerOff()"
@@ -394,62 +396,48 @@
         </div>
       </div>
 
-      <div class="board-right">
-        <div v-if="windowWidth>=980" class="datetime">
+      <div class="lg-section2">
+        <!-- 시계 -->
+        <div class="datetime">
           <div class="time">{{clock}}</div>
           <div class="date">{{today}}</div>
         </div>
-        <div class="mobile-wrap">
-          <div class="board-info">
-            <div class="info-title">메시지</div>
-            <select v-model="msgTo" name="msgTo" id="msgTo">
-              <option value>사이트 통합관제</option>
-              <option v-for="center in centers" :key="center.name" :value="center">{{center.name}}</option>
-            </select>
-            <button
-              v-if="windowWidth<=980"
-              class="btn-outline msgTo-btn block-btn"
-              @click="isMsg=true"
-            >메시지 보내기</button>
-            <button v-else class="btn-outline msgTo-btn" @click="isMsg=true">보내기</button>
-          </div>
-          <div class="board-info">
-            <div class="info-title">탑승객 수</div>
-            <div class="psnginfo">
-              <div class="psng-txt">
-                <span>{{psng}}</span> 명
-              </div>
-              <div class="psng-cnt">
-                <button class="btn-minus" @click="decrease()">
-                  <img src="@/assets/img/minus.png" alt="minus button" />
-                </button>
-                <input type="number" v-model="psngTemp" />
-                <button class="btn-plus" @click="increase()">
-                  <img src="@/assets/img/plus.png" alt="plus button" />
-                </button>
-              </div>
-              <button
-                v-if="600<windowWidth<=980"
-                class="btn-outline psng-save block-btn"
-                @click="savePsng()"
-              >저장하기</button>
-              <button v-else class="btn-outline psng-save" @click="savePsng()">저장</button>
-            </div>
-          </div>
+
+        <div class="text-gray">메시지</div>
+        <div class="msg-container justify-end">
+          <select v-model="msgTo" name="msgTo" id="msgTo">
+            <option value>사이트 통합관제</option>
+            <option v-for="center in centers" :key="center.name" :value="center">{{center.name}}</option>
+          </select>
+          <button class="btn-outline msgTo-btn" @click="isMsg=true">보내기</button>
         </div>
-        <div class="board-info">
-          <div class="info-title">주행모드</div>
-          <div class="info-btngroup">
-            <button class="togglebtn" :class="{btnActive: isAuto==1}" @click="autoOn()">자동주행</button>
-            <button class="togglebtn" :class="{btnActive: isAuto==2}" @click="autoOff()">수동주행</button>
+
+        <div class="text-gray">탑승객 수</div>
+
+        <div class="psng-container justify-end">
+          <div class="psng-txt">
+            <span>{{psng}}</span> 명
           </div>
+          <div class="psng-cnt">
+            <button class="btn-minus" @click="decrease()">
+              <img src="@/assets/img/minus.png" alt="minus button" />
+            </button>
+            <input type="number" v-model="psngTemp" />
+            <button class="btn-plus" @click="increase()">
+              <img src="@/assets/img/plus.png" alt="plus button" />
+            </button>
+          </div>
+          <button class="btn-outline psng-save" @click="savePsng()">저장</button>
         </div>
-        <div class="board-info">
-          <div class="info-title">주차여부</div>
-          <div class="info-btngroup">
-            <button class="togglebtn" :class="{btnActive: isPark}" @click="parkOn()">예</button>
-            <button class="togglebtn" :class="{btnActive: !isPark}" @click="parkOff()">아니오</button>
-          </div>
+        <div class="text-gray">주행모드</div>
+        <div class="info-btngroup justify-end">
+          <button class="togglebtn" :class="{btnActive: isAuto==1}" @click="autoOn()">자동주행</button>
+          <button class="togglebtn" :class="{btnActive: isAuto==2}" @click="autoOff()">수동주행</button>
+        </div>
+        <div class="text-gray">주차여부</div>
+        <div class="info-btngroup justify-end">
+          <button class="togglebtn" :class="{btnActive: isPark}" @click="parkOn()">예</button>
+          <button class="togglebtn" :class="{btnActive: !isPark}" @click="parkOff()">아니오</button>
         </div>
       </div>
     </div>
@@ -1094,13 +1082,8 @@ export default {
   appearance: none;
 }
 
-.main-board {
-  display: flex;
-  margin-top: 31px;
-  justify-content: center;
-}
-.board-left {
-  margin-right: 186px;
+.dash-padding {
+  padding: 0 93px 47px 93px;
 }
 .info-txt {
   height: 26.5px;
@@ -1111,10 +1094,8 @@ export default {
   color: #333333;
 }
 .carinfo {
-  display: inline-flex;
-  justify-content: space-between;
   margin-bottom: 75px;
-  align-items: center;
+  /* align-items: center; */
 }
 .carinfo-box {
   width: 32px;
@@ -1322,7 +1303,6 @@ export default {
 .msgTo-btn {
   width: 82px;
   height: 38px;
-  border-radius: 19px;
   margin-left: 24px;
 }
 .psng-cnt {
@@ -1386,7 +1366,7 @@ export default {
   border-radius: 50%;
 }
 .info-btngroup {
-  margin-left: 30px;
+  margin: 19px 0 54px 0;
 }
 .togglebtn {
   width: 120px;
@@ -1404,7 +1384,34 @@ export default {
   background: #3bbae2;
   color: #ffffff;
 }
-
+.lg-section1 {
+  width: 326px;
+  margin-right: 193px;
+}
+.lg-section2 {
+  width: 319px;
+}
+.car-btn-size {
+  width: 139px;
+  height: 38px;
+  margin-top: 11px;
+}
+.board-section1 {
+  margin-bottom: 75px;
+}
+.board-section2 .info-txt {
+  margin: 19px 0 49px 52px;
+}
+.msg-container {
+  margin-top: 15px;
+  margin-bottom: 39px;
+  align-items: center;
+}
+.psng-container {
+  align-items: center;
+  margin-top: 25px;
+  margin-bottom: 54px;
+}
 /* --------------------------------- */
 
 @media (max-width: 600px) {
@@ -1632,7 +1639,6 @@ export default {
     width: 122px;
     height: 35px;
     margin-left: 40px;
-    color: #4f4f4f;
   }
   .psng-txt {
     font-size: 18px;
@@ -1663,7 +1669,7 @@ export default {
     color: #4f4f4f;
   }
   .info-btngroup {
-    margin: 0;
+    margin: 12px 0 14px 0;
     display: flex;
     justify-content: space-evenly;
     padding: 0 10px;
@@ -1690,6 +1696,7 @@ export default {
   .msg-byte {
     width: 272px;
   }
+  /* ------------------------------------- */
   .dash-padding {
     padding-left: 24px;
     padding-right: 24px;
@@ -1700,7 +1707,21 @@ export default {
   .info-title-size {
     font-size: 13px;
   }
-  /* ------------------------------------- */
+  .board-section2 {
+    margin-bottom: 23px;
+  }
+  .msg-container {
+    margin-top: 12px;
+    margin-bottom: 15px;
+  }
+  .psng-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 7px;
+  }
+  .board-section3 {
+    margin-bottom: 18px;
+  }
 }
 @media (min-width: 601px) and (max-width: 960px) {
   .selectCar {
@@ -1740,11 +1761,6 @@ export default {
     margin: 0;
     width: 640px;
   }
-  .carinfo {
-    width: 100%;
-    display: grid;
-    grid: auto auto auto auto;
-  }
   .msgTo-btn {
     width: 123px;
     height: 38px;
@@ -1774,7 +1790,7 @@ export default {
     font-size: 16px;
   }
   .pad-col-width {
-    width: 215px;
+    width: 219px;
   }
   .car-btn-size {
     width: 148px;
@@ -1790,6 +1806,48 @@ export default {
     margin-top: 9px;
     margin-bottom: 30px;
     padding-left: 15px;
+  }
+  .msgTo-btn {
+    width: 123px;
+    height: 38px;
+    margin: 0;
+  }
+  .msg-container {
+    display: flex;
+    flex-direction: column;
+    margin: 17px 0 0 15px;
+  }
+  .psng-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin: 15px 0 0 0;
+  }
+  #msgTo {
+    margin: 0 0 20px 0;
+  }
+  .psng-save {
+    margin: 20px 0 0 0;
+  }
+  .board-section1 {
+    margin-top: 18px;
+    margin-bottom: 35px;
+    align-items: flex-end;
+  }
+  .board-section2 {
+    margin-bottom: 30px;
+  }
+  .board-section3 {
+    margin-bottom: 55px;
+  }
+  .info-btngroup {
+    margin: 20px 0 30px 0;
+    display: flex;
+    justify-content: space-evenly;
+  }
+  .board-section4 {
+    width: 80%;
+    align-self: center;
   }
 }
 </style>
