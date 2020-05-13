@@ -405,11 +405,10 @@
             :class="{ 'justify-between': windowWidth <= 600 }"
           >
             <select v-model="msgTo" name="msgTo" id="msgTo">
-              <option value>사이트 통합관제</option>
               <option
                 v-for="center in centers"
                 :key="center.name"
-                :value="center"
+                :value="center.name"
                 >{{ center.name }}</option
               >
             </select>
@@ -548,11 +547,10 @@
         <div class="text-gray">메시지</div>
         <div class="msg-container justify-end align-center">
           <select v-model="msgTo" name="msgTo" id="msgTo">
-            <option value>사이트 통합관제</option>
             <option
               v-for="center in centers"
               :key="center.name"
-              :value="center"
+              :value="center.name"
               >{{ center.name }}</option
             >
           </select>
@@ -659,7 +657,7 @@ export default {
     msgtxt: "",
     modalTitle: "",
     modalValue: "",
-    msgTo: "",
+    msgTo: "사이트 통합관제",
     centers: [{ name: "사이트 통합관제" }],
     drivetime: " ",
     successmsg: "",
