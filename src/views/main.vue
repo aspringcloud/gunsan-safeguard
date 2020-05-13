@@ -624,7 +624,7 @@ import axios from "axios";
 import router from "../router";
 import Modal from "../components/modal";
 import "@/assets/css/mainStyle.css";
-const url = "https://115.93.143.2:9103/api/";
+const url = "http://115.93.143.2:9103/api/";
 
 export default {
   name: "Main",

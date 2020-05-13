@@ -4,7 +4,7 @@ import router from './router'
 import VueSession from 'vue-session'
 
 // import io from 'socket.io-client';
-// const socket = io('ws://115.93.143.2:9103/ws/vehicle');
+// const socket = io('ws://115.93.143.2:9104/ws/vehicle');
 
 // Vue.prototype.$socket = socket;
 

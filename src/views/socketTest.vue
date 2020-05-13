@@ -15,7 +15,7 @@ export default {
     //   console.log("연결완료");
     //   this.message = res;
     // });
-    this.socket = new WebSocket("ws://115.93.143.2:9103/ws/vehicle");
+    this.socket = new WebSocket("ws://115.93.143.2:9104/ws/vehicle");
     this.socket.onopen = () => {
       this.status = "connected!";
     };
@@ -41,6 +41,7 @@ export default {
     },
     disconnect() {
       this.socket.close();
+      console.log("socket close");
       this.status = false;
     },
   },
