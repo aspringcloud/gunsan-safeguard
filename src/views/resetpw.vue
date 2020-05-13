@@ -6,13 +6,13 @@
       <div class="text-blue resetpw-title2">비밀번호 재설정</div>
     </div>
     <div class="mobile-justify" v-if="resetpage">
-      <div class="resetpw-txt">
+      <div class="resetpw-txt text-gray2">
         이메일로 임시 비밀번호를 발송합니다.
         <br />본인 확인을 위해 이름과 이메일 아이디를 입력해 주세요.
       </div>
       <div class="login-form">
         <form @submit.prevent="resetpw">
-          <label for="name">이름</label>
+          <label for="name" class="text-gray2">이름</label>
           <input
             v-model="username"
             type="text"
@@ -20,7 +20,7 @@
             name="username"
             placeholder="이름을 입력해주세요."
           />
-          <label for="emailID">이메일 아이디</label>
+          <label for="emailID" class="text-gray2">이메일 아이디</label>
           <input
             v-model="email"
             id="emailID"
@@ -38,7 +38,7 @@
       </div>
     </div>
     <div v-if="!resetpage">
-      <div class="resetpw2-txt">
+      <div class="resetpw2-txt text-gray2">
         <span>{{email}}</span> 으로
         <br />임시 비밀번호를 발송하였습니다.
       </div>
@@ -58,7 +58,7 @@ export default {
       email: "",
       errmsg1: "",
       errmsg2: "",
-      resetpage: true
+      resetpage: false
     };
   },
   methods: {
@@ -146,7 +146,6 @@ export default {
 .resetpw-txt {
   font-size: 16px;
   font-weight: 500;
-  color: #4f4f4f;
   width: 464px;
   margin-bottom: 30px;
 }

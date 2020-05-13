@@ -8,7 +8,7 @@
     <div class="text-blue login-title2">안전요원 로그인</div>
     <div class="login-form">
       <form @submit.prevent="login">
-        <label for="emailID">이메일 아이디</label>
+        <label for="emailID" class="text-gray2">이메일 아이디</label>
         <input
           v-model="user.email"
           id="emailID"
@@ -16,7 +16,7 @@
           name="emailID"
           placeholder="이메일 아이디를 입력해 주세요."
         />
-        <label for="pw">비밀번호</label>
+        <label for="pw" class="text-gray2">비밀번호</label>
         <input v-model="user.pw" type="password" id="pw" name="pw" placeholder="비밀번호를 입력해 주세요." />
         <button type="submit" class="login-btn login-btn-pos">로그인</button>
       </form>

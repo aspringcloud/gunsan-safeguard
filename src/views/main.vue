@@ -404,7 +404,7 @@
         </div>
 
         <div class="text-gray">메시지</div>
-        <div class="msg-container justify-end">
+        <div class="msg-container justify-end align-center">
           <select v-model="msgTo" name="msgTo" id="msgTo">
             <option value>사이트 통합관제</option>
             <option v-for="center in centers" :key="center.name" :value="center">{{center.name}}</option>
@@ -633,6 +633,7 @@ export default {
           var i = res.data.length;
           if (i) {
             var time = res.data[i - 1].time_start;
+            console.log(time);
             time = time.split("-").join("/");
             time = time.replace("T", " ");
             time = time.replace("Z", "");
@@ -1389,7 +1390,8 @@ export default {
   margin-right: 193px;
 }
 .lg-section2 {
-  width: 319px;
+  min-width: 312px;
+  width: max-content;
 }
 .car-btn-size {
   width: 139px;
@@ -1405,7 +1407,7 @@ export default {
 .msg-container {
   margin-top: 15px;
   margin-bottom: 39px;
-  align-items: center;
+  /* align-items: center; */
 }
 .psng-container {
   align-items: center;
