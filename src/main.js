@@ -3,6 +3,11 @@ import App from './App.vue'
 import router from './router'
 import VueSession from 'vue-session'
 
+// import io from 'socket.io-client';
+// const socket = io('ws://115.93.143.2:9103/ws/vehicle');
+
+// Vue.prototype.$socket = socket;
+
 const VueCookie = require('vue-cookie');
 
 var options = {

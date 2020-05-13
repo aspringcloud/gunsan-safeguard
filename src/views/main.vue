@@ -8,7 +8,8 @@
         </div>
       </div>
       <div class="header-right">
-        <span>{{user.info.first_name}}</span>님 안녕하세요!
+        <span>{{ user.info.first_name }}</span
+        >님 안녕하세요!
         <button @click="openSetting()">
           <img src="@/assets/img/setting.png" alt="setting button" />
           환경설정
@@ -19,14 +20,18 @@
         </button>
       </div>
       <div class="header-mobile">
-        <img @click="closeMobileSetting()" src="@/assets/img/menu.png" alt="mobile menu" />
+        <img
+          @click="closeMobileSetting()"
+          src="@/assets/img/menu.png"
+          alt="mobile menu"
+        />
       </div>
     </div>
 
     <!-- 햄버거 메뉴 오픈 -->
     <div class="small-menu" v-if="openHam">
       <div class="small-menu-title">
-        <b>{{user.info.first_name}}</b> 님 안녕하세요
+        <b>{{ user.info.first_name }}</b> 님 안녕하세요
       </div>
       <div class="small-menu-menus">
         <button @click="openSetting()">로그인 정보</button>
@@ -39,26 +44,28 @@
     <div class="mobile-setting-modal" v-if="sloginInfo">
       <div class="mobile-setting-modal-title">
         <div>로그인 정보</div>
-        <button @click="sloginInfo=false;">
+        <button @click="sloginInfo = false">
           <img width="18px;" src="@/assets/img/close.png" alt="close button" />
         </button>
       </div>
       <div class="setting-login-img">
         <img src="@/assets/img/profile.png" alt="user profile image" />
         <div>
-          <div class="setting-username">{{user.info.last_name}} {{user.info.first_name}}</div>
+          <div class="setting-username">
+            {{ user.info.last_name }} {{ user.info.first_name }}
+          </div>
           <button class="setting-btn">사진 변경하기</button>
         </div>
       </div>
       <div class="mobile-loginInfo-content">
         <div class="mobile-loginInfo-title">이메일 ID</div>
-        <div class="mobile-loginInfo-info">{{user.info.email}}</div>
+        <div class="mobile-loginInfo-info">{{ user.info.email }}</div>
         <div class="mobile-loginInfo-title">팀</div>
-        <div class="mobile-loginInfo-info">{{user.profile.team}}</div>
+        <div class="mobile-loginInfo-info">{{ user.profile.team }}</div>
         <div class="mobile-loginInfo-title">휴대폰</div>
-        <div class="mobile-loginInfo-info">{{user.profile.phone}}</div>
+        <div class="mobile-loginInfo-info">{{ user.profile.phone }}</div>
         <div class="mobile-loginInfo-title">권한</div>
-        <div class="mobile-loginInfo-info">{{user.profile.level}}</div>
+        <div class="mobile-loginInfo-info">{{ user.profile.level }}</div>
       </div>
     </div>
 
@@ -66,33 +73,56 @@
     <div class="mobile-setting-modal" v-if="schangePw">
       <div class="mobile-setting-modal-title">
         <div>비밀번호 변경</div>
-        <button @click="schangePw=false;">
+        <button @click="schangePw = false">
           <img width="18px;" src="@/assets/img/close.png" alt="close button" />
         </button>
       </div>
       <div class="setting-content">
         <form class="setting-infos" @submit.prevent="resetPw">
           <label for="currentPw">현재 비밀번호</label>
-          <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
+          <input
+            id="currentPw"
+            value="1234567890"
+            disabled
+            type="password"
+            name="newPw"
+          />
           <label for="newPw">새 비밀번호</label>
-          <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
+          <input
+            v-model="newpw"
+            type="password"
+            name="newPw"
+            placeholder="새로운 비밀번호를 입력하세요."
+          />
           <label for="renewPw">새 비밀번호 확인</label>
-          <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
-          <div v-if="errmsg" class="errmsg errmsg-pos">{{errmsg}}</div>
-          <div v-if="successmsg" class="text-blue errmsg-pos">{{successmsg}}</div>
+          <input
+            v-model="repw"
+            type="password"
+            name="renewPw"
+            placeholder="새로운 비밀번호를 다시 입력하세요."
+          />
+          <div v-if="errmsg" class="errmsg errmsg-pos">{{ errmsg }}</div>
+          <div v-if="successmsg" class="text-blue errmsg-pos">
+            {{ successmsg }}
+          </div>
           <div class="setting-pwrule">
             ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
-            <br />※ 비밀번호는 8글자 이상이어야 합니다.
-            <br />※ 비밀번호는 숫자로만 입력은 불가능합니다.
+            <br />※ 비밀번호는 8글자 이상이어야 합니다. <br />※ 비밀번호는
+            숫자로만 입력은 불가능합니다.
           </div>
-          <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
+          <button class="setting-btn rspw-btn-pos" type="submit">
+            변경하기
+          </button>
         </form>
       </div>
     </div>
 
     <!-- 태블릿,PC버전 환경설정 모달 -->
     <div v-if="isSetting">
-      <div class="modal-back" v-if="600<windowWidth && windowWidth<=960"></div>
+      <div
+        class="modal-back"
+        v-if="600 < windowWidth && windowWidth <= 960"
+      ></div>
       <div class="modalBox modalBox-setting">
         <button class="setting-closebtn" @click="isSetting = false">
           <img src="@/assets/img/closebtn.png" alt="close button" />
@@ -100,21 +130,27 @@
         <div class="setting-tab">
           <button
             class="setting-tab-login"
-            :class="{'setting-activetab': loginInfo}"
-            @click="loginInfo=true"
-          >로그인 정보</button>
+            :class="{ 'setting-activetab': loginInfo }"
+            @click="loginInfo = true"
+          >
+            로그인 정보
+          </button>
           <div class="setting-tab-divider"></div>
           <button
             class="setting-tab-pw"
-            :class="{'setting-activetab': !loginInfo}"
-            @click="loginInfo=false"
-          >비밀번호 변경</button>
+            :class="{ 'setting-activetab': !loginInfo }"
+            @click="loginInfo = false"
+          >
+            비밀번호 변경
+          </button>
         </div>
         <div v-if="loginInfo" class="setting-content setting-loginInfo">
           <div class="setting-login-img">
             <img src="@/assets/img/profile.png" alt="user profile image" />
             <div>
-              <div class="setting-username">{{user.info.last_name}} {{user.info.first_name}}</div>
+              <div class="setting-username">
+                {{ user.info.last_name }} {{ user.info.first_name }}
+              </div>
               <button class="setting-btn">사진 변경하기</button>
             </div>
           </div>
@@ -122,30 +158,65 @@
             <label for="email">이메일 ID</label>
             <input name="email" type="text" :value="user.info.email" readonly />
             <label for="team">팀</label>
-            <input name="team" type="text" :value="user.profile.team" readonly />
+            <input
+              name="team"
+              type="text"
+              :value="user.profile.team"
+              readonly
+            />
             <label for="phone">휴대폰</label>
-            <input name="phone" type="text" :value="user.profile.phone" readonly />
+            <input
+              name="phone"
+              type="text"
+              :value="user.profile.phone"
+              readonly
+            />
             <label for="auth">권한</label>
-            <input name="auth" type="text" :value="user.profile.level" readonly />
+            <input
+              name="auth"
+              type="text"
+              :value="user.profile.level"
+              readonly
+            />
           </div>
         </div>
 
         <div v-if="!loginInfo" class="setting-content">
           <form class="setting-infos" @submit.prevent="resetPw">
             <label for="currentPw">현재 비밀번호</label>
-            <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
+            <input
+              id="currentPw"
+              value="1234567890"
+              disabled
+              type="password"
+              name="newPw"
+            />
             <label for="newPw">새 비밀번호</label>
-            <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
+            <input
+              v-model="newpw"
+              type="password"
+              name="newPw"
+              placeholder="새로운 비밀번호를 입력하세요."
+            />
             <label for="renewPw">새 비밀번호 확인</label>
-            <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
-            <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
-            <div v-if="errmsg" class="errmsg errmsg-pos">{{errmsg}}</div>
-            <div v-if="successmsg" class="text-blue errmsg-pos">{{successmsg}}</div>
+            <input
+              v-model="repw"
+              type="password"
+              name="renewPw"
+              placeholder="새로운 비밀번호를 다시 입력하세요."
+            />
+            <button class="setting-btn rspw-btn-pos" type="submit">
+              변경하기
+            </button>
+            <div v-if="errmsg" class="errmsg errmsg-pos">{{ errmsg }}</div>
+            <div v-if="successmsg" class="text-blue errmsg-pos">
+              {{ successmsg }}
+            </div>
           </form>
           <div class="setting-pwrule">
             ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
-            <br />※ 비밀번호는 8글자 이상이어야 합니다.
-            <br />※ 비밀번호는 숫자로만 입력은 불가능합니다.
+            <br />※ 비밀번호는 8글자 이상이어야 합니다. <br />※ 비밀번호는
+            숫자로만 입력은 불가능합니다.
           </div>
         </div>
       </div>
@@ -162,7 +233,10 @@
       <slot>
         <b>차량</b>
         <div>
-          <b class="text-blue" style="font-size: 24px;">{{selectedCar.name}}</b> 을 선택합니까?
+          <b class="text-blue" style="font-size: 24px;">{{
+            selectedCar.name
+          }}</b>
+          을 선택합니까?
         </div>
       </slot>
     </modal>
@@ -177,7 +251,9 @@
         </div>
         <select v-model="selectedCar" name="selectCar" id="selectCar">
           <option value>차량을 선택하세요.</option>
-          <option v-for="car in cars" :key="car.name" :value="car">{{car.name}}</option>
+          <option v-for="car in cars" :key="car.name" :value="car">{{
+            car.name
+          }}</option>
         </select>
       </div>
     </div>
@@ -187,7 +263,7 @@
       v-if="isSubmit"
       :selectedCar="selectedCar"
       :title="modalTitle"
-      @close="isSubmit=false"
+      @close="isSubmit = false"
       @submit="submitModal"
     ></modal>
 
@@ -196,13 +272,11 @@
       v-if="isMsg"
       :selectedCar="selectedCar"
       title="msg"
-      @close="isMsg=false"
+      @close="isMsg = false"
       @submit="sendMsg"
     >
       <slot>
-        <div class="msg-title">
-          <b>사이트</b> 통합관제 화면으로 전송
-        </div>
+        <div class="msg-title"><b>사이트</b> 통합관제 화면으로 전송</div>
         <textarea
           @keydown="calcbyte()"
           @keyup="calcbyte"
@@ -212,18 +286,25 @@
           cols="30"
           rows="10"
         ></textarea>
-        <div class="msg-byte">{{byte}}/200bytes</div>
+        <div class="msg-byte">{{ byte }}/200bytes</div>
       </slot>
     </modal>
 
     <!-- moile && pad -->
-    <div v-if="dashboard && windowWidth < 960" class="flex-container dash-padding">
+    <div
+      v-if="dashboard && windowWidth < 960"
+      class="flex-container dash-padding"
+    >
       <!-- shuttle + clock -->
       <div class="justify-between width-100">
-        <img class="dash-shuttle-size" src="@/assets/img/shuttle2.png" alt="shuttle image" />
+        <img
+          class="dash-shuttle-size"
+          src="@/assets/img/shuttle2.png"
+          alt="shuttle image"
+        />
         <div>
-          <div class="time">{{clock}}</div>
-          <div class="date">{{today}}</div>
+          <div class="time">{{ clock }}</div>
+          <div class="date">{{ today }}</div>
         </div>
       </div>
       <!-- mobile car + power -->
@@ -235,7 +316,7 @@
         <div>
           <div class="text-gray info-title-size">차량</div>
           <div class="carinfo-txt">
-            {{selectedCar.name}}
+            {{ selectedCar.name }}
             <a @click="openSubmit('차량')">차량 변경하기</a>
           </div>
         </div>
@@ -266,8 +347,13 @@
           <div class="text-gray info-title-size">차량</div>
           <div>
             <div class="align-center">
-              <div class="carinfo-txt">{{selectedCar.name}}</div>
-              <button class="btn-outline car-btn-size" @click="openSubmit('차량')">차량 변경하기</button>
+              <div class="carinfo-txt">{{ selectedCar.name }}</div>
+              <button
+                class="btn-outline car-btn-size"
+                @click="openSubmit('차량')"
+              >
+                차량 변경하기
+              </button>
             </div>
           </div>
         </div>
@@ -294,38 +380,54 @@
       <!-- mobile+pad loc,time info -->
       <div class="board-section2">
         <div class="text-gray info-title-size">현재위치</div>
-        <div class="info-txt">{{location}}</div>
+        <div class="info-txt">{{ location }}</div>
         <div class="justify-between width-100">
           <div>
             <div class="text-gray info-title-size">운행시간</div>
-            <div class="info-txt">{{drivetime}}</div>
+            <div class="info-txt">{{ drivetime }}</div>
           </div>
           <div class="pad-col-width">
             <div class="text-gray info-title-size">마지막 전원 ON</div>
-            <div class="info-txt">{{lastOn}}</div>
+            <div class="info-txt">{{ lastOn }}</div>
           </div>
         </div>
       </div>
 
       <!-- msg && pnsgcnt-->
-      <div class="board-section3" :class="{'justify-between':600<windowWidth}">
+      <div
+        class="board-section3"
+        :class="{ 'justify-between': 600 < windowWidth }"
+      >
         <div>
           <div class="text-gray info-title-size">메시지</div>
-          <div class="msg-container" :class="{'justify-between':windowWidth<=600}">
+          <div
+            class="msg-container"
+            :class="{ 'justify-between': windowWidth <= 600 }"
+          >
             <select v-model="msgTo" name="msgTo" id="msgTo">
               <option value>사이트 통합관제</option>
-              <option v-for="center in centers" :key="center.name" :value="center">{{center.name}}</option>
+              <option
+                v-for="center in centers"
+                :key="center.name"
+                :value="center"
+                >{{ center.name }}</option
+              >
             </select>
-            <button class="btn-outline msgTo-btn text-gray2" @click="isMsg=true">메시지 보내기</button>
+            <button
+              class="btn-outline msgTo-btn text-gray2"
+              @click="isMsg = true"
+            >
+              메시지 보내기
+            </button>
           </div>
         </div>
 
-        <div :class="{'pad-col-width':600<windowWidth}">
+        <div :class="{ 'pad-col-width': 600 < windowWidth }">
           <div class="text-gray info-title-size">탑승객 수</div>
           <div class="psng-container">
             <div class="psnginfo">
               <div class="psng-txt">
-                <span>{{psng}}</span> 명
+                <span>{{ psng }}</span> 명
               </div>
               <div class="psng-cnt">
                 <button class="btn-minus" @click="decrease()">
@@ -337,26 +439,61 @@
                 </button>
               </div>
             </div>
-            <button v-if="600<windowWidth" class="btn-outline psng-save" @click="savePsng()">저장하기</button>
-            <button v-else class="btn-outline psng-save" @click="savePsng()">저장</button>
+            <button
+              v-if="600 < windowWidth"
+              class="btn-outline psng-save"
+              @click="savePsng()"
+            >
+              저장하기
+            </button>
+            <button v-else class="btn-outline psng-save" @click="savePsng()">
+              저장
+            </button>
           </div>
         </div>
       </div>
       <div class="board-section4">
         <div class="text-gray info-title-size">주행모드</div>
         <div class="info-btngroup">
-          <button class="togglebtn" :class="{btnActive: isAuto==1}" @click="autoOn()">자동주행</button>
-          <button class="togglebtn" :class="{btnActive: isAuto==2}" @click="autoOff()">수동주행</button>
+          <button
+            class="togglebtn"
+            :class="{ btnActive: isAuto == 1 }"
+            @click="autoOn()"
+          >
+            자동주행
+          </button>
+          <button
+            class="togglebtn"
+            :class="{ btnActive: isAuto == 2 }"
+            @click="autoOff()"
+          >
+            수동주행
+          </button>
         </div>
         <div class="text-gray info-title-size">주차여부</div>
         <div class="info-btngroup">
-          <button class="togglebtn" :class="{btnActive: isPark}" @click="parkOn()">예</button>
-          <button class="togglebtn" :class="{btnActive: !isPark}" @click="parkOff()">아니오</button>
+          <button
+            class="togglebtn"
+            :class="{ btnActive: isPark }"
+            @click="parkOn()"
+          >
+            예
+          </button>
+          <button
+            class="togglebtn"
+            :class="{ btnActive: !isPark }"
+            @click="parkOff()"
+          >
+            아니오
+          </button>
         </div>
       </div>
     </div>
 
-    <div v-if="dashboard && 960<=windowWidth" class="justify-center dash-padding">
+    <div
+      v-if="dashboard && 960 <= windowWidth"
+      class="justify-center dash-padding"
+    >
       <div class="lg-section1">
         <!-- select car -->
         <div class="justify-between align-center lg-container1">
@@ -364,8 +501,13 @@
           <div>
             <div class="text-gray">차량</div>
             <div class="flex-container">
-              <div class="carinfo-txt">{{selectedCar.name}}</div>
-              <button class="btn-outline car-btn-size" @click="openSubmit('차량')">차량 변경하기</button>
+              <div class="carinfo-txt">{{ selectedCar.name }}</div>
+              <button
+                class="btn-outline car-btn-size"
+                @click="openSubmit('차량')"
+              >
+                차량 변경하기
+              </button>
             </div>
           </div>
         </div>
@@ -373,11 +515,11 @@
         <!-- 현재 위치~차량전원 -->
         <div class="lg-container2">
           <div class="text-gray">현재위치</div>
-          <div class="info-txt">{{location}}</div>
+          <div class="info-txt">{{ location }}</div>
           <div class="text-gray">운행시간</div>
-          <div class="info-txt">{{drivetime}}</div>
+          <div class="info-txt">{{ drivetime }}</div>
           <div class="text-gray">마지막 전원 ON</div>
-          <div class="info-txt">{{lastOn}}</div>
+          <div class="info-txt">{{ lastOn }}</div>
           <div class="text-gray">차량 전원</div>
           <img
             class="powerbtn"
@@ -399,24 +541,31 @@
       <div class="lg-section2">
         <!-- 시계 -->
         <div class="datetime">
-          <div class="time">{{clock}}</div>
-          <div class="date">{{today}}</div>
+          <div class="time">{{ clock }}</div>
+          <div class="date">{{ today }}</div>
         </div>
 
         <div class="text-gray">메시지</div>
         <div class="msg-container justify-end align-center">
           <select v-model="msgTo" name="msgTo" id="msgTo">
             <option value>사이트 통합관제</option>
-            <option v-for="center in centers" :key="center.name" :value="center">{{center.name}}</option>
+            <option
+              v-for="center in centers"
+              :key="center.name"
+              :value="center"
+              >{{ center.name }}</option
+            >
           </select>
-          <button class="btn-outline msgTo-btn" @click="isMsg=true">보내기</button>
+          <button class="btn-outline msgTo-btn" @click="isMsg = true">
+            보내기
+          </button>
         </div>
 
         <div class="text-gray">탑승객 수</div>
 
         <div class="psng-container justify-end">
           <div class="psng-txt">
-            <span>{{psng}}</span> 명
+            <span>{{ psng }}</span> 명
           </div>
           <div class="psng-cnt">
             <button class="btn-minus" @click="decrease()">
@@ -427,17 +576,43 @@
               <img src="@/assets/img/plus.png" alt="plus button" />
             </button>
           </div>
-          <button class="btn-outline psng-save" @click="savePsng()">저장</button>
+          <button class="btn-outline psng-save" @click="savePsng()">
+            저장
+          </button>
         </div>
         <div class="text-gray">주행모드</div>
         <div class="info-btngroup justify-end">
-          <button class="togglebtn" :class="{btnActive: isAuto==1}" @click="autoOn()">자동주행</button>
-          <button class="togglebtn" :class="{btnActive: isAuto==2}" @click="autoOff()">수동주행</button>
+          <button
+            class="togglebtn"
+            :class="{ btnActive: isAuto == 1 }"
+            @click="autoOn()"
+          >
+            자동주행
+          </button>
+          <button
+            class="togglebtn"
+            :class="{ btnActive: isAuto == 2 }"
+            @click="autoOff()"
+          >
+            수동주행
+          </button>
         </div>
         <div class="text-gray">주차여부</div>
         <div class="info-btngroup justify-end">
-          <button class="togglebtn" :class="{btnActive: isPark}" @click="parkOn()">예</button>
-          <button class="togglebtn" :class="{btnActive: !isPark}" @click="parkOff()">아니오</button>
+          <button
+            class="togglebtn"
+            :class="{ btnActive: isPark }"
+            @click="parkOn()"
+          >
+            예
+          </button>
+          <button
+            class="togglebtn"
+            :class="{ btnActive: !isPark }"
+            @click="parkOff()"
+          >
+            아니오
+          </button>
         </div>
       </div>
     </div>
@@ -464,7 +639,7 @@ export default {
     headers: {
       accept: "application/json",
       authorization: "",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     isSetting: false,
     loginInfo: true,
@@ -493,7 +668,7 @@ export default {
     clock: "",
     openHam: false,
     windowWidth: 0,
-    psngTemp: 0
+    psngTemp: 0,
   }),
   beforeCreate() {
     if (!this.$session.exists()) {
@@ -506,13 +681,13 @@ export default {
       this.headers.authorization = "Basic " + this.user.basic;
       axios
         .get(url + "vehicles/", { headers: this.headers })
-        .then(res => {
+        .then((res) => {
           var infos = res.data;
           for (let i = 0; i < infos.length; i++) {
             this.cars.push({ id: infos[i].id, name: infos[i].name });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }
@@ -553,7 +728,7 @@ export default {
           this.loginInfo = true;
         }
       }
-    }
+    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -592,7 +767,7 @@ export default {
     submitCar() {
       axios
         .get(url + "vehicles/" + this.selectedCar.id, { headers: this.headers })
-        .then(res => {
+        .then((res) => {
           // console.log("초기값", res.data);
           this.psng = res.data.passenger;
           this.isOn = res.data.drive;
@@ -606,14 +781,14 @@ export default {
                 `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
                 {
                   headers: {
-                    Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1"
-                  }
+                    Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1",
+                  },
                 }
               )
-              .then(res => {
+              .then((res) => {
                 this.location = res.data.documents[0].address.address_name;
               })
-              .catch(err => {
+              .catch((err) => {
                 console.log(err);
                 this.location = "서비스 에러";
               });
@@ -621,15 +796,15 @@ export default {
             this.location = "위치정보 없음";
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
 
       axios
         .get(url + "oplogs/vehicle/" + this.selectedCar.id, {
-          headers: this.headers
+          headers: this.headers,
         })
-        .then(res => {
+        .then((res) => {
           var i = res.data.length;
           if (i) {
             var time = res.data[i - 1].time_start;
@@ -637,6 +812,7 @@ export default {
             time = time.split("-").join("/");
             time = time.replace("T", " ");
             time = time.replace("Z", "");
+            time = time.replace("+09:00");
             this.lastOn = time;
             this.calcDrivetime(time);
           } else {
@@ -644,7 +820,7 @@ export default {
             this.drivetime = " ";
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
       this.isDash = false;
@@ -715,7 +891,7 @@ export default {
           { new_password1: this.newpw, new_password2: this.repw },
           { headers: this.headers }
         )
-        .then(res => {
+        .then((res) => {
           console.log(res.data.detail);
           this.errmsg = "";
           this.successmsg = "새로운 비밀번호로 변경되었습니다.";
@@ -727,7 +903,7 @@ export default {
           this.newpw = "";
           this.repw = "";
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response.data);
           var err = error.response.data.new_password2[0];
           if (
@@ -758,12 +934,12 @@ export default {
     logout() {
       axios
         .post(url + "auth/logout/")
-        .then(res => {
+        .then((res) => {
           console.log(res.data.detail);
           this.$session.destroy();
           router.push({ name: "Login" });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -791,7 +967,7 @@ export default {
       if (!this.user.profile) {
         axios
           .get(url + "users/" + this.user.info.pk, { headers: this.headers })
-          .then(res => {
+          .then((res) => {
             this.user.profile = res.data.profile;
             if (this.windowWidth < 601) {
               this.sloginInfo = true;
@@ -803,7 +979,7 @@ export default {
               this.successmsg = "";
             }
           })
-          .catch(err => {
+          .catch((err) => {
             alert(
               err,
               "사용자 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요."
@@ -837,10 +1013,10 @@ export default {
             { drive: !this.isOn },
             { headers: this.headers }
           )
-          .then(res => {
+          .then((res) => {
             this.isOn = res.data.drive;
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
             alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
           });
@@ -853,10 +1029,10 @@ export default {
               { drive_mode: 2 },
               { headers: this.headers }
             )
-            .then(res => {
+            .then((res) => {
               this.isAuto = res.data.drive_mode;
             })
-            .catch(err => {
+            .catch((err) => {
               console.log(err);
               alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
             });
@@ -867,10 +1043,10 @@ export default {
               { drive_mode: 1 },
               { headers: this.headers }
             )
-            .then(res => {
+            .then((res) => {
               this.isAuto = res.data.drive_mode;
             })
-            .catch(err => {
+            .catch((err) => {
               console.log(err);
               alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
             });
@@ -883,10 +1059,10 @@ export default {
             { isparked: !this.isPark },
             { headers: this.headers }
           )
-          .then(res => {
+          .then((res) => {
             this.isPark = res.data.isparked;
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
             alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
           });
@@ -924,10 +1100,10 @@ export default {
           { passenger: this.psngTemp },
           { headers: this.headers }
         )
-        .then(res => {
+        .then((res) => {
           this.psng = res.data.passenger;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
         });
@@ -985,7 +1161,20 @@ export default {
         alert("메세지를 입력해주세요.");
         return;
       }
-      alert("메세지 기획 필요");
+      axios
+        .post(
+          url + "event/message/",
+          { vehicle_id: this.selectedCar.id, message: this.msgtxt },
+          { headers: this.headers }
+        )
+        .then((res) => {
+          alert("메세지가 전송되었습니다.");
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
+        });
       this.isMsg = false;
       this.byte = 0;
       this.msgtxt = "";
@@ -994,12 +1183,12 @@ export default {
       this.isMsg = false;
       this.byte = 0;
       this.msgtxt = "";
-    }
-  }
+    },
+  },
 };
 </script>
 
- <!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #main {
   margin-top: 101px;
