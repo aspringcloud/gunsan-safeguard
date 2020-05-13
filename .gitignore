@@ -2,8 +2,12 @@
 node_modules
 /dist
 
-app.yml
-cloudbuid.yml
+#app engine files
+# app.yml
+# cloudbuid.yml
+
+#old versions
+pandora/
 
 # local env files
 .env.local
