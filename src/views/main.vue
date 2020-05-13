@@ -232,7 +232,7 @@
         class="justify-between width-100"
         style="margin-top:19px;margin-bottom: 37px;"
       >
-        <div class="mobile-carChange">
+        <div>
           <div class="text-gray info-title-size">차량</div>
           <div class="carinfo-txt">
             {{selectedCar.name}}
@@ -254,7 +254,7 @@
             src="@/assets/img/mobile_poweroff.png"
             alt="switchOFF button"
           />
-          <div class="text-gray info-title-size">
+          <div class="text-gray info-title-size" style="margin-left:7px;">
             차량
             <br />전원
           </div>
@@ -264,7 +264,7 @@
       <div v-else class="board-section1 justify-between width-100">
         <div>
           <div class="text-gray info-title-size">차량</div>
-          <div class="mobile-carChange">
+          <div>
             <div class="align-center">
               <div class="carinfo-txt">{{selectedCar.name}}</div>
               <button class="btn-outline car-btn-size" @click="openSubmit('차량')">차량 변경하기</button>
@@ -1082,7 +1082,6 @@ export default {
   -moz-appearance: none;
   appearance: none;
 }
-
 .dash-padding {
   padding: 0 93px 47px 93px;
 }
@@ -1094,30 +1093,10 @@ export default {
   font-size: 18px;
   color: #333333;
 }
-.carinfo {
-  margin-bottom: 75px;
-  /* align-items: center; */
-}
-.carinfo-box {
-  width: 32px;
-  margin-left: 46px;
-}
-.carinfo-title {
-  color: #828282;
-  font-size: 16px;
-}
 .carinfo-txt {
   font-size: 36px;
   color: #333333;
   text-align: center;
-}
-.carinfo-btn {
-  width: 139px;
-  height: 38px;
-  border-radius: 19px;
-}
-.board-info {
-  margin-bottom: 49px;
 }
 .powerbtn {
   cursor: pointer;
@@ -1125,17 +1104,6 @@ export default {
 }
 .errmsg {
   color: #eb5757;
-}
-.modal {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
 }
 .modalBox {
   background-color: #ffffff;
@@ -1359,7 +1327,6 @@ export default {
   padding-left: 23px;
   text-align: center;
 }
-
 .psng-save {
   margin-left: 20px;
   width: 52px;
@@ -1407,15 +1374,12 @@ export default {
 .msg-container {
   margin-top: 15px;
   margin-bottom: 39px;
-  /* align-items: center; */
 }
 .psng-container {
   align-items: center;
   margin-top: 25px;
   margin-bottom: 54px;
 }
-/* --------------------------------- */
-
 @media (max-width: 600px) {
   #main {
     margin-top: 76px;
@@ -1561,46 +1525,11 @@ export default {
   .errmsg-pos {
     top: 195px;
   }
-  /* Dash board */
-  .main-board {
-    flex-direction: column;
-    margin: 0;
-    padding-top: 20px;
-    align-items: center;
-  }
-  .board-left {
-    margin: 0;
-    width: 312px;
-  }
-  .carinfo {
-    width: 100%;
-    align-items: start;
-    margin-bottom: 19px;
-  }
-  .carinfo img {
-    width: 134.5px;
-  }
   .time {
     font-size: 28px;
   }
   .date {
     font-size: 14px;
-  }
-  .board-right {
-    width: 312px;
-  }
-  .mobile-firstContainer {
-    display: flex;
-    width: 311px;
-    justify-content: space-between;
-    margin-bottom: 26px;
-  }
-  .info-title {
-    font-size: 13px;
-    margin-bottom: 10px;
-  }
-  .mobile-carChange .info-title {
-    margin-bottom: 0;
   }
   .carinfo-txt {
     font-weight: 500;
@@ -1612,7 +1541,6 @@ export default {
     color: #3bbae2;
     cursor: pointer;
   }
-
   .powerbtn {
     margin: 0;
   }
@@ -1620,14 +1548,6 @@ export default {
     padding: 0;
     margin: 10px 0 15px 0;
     font-size: 14px;
-  }
-  .board-info {
-    margin-bottom: 15px;
-  }
-  .mobile-wrap {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 23px;
   }
   #msgTo {
     width: 150px;
@@ -1754,14 +1674,6 @@ export default {
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.3);
   }
-  .main-board {
-    flex-direction: column;
-    align-items: center;
-  }
-  .board-left {
-    margin: 0;
-    width: 640px;
-  }
   .msgTo-btn {
     width: 123px;
     height: 38px;
@@ -1771,14 +1683,6 @@ export default {
     width: 94px;
     height: 38px;
     border-radius: 19px;
-  }
-  .mobile-wrap {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 23px;
-  }
-  block-btn {
-    display: block;
   }
   .dash-padding {
     padding-left: 36px;

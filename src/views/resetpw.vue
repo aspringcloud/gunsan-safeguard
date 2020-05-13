@@ -58,7 +58,7 @@ export default {
       email: "",
       errmsg1: "",
       errmsg2: "",
-      resetpage: false
+      resetpage: true
     };
   },
   methods: {
