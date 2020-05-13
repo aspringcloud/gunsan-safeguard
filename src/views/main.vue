@@ -359,7 +359,7 @@
     <div v-if="dashboard && 960<=windowWidth" class="justify-center dash-padding">
       <div class="lg-section1">
         <!-- select car -->
-        <div class="justify-between align-center board-section1">
+        <div class="justify-between align-center lg-container1">
           <img src="@/assets/img/shuttle2.png" alt="shuttle image" />
           <div>
             <div class="text-gray">차량</div>
@@ -371,7 +371,7 @@
         </div>
 
         <!-- 현재 위치~차량전원 -->
-        <div class="board-section2">
+        <div class="lg-container2">
           <div class="text-gray">현재위치</div>
           <div class="info-txt">{{location}}</div>
           <div class="text-gray">운행시간</div>
@@ -1396,10 +1396,10 @@ export default {
   height: 38px;
   margin-top: 11px;
 }
-.board-section1 {
+.lg-container1 {
   margin-bottom: 75px;
 }
-.board-section2 .info-txt {
+.lg-container2 .info-txt {
   margin: 19px 0 49px 52px;
 }
 .msg-container {
@@ -1616,8 +1616,7 @@ export default {
   }
   .info-txt {
     padding: 0;
-    margin-top: 10px;
-    margin-bottom: 15px;
+    margin: 10px 0 15px 0;
     font-size: 14px;
   }
   .board-info {
@@ -1717,7 +1716,7 @@ export default {
   .psng-container {
     display: flex;
     justify-content: flex-end;
-    margin-top: 7px;
+    margin: 7px 0 0 0;
   }
   .board-section3 {
     margin-bottom: 18px;
