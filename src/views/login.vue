@@ -101,7 +101,7 @@ export default {
         this.$cookie.set("emailID", this.user.email, 7);
       }
       axios
-        .post("http://115.93.143.2:9103/api/auth/login/", {
+        .post("https://115.93.143.2:9103/api/auth/login/", {
           email: this.user.email,
           password: this.user.pw
         })

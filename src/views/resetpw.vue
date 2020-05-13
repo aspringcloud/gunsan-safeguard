@@ -83,7 +83,7 @@ export default {
         alert("API(이름,이메일 검증, 메일발송) 확인 필요");
         axios
           .post(
-            "http://115.93.143.2:9103/api/users/resetpassword/",
+            "https://115.93.143.2:9103/api/users/resetpassword/",
             { email: this.email },
             {
               headers: {
