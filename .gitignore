@@ -3,8 +3,8 @@ node_modules
 /dist
 
 #app engine files
-# app.yml
-# cloudbuid.yml
+app.yml
+cloudbuid.yml
 
 #old versions
 pandora/

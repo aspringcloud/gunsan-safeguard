@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Main from './views/main.vue'
 import Login from './views/login.vue'
 import Resetpw from './views/resetpw.vue'
-import SocketTest from './views/socketTest.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -23,10 +22,6 @@ export default new Router({
             name: 'Resetpw',
             component: Resetpw,
         },
-        {
-            path: '/test',
-            name: 'SocketTest',
-            component: SocketTest
-        }
+
     ]
 })
