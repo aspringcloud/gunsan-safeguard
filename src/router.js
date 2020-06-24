@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Main from './views/main.vue'
+import MainM from './views/mainM.vue'
 import Login from './views/login.vue'
-import Resetpw from './views/resetpw.vue'
+// import Resetpw from './views/resetpw.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -10,18 +11,24 @@ export default new Router({
     routes: [{
             path: '/',
             name: 'Main',
-            component: Main,
+            components: {
+                default: Main,
+                mobile: MainM
+            }
         },
         {
             path: '/login',
             name: 'Login',
-            component: Login,
+            components: {
+                default: Login,
+                mobile: Login,
+            }
         },
-        {
-            path: '/resetpw',
-            name: 'Resetpw',
-            component: Resetpw,
-        },
+        // {
+        //     path: '/resetpw',
+        //     name: 'Resetpw',
+        //     component: Resetpw,
+        // },
 
 
     ]

@@ -17,13 +17,7 @@
           placeholder="이메일 아이디를 입력해 주세요."
         />
         <label for="pw" class="text-gray2">비밀번호</label>
-        <input
-          v-model="user.pw"
-          type="password"
-          id="pw"
-          name="pw"
-          placeholder="비밀번호를 입력해 주세요."
-        />
+        <input v-model="user.pw" type="password" id="pw" name="pw" placeholder="비밀번호를 입력해 주세요." />
         <button type="submit" class="login-btn login-btn-pos">로그인</button>
       </form>
     </div>
@@ -62,10 +56,10 @@ export default {
       first_name: "",
       last_name: "",
       token: "",
-      basic: "",
+      basic: ""
     },
     errmsg1: "",
-    errmsg2: "",
+    errmsg2: ""
   }),
   beforeCreate() {
     if (this.$session.exists()) {
@@ -109,24 +103,26 @@ export default {
       axios
         .post("http://115.93.143.2:9103/api/auth/login/", {
           email: this.user.email,
-          password: this.user.pw,
+          password: this.user.pw
         })
-        .then((res) => {
+        .then(res => {
           this.user = {
             token: res.data.token,
             basic: btoa(this.user.email + ":" + this.user.pw),
-            info: res.data.user,
+            info: res.data.user
           };
           this.$session.set("user", this.user);
+          this.$headers.authorization = "Basic " + this.user.basic;
+
           router.push({ name: "Main" });
         })
-        .catch((err) => {
+        .catch(err => {
           this.errmsg1 = "일치하는 사용자가 없습니다.";
           this.errmsg2 = "이름 또는 이메일 아이디를 확인해주세요.";
           console.log(err);
         });
-    },
-  },
+    }
+  }
 };
 </script>
 <style>
