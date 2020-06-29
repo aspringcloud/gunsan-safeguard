@@ -31,7 +31,8 @@ let operateMixin = {
         stopEMsg: "",
         stopOpt: "",
         stopReason: "",
-        stopOptList: ["차", "사람", "환경요소", "오류", "기타"]
+        stopOptList: ["차", "사람", "환경요소", "오류", "기타"],
+        ver: ''
     }),
     beforeCreate() {
         if (!this.$session.exists()) {
@@ -68,6 +69,11 @@ let operateMixin = {
         }
         setInterval(this.showClock, 1000);
         this.windowWidth = window.innerWidth;
+        if (this.windowWidth < 900) {
+            this.ver = 'pad-ver'
+        } else {
+            this.ver = 'pad-hor'
+        }
     },
     watch: {
         clock: function () {
@@ -81,27 +87,10 @@ let operateMixin = {
             }
         },
         windowWidth: function () {
-            if (this.windowWidth < 601) {
-                if (this.isSetting) {
-                    if (this.loginInfo) {
-                        this.sloginInfo = true;
-                    } else {
-                        this.schangePw = true;
-                    }
-                }
-                this.isSetting = false;
+            if (this.windowWidth < 900) {
+                this.ver = 'pad verti'
             } else {
-                this.openHam = false;
-                if (this.schangePw) {
-                    this.schangePw = false;
-                    this.isSetting = true;
-                    this.loginInfo = false;
-                }
-                if (this.sloginInfo) {
-                    this.sloginInfo = false;
-                    this.isSetting = true;
-                    this.loginInfo = true;
-                }
+                this.ver = 'pad hori'
             }
         }
     },

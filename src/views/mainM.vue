@@ -31,6 +31,9 @@
       @submit="submitModal"
     ></modal>
 
+    <!-- 타시오 배차정보 -->
+    <tasio ver="mobile"></tasio>
+
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />
       <div>
@@ -168,6 +171,8 @@
   </div>
 </template>
 <script>
+import Tasio from "@/components/tasio";
+
 import Modal from "@/components/modal";
 import NavbarM from "@/components/Navbar-m";
 import operateMixin from "@/views/operate.js";
@@ -176,7 +181,7 @@ import "@/views/main.css";
 export default {
   mixins: [operateMixin],
   name: "MainM",
-  components: { NavbarM, Modal },
+  components: { NavbarM, Modal, Tasio },
   data: () => ({})
 };
 </script>

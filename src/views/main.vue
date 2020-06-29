@@ -54,6 +54,9 @@
       </slot>
     </modal>
 
+    <!-- 타시오 배차정보 -->
+    <tasio :ver="ver"></tasio>
+
     <!-- 차량 선택 화면 -->
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />
@@ -219,6 +222,7 @@
 </template>
 
 <script>
+import Tasio from "@/components/tasio";
 import Modal from "@/components/modal";
 import Navbar from "@/components/Navbar";
 import operateMixin from "@/views/operate.js";
@@ -227,7 +231,7 @@ import "@/views/main.css";
 export default {
   mixins: [operateMixin],
   name: "Main",
-  components: { Modal, Navbar }
+  components: { Modal, Navbar, Tasio }
 };
 </script>
 
@@ -235,7 +239,6 @@ export default {
 #main {
   margin-top: 68px;
 }
-
 .selectCar-container {
   margin-top: 186px;
   margin-bottom: 100px;
