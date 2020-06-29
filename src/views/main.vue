@@ -21,7 +21,6 @@
         </div>
       </slot>
     </modal>
-
     <!-- submit 모달 -->
     <modal
       v-if="isSubmit"
@@ -30,7 +29,6 @@
       @close="isSubmit = false"
       @submit="submitModal"
     ></modal>
-
     <!-- msg 모달 -->
     <modal
       v-if="isMsg"
@@ -78,8 +76,8 @@
     <div id="dashboard" v-else>
       <div class="dashboard-container">
         <div class="clock-box box-default">
-          <div class="date">{{today}}</div>
-          <div class="time">{{clock}}</div>
+          <div class="date text-333">{{today}}</div>
+          <div class="time text-333 bold">{{clock}}</div>
         </div>
         <div class="dashboard-col1">
           <div class="dashboard-col1-row1">
@@ -93,8 +91,12 @@
               <div class="box-power box-default">
                 <div class="box-tohide"></div>
                 <div class="box-title">차량 전원</div>
-                <img @click="powerOff()" v-if="isOn" src="@/assets/img/switchOn.png" alt="차량 전원On" />
-                <img @click="powerOn()" v-else src="@/assets/img/switchOff.png" alt="차량 전원Off" />
+                <img
+                  @click="isOn?powerOff():powerOn()"
+                  height="31px"
+                  :src=" isOn? require('@/assets/img/switchOn.png'):require('@/assets/img/switchOff.png')"
+                  alt="차량 전원On"
+                />
               </div>
               <div class="msgTo-container">
                 <select name="msgTo" id="msgTo">사이트 통합관제</select>
@@ -219,8 +221,9 @@
 <script>
 import Modal from "@/components/modal";
 import Navbar from "@/components/Navbar";
-import "@/assets/css/mainStyle.css";
 import operateMixin from "@/views/operate.js";
+import "@/views/main.css";
+
 export default {
   mixins: [operateMixin],
   name: "Main",
@@ -234,9 +237,6 @@ export default {
 }
 
 .selectCar-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin-top: 186px;
   margin-bottom: 100px;
 }
@@ -246,24 +246,9 @@ export default {
 }
 .selectCar-title {
   font-size: 34px;
-  font-weight: 500;
   margin-bottom: 46px;
 }
-#selectCar {
-  width: 302px;
-  border: 1px solid #e0e0e0;
-  border-left: none;
-  border-right: none;
-  background-color: transparent;
-  height: 44px;
-  font-size: 16px;
-  color: #828282;
-  padding-left: 10px;
-  background: url("../assets/img/dropdown.png") no-repeat 95% 50%;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
+
 #msgtxt {
   border: none;
   width: 463px;
@@ -283,14 +268,13 @@ export default {
   text-align: end;
 }
 #dashboard {
-  background: #d8f1f9;
   padding: 30px 36px;
-  min-height: 100vh;
-  width: 100%;
-  min-width: max-content;
-  height: 100%;
-  display: flex;
-  justify-content: center;
+}
+.box-default {
+  padding: 12px;
+}
+.box-title {
+  font-size: 14px;
 }
 .dashboard-container {
   display: flex;
@@ -323,15 +307,6 @@ export default {
   width: 100%;
 }
 
-.box-default {
-  background: #ffffff;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 .stopMsg-container {
   width: 349px;
   height: 374px;
@@ -339,10 +314,7 @@ export default {
   padding: 13px 17px;
 }
 .box-title {
-  font-weight: 500;
   font-size: 14px;
-  color: #bdbdbd;
-  text-align: center;
 }
 .box-carselect .box-title {
   align-self: flex-start;
@@ -370,27 +342,19 @@ export default {
   top: 0;
 }
 .clock-box {
-  display: flex;
-  flex-direction: column;
-  padding-top: 8px;
-  align-items: center;
   position: absolute;
   right: 0;
   top: 0;
   width: 182px;
   height: 86px;
-  border-radius: 14px;
 }
 .time {
-  font-weight: 500;
   font-size: 36px;
   line-height: 35px;
-  color: #333333;
 }
 .date {
   font-size: 18px;
   letter-spacing: 0.02em;
-  color: #333333;
 }
 .infobox {
   width: 568px;
@@ -522,16 +486,12 @@ export default {
   font-size: 14px;
   margin-top: 2px;
 }
-.psng-form > button:active,
-.MsgBtn-container button:active {
+.psng-form > button:active {
   background: #2e92b0;
   color: #ffffff;
   border: none;
 }
 .btn-toggle {
-  background: #e0e0e0;
-  color: #333333;
-  font-weight: 500;
   font-size: 16px;
 }
 .dashboard-col1-row3 .btn-toggle {
@@ -540,10 +500,7 @@ export default {
   width: 120px;
   height: 48px;
 }
-.btn-toggle-active {
-  background: #3bbae2;
-  color: #ffffff;
-}
+
 .dashboard-col2-btn-container {
   display: grid;
   grid-template-columns: max-content max-content max-content;
@@ -590,29 +547,7 @@ export default {
   top: 72px;
 }
 .stopBtn {
-  width: 80px;
   height: 42px;
-  border: 0.5px solid #4f4f4f;
-  border-radius: 3px;
-  font-weight: 500;
-  font-size: 14px;
-  color: #4f4f4f;
-}
-.MsgBtn-container button:disabled {
-  color: #bdbdbd;
-  border-color: #bdbdbd;
-}
-.disabled-stopBtn {
-  color: #bdbdbd;
-  border-color: #bdbdbd;
-}
-.errmsg-container .fade-enter-active,
-.errmsg-container .fade-leave-active {
-  transition: opacity 0.5s;
-}
-.errmsg-container .fade-enter,
-.errmsg-container .fade-leave-to {
-  opacity: 0;
 }
 @media (min-width: 601px) and (max-width: 960px) {
   .selectCar-container {

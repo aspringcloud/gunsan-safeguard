@@ -1,17 +1,19 @@
 <template>
-  <div id="modal" :class="[title=='msg'? 'modal-msg':'modal-submit']">
-    <div class="modal-content">
-      <slot>
-        <div class="modal-car">{{selectedCar.name}}</div>
-        <div>
-          <b>{{title}}</b> 변경하시겠습니까?
-        </div>
-      </slot>
-    </div>
-    <div class="modal-footer">
-      <button class="text-blue" @click="closeModal()">취소</button>
-      <button v-if="title=='msg'" @click="submitModal()" class="blue text-white">보내기</button>
-      <button v-else @click="submitModal()" class="blue text-white">변경하기</button>
+  <div id="modal">
+    <div class="modalBox modal-container" :class="[title=='msg'? 'modal-msg':'modal-submit']">
+      <div class="modal-content">
+        <slot>
+          <div class="modal-car">{{selectedCar.name}}</div>
+          <div>
+            <b>{{title}}</b> 변경하시겠습니까?
+          </div>
+        </slot>
+      </div>
+      <div class="modal-footer">
+        <button class="text-blue" @click="closeModal()">취소</button>
+        <button v-if="title=='msg'" @click="submitModal()" class="blue text-white">보내기</button>
+        <button v-else @click="submitModal()" class="blue text-white">변경하기</button>
+      </div>
     </div>
   </div>
 </template>
@@ -36,21 +38,23 @@ export default {
   font-size: 18px;
 }
 #modal {
-  background: #ffffff;
-  box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12),
-    0px 24px 38px rgba(0, 0, 0, 0.14);
-  border-radius: 2px;
   position: fixed;
-  top: 0;
+  top: -68px;
   bottom: 0;
   left: 0;
   right: 0;
+  width: 100vw;
+  height: 100vh;
   margin: auto auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  z-index: 2;
+  z-index: 10;
+}
+.modal-container {
+  display: flex;
+  flex-direction: column;
 }
 .modal-submit {
   width: 323px;

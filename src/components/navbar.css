@@ -1,0 +1,93 @@
+.main-header {
+    position: fixed;
+    z-index: 9;
+    top: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f4f4f4;
+    box-shadow: 0px 0.5px 0px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(27.1828px);
+}
+
+.header-title {
+    font-weight: 500;
+}
+
+.header-title span {
+    font-weight: 800;
+    font-size: 24px;
+    font-family: "NanumSquareRound", sans-serif;
+}
+
+.setting-login-img {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.setting-btn {
+    border: 1px solid #3bbae2;
+    border-radius: 4px;
+    color: #3bbae2;
+    font-size: 14px;
+    background: transparent;
+}
+
+.setting-btn:active {
+    color: #ffffff;
+    background-color: #38bae2;
+}
+
+.setting-username {
+    font-weight: 500;
+    font-size: 16px;
+    color: #333333;
+    margin-bottom: 15px;
+}
+
+.setting-content {
+    width: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.setting-infos {
+    display: flex;
+    flex-direction: column;
+}
+
+.setting-pwrule {
+    color: #828282;
+    line-height: 24px;
+}
+
+.rspw-btn-pos {
+    align-self: flex-end;
+}
+
+.setting-infos input {
+    width: 268px;
+    background-color: #f8f8f8;
+    border: 0.2px solid #e0e0e0;
+    border-radius: 2px;
+    height: 30px;
+    padding-left: 20px;
+    color: #666666;
+}
+
+#currentPw {
+    background: #bdbdbd;
+    color: #666666;
+}
+
+.setting-infos input::placeholder {
+    color: #bdbdbd;
+}
+
+.errmsg-pos {
+    position: absolute;
+}

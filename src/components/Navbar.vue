@@ -83,132 +83,22 @@
   </div>
 </template>
 <script>
+import navbarMixin from "@/components/navbar.js";
+import "@/components/navbar.css";
+
 export default {
   name: "Navbar",
-  props: ["user"],
-  data: () => ({
-    newpw: "",
-    repw: "",
-    openHam: false,
-    isSetting: false,
-    loginInfo: true,
-    errmsg: "",
-    successmsg: ""
-  }),
-  methods: {
-    openSetting() {
-      if (!this.user.profile) {
-        this.$http
-          .get(this.$api + "users/" + this.user.info.pk, {
-            headers: this.$headers
-          })
-          .then(res => {
-            this.user.profile = res.data.profile;
-            this.isSetting = true;
-            this.loginInfo = true;
-            this.errmsg = "";
-            this.successmsg = "";
-          })
-          .catch(err => {
-            alert(
-              err,
-              "사용자 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요."
-            );
-          });
-      } else {
-        this.loginInfo = true;
-        this.isSetting = true;
-        this.errmsg = "";
-        this.successmsg = "";
-        this.newpw = "";
-        this.repw = "";
-      }
-    },
-    logout() {
-      this.$http
-        .post(this.$api + "auth/logout/")
-        .then(res => {
-          console.log(res.data.detail);
-          this.$session.destroy();
-          this.$router.push({ name: "Login" });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    resetPw() {
-      this.$http
-        .post(
-          this.$api + "auth/password/change/",
-          { new_password1: this.newpw, new_password2: this.repw },
-          { headers: this.$headers }
-        )
-        .then(res => {
-          console.log(res.data.detail);
-          this.errmsg = "";
-          this.successmsg = "새로운 비밀번호로 변경되었습니다.";
-          var temp = this.$session.get("user");
-          temp.basic = btoa(this.user.info.email + ":" + this.newpw);
-          this.$session.set("user", temp);
-          this.$headers.authorization =
-            "Basic " + this.$session.get("user").basic;
-          this.newpw = "";
-          this.repw = "";
-        })
-        .catch(error => {
-          console.log(error.response.data);
-          var err = error.response.data.new_password2[0];
-          if (
-            err ==
-            "This password is too short. It must contain at least 8 characters."
-          ) {
-            this.errmsg = "8글자 이상의 비밀번호를 입력하세요.";
-          } else if (err == "The two password fields didn't match.") {
-            this.errmsg = "두 개의 비밀번호가 일치하지 않습니다.";
-          } else if (err == "This field may not be blank.") {
-            this.errmsg = "비밀번호를 입력해주세요.";
-          } else if (err == "This password is too common.") {
-            this.errmsg = "평범하지 않은 비밀번호를 입력하세요.";
-          } else if (err == "This password is entirely numeric.") {
-            this.errmsg = "비밀번호에 숫자 외의 문자를 포함하세요.";
-          } else if (
-            err == "The password is too similar to the email address."
-          ) {
-            this.errmsg = "비밀번호가 이메일ID와 너무 유사합니다.";
-          } else if (err == "The password is too similar to the username.") {
-            this.errmsg = "비밀번호가 사용자 이름과 너무 유사합니다.";
-          } else {
-            console.log(this.errmsg);
-          }
-        });
-    }
-  }
+  mixins: [navbarMixin],
+  methods: {}
 };
 </script>
 <style scoped>
 .main-header {
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
   height: 68px;
-  background-color: #f4f4f4;
   padding: 0 36px;
-  box-shadow: 0px 0.5px 0px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(27.1828px);
 }
-
 .header-title {
   font-size: 18px;
-  font-weight: 500;
-}
-.header-title span {
-  font-weight: 800;
-  font-size: 24px;
-  font-family: "NanumSquareRound", sans-serif;
 }
 .header-right {
   display: inline-flex;
@@ -229,11 +119,10 @@ export default {
   margin-right: 10px;
 }
 .modalBox-setting {
-  z-index: 2;
+  position: absolute;
   border-radius: 14px;
   height: 500px;
   width: 383px;
-  position: fixed;
   top: 68px;
   right: 100px;
 }
@@ -249,24 +138,9 @@ export default {
   height: 60px;
   box-shadow: 0px 0.5px 0px rgba(0, 0, 0, 0.3);
 }
-.setting-username {
-  font-weight: 500;
-  font-size: 16px;
-  color: #333333;
-  margin-bottom: 15px;
-}
 .setting-btn {
-  border: 1px solid #3bbae2;
-  border-radius: 4px;
-  color: #3bbae2;
-  font-size: 14px;
-  background: transparent;
   width: 117px;
   height: 40px;
-}
-.setting-btn:active {
-  color: #ffffff;
-  background-color: #38bae2;
 }
 .setting-tab button {
   background: #f3f3f3;
@@ -289,60 +163,28 @@ export default {
   font-weight: bold;
 }
 .setting-login-img {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   width: 270px;
   margin-bottom: 10px;
 }
 
 .setting-content {
   padding-top: 30px;
-  width: 100%;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-.setting-infos {
-  display: flex;
-  flex-direction: column;
-}
-.errmsg-pos {
-  position: absolute;
-  top: 240px;
-}
-.setting-pwrule {
-  color: #828282;
-  line-height: 24px;
-  margin-top: 30px;
-  font-size: 14px;
-}
-
-#currentPw {
-  background: #bdbdbd;
-  color: #666666;
-}
-.rspw-btn-pos {
-  margin-top: 43px;
-  align-self: flex-end;
 }
 .setting-infos label {
   margin-top: 8px;
   margin-bottom: 8px;
   font-size: 14px;
 }
-.setting-infos input {
-  width: 268px;
-  background-color: #f8f8f8;
-  border: 0.2px solid #e0e0e0;
-  border-radius: 2px;
-  height: 30px;
-  padding-left: 20px;
-  color: #666666;
+.errmsg-pos {
+  top: 240px;
 }
-.setting-infos input::placeholder {
-  color: #bdbdbd;
+.setting-pwrule {
+  margin-top: 30px;
+  font-size: 14px;
+}
+
+.rspw-btn-pos {
+  margin-top: 43px;
 }
 @media (min-width: 601px) and (max-width: 960px) {
   .modalBox-setting {
@@ -352,12 +194,6 @@ export default {
     right: 0;
   }
   .modal-back {
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
     background-color: rgba(0, 0, 0, 0.3);
   }
 }

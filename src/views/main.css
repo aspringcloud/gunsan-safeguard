@@ -1,0 +1,102 @@
+.selectCar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.selectCar-title {
+    font-weight: 500;
+}
+
+#selectCar {
+    width: 302px;
+    border: 1px solid #e0e0e0;
+    border-left: none;
+    border-right: none;
+    background-color: transparent;
+    height: 44px;
+    font-size: 16px;
+    color: #828282;
+    padding-left: 10px;
+    background: url("../assets/img/dropdown.png") no-repeat 95% 50%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+#dashboard {
+    background: #d8f1f9;
+    min-height: 100vh;
+    width: 100%;
+    min-width: max-content;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.box-default {
+    background: #ffffff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.box-title {
+    font-weight: 500;
+    color: #bdbdbd;
+    text-align: center;
+}
+
+.clock-box {
+    display: flex;
+    flex-direction: column;
+    padding-top: 8px;
+    border-radius: 14px;
+    align-items: center;
+}
+
+.btn-toggle {
+    background: #e0e0e0;
+    color: #333333;
+    font-weight: 500;
+}
+
+.btn-toggle-active {
+    background: #3bbae2;
+    color: #ffffff;
+}
+
+.errmsg-container .fade-enter-active,
+.errmsg-container .fade-leave-active {
+    transition: opacity 0.5s;
+}
+
+.errmsg-container .fade-enter,
+.errmsg-container .fade-leave-to {
+    opacity: 0;
+}
+
+.stopBtn {
+    width: 80px;
+    border: 0.5px solid #4f4f4f;
+    border-radius: 3px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #4f4f4f;
+}
+
+.stopBtn:active {
+    border: none;
+    color: #ffffff;
+    background: #2e92b0;
+}
+
+.disabled-stopBtn,
+.disabled-stopBtn:active {
+    color: #bdbdbd;
+    background-color: #ffFFFf;
+    border: 0.5px solid #bdbdbd;
+
+}
