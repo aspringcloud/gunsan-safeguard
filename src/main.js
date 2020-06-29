@@ -24,12 +24,12 @@ Vue.prototype.$http = axios;
 // 분리 필요
 Vue.prototype.$api = "http://115.93.143.2:9103/api/"
 Vue.prototype.$headers = {
-    accept: "application/json",
-    authorization: "",
-    "Content-Type": "application/json"
-  },
+  accept: "application/json",
+  authorization: "",
+  "Content-Type": "application/json"
+}
 
-  new Vue({
-    router,
-    render: h => h(App)
-  }).$mount('#app')
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app')

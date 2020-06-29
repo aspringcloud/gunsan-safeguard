@@ -188,6 +188,7 @@ export default {
 <style scoped>
 .main-header {
   position: fixed;
+  z-index: 10;
   top: 0;
   display: flex;
   width: 100%;
@@ -342,5 +343,22 @@ export default {
 }
 .setting-infos input::placeholder {
   color: #bdbdbd;
+}
+@media (min-width: 601px) and (max-width: 960px) {
+  .modalBox-setting {
+    margin: 0 auto;
+    top: 219px;
+    left: 0;
+    right: 0;
+  }
+  .modal-back {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
 }
 </style>
