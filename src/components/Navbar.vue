@@ -83,7 +83,7 @@
   </div>
 </template>
 <script>
-import navbarMixin from "@/components/navbar.js";
+import navbarMixin from "@/components/navfunc.js";
 import "@/components/navbar.css";
 
 export default {

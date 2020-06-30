@@ -383,7 +383,7 @@ let operateMixin = {
         },
 
         savePsng() {
-            if (this.psngTemp >= 2147483847) {
+            if (this.psngTemp >= 16) {
                 alert("탑승객 수를 확인해주세요.");
                 this.psngTemp = this.psng;
                 return;

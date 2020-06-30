@@ -552,7 +552,7 @@ export default {
 .stopBtn {
   height: 42px;
 }
-@media (min-width: 601px) and (max-width: 960px) {
+@media (min-width: 601px) and (max-width: 900px) {
   .selectCar-container {
     flex-direction: column;
     margin-top: 235px;
