@@ -41,7 +41,7 @@ export default {
 }
 .hori .tasio-simple-container {
   top: 98px;
-  left: 239px;
+  left: 289px;
 }
 .mobile .tasio-simple-container {
   padding: 8px 12px 8px 15px;

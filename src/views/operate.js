@@ -31,6 +31,7 @@ let operateMixin = {
         stopEMsg: "",
         stopOpt: "",
         stopReason: "",
+        stopReasonL: 0,
         stopOptList: ["차", "사람", "환경요소", "오류", "기타"],
         ver: ''
     }),
@@ -76,6 +77,14 @@ let operateMixin = {
         }
     },
     watch: {
+        stopReason: function () {
+            var L = this.stopReason.length
+            if (L != this.stopReasonL) {
+                this.stopReason = this.calcbyte(100, this.stopReason)
+                this.stopReasonL = this.stopReason.length;
+
+            }
+        },
         clock: function () {
             if (this.drivetime != " ") {
                 this.calcDrivetime(this.lastOn);
@@ -114,26 +123,8 @@ let operateMixin = {
         }
     },
     methods: {
-        closeMobileSetting() {
-            if (this.sloginInfo) {
-                this.sloginInfo = false;
-                return;
-            } else if (this.schangePw) {
-                this.schangePw = false;
-                return;
-            } else {
-                this.openHam = !this.openHam;
-            }
-        },
         onResize() {
             this.windowWidth = window.innerWidth;
-        },
-        openmobilepw() {
-            this.errmsg = "";
-            this.successmsg = "";
-            this.schangePw = true;
-            this.openHam = false;
-            this.isModal = true;
         },
         resetCar() {
             this.selectedCar = "";
@@ -244,22 +235,32 @@ let operateMixin = {
                 if (diffD) this.drivetime = `${diffD}일 ` + this.drivetime;
             }
         },
-        calcbyte() {
-            var b, i, c;
-            var s = this.msgtxt;
-            var l = s.length;
-            for (b = i = 0; i < l; i++) {
-                c = s.charCodeAt(i);
-                b += c >> 11 ? 3 : c >> 7 ? 2 : 1;
-                if (b > 200) {
-                    this.msgtxt = s.substr(0, i);
-                    this.byte = b - (c >> 11 ? 3 : c >> 7 ? 2 : 1);
-                    alert("메세지는 200byte까지 입력 가능합니다.");
-                    return;
+        calcbyte(maxByte, str) {
+            var str_len = str.length;
+
+            var rbyte = 0;
+            var rlen = 0;
+            var one_char = "";
+            var str2 = "";
+
+            for (var i = 0; i < str_len; i++) {
+                one_char = str.charAt(i);
+                if (escape(one_char).length > 4) {
+                    rbyte += 2;
+                } else {
+                    rbyte++;
                 }
-                this.byte = b;
+                if (rbyte <= maxByte) {
+                    rlen = i + 1;
+                }
             }
-            this.byte = b;
+
+            if (rbyte > maxByte) {
+                // alert("메세지는 최대 " + maxByte + "byte를 초과할 수 없습니다.")
+                str2 = str.substr(0, rlen);
+                return str2;
+            }
+            return str
         },
 
         getTime() {

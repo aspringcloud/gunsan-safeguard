@@ -283,8 +283,8 @@ export default {
   display: flex;
   justify-content: space-between;
   position: relative;
-  width: 951px;
-  min-width: 951px;
+  width: 952px;
+  min-width: 952px;
   height: 500px;
 }
 .dashboard-col1 {
