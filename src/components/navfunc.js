@@ -76,26 +76,25 @@ let navbarMixin = {
                 })
                 .catch(error => {
                     console.log(error.response.data);
-                    var err = error.response.data.new_password2[0];
+                    var err = error.response.data.new_password2;
                     if (
-                        err ==
-                        "This password is too short. It must contain at least 8 characters."
+                        err.includes("This password is too short. It must contain at least 8 characters.")
+
                     ) {
                         this.errmsg = "8글자 이상의 비밀번호를 입력하세요.";
-                    } else if (err == "The two password fields didn't match.") {
+                    } else if (err.includes("The two password fields didn't match.")) {
                         this.errmsg = "두 개의 비밀번호가 일치하지 않습니다.";
-                    } else if (err == "This field may not be blank.") {
+                    } else if (err.includes("This field may not be blank.")) {
                         this.errmsg = "비밀번호를 입력해주세요.";
-                    } else if (err == "This password is too common.") {
-                        this.errmsg = "평범하지 않은 비밀번호를 입력하세요.";
-                    } else if (err == "This password is entirely numeric.") {
+                    } else if (err.includes("This password is entirely numeric.")) {
                         this.errmsg = "비밀번호에 숫자 외의 문자를 포함하세요.";
                     } else if (
-                        err == "The password is too similar to the email address."
-                    ) {
+                        err.includes("The password is too similar to the email address.")) {
                         this.errmsg = "비밀번호가 이메일ID와 너무 유사합니다.";
-                    } else if (err == "The password is too similar to the username.") {
+                    } else if (err.includes("The password is too similar to the username.")) {
                         this.errmsg = "비밀번호가 사용자 이름과 너무 유사합니다.";
+                    } else if (err.includes("This password is too common.")) {
+                        this.errmsg = "평범하지 않은 비밀번호를 입력하세요.";
                     } else {
                         console.log(this.errmsg);
                     }

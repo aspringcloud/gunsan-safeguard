@@ -27,7 +27,10 @@ export default new Router({
         {
             path: '/resetpw',
             name: 'Resetpw',
-            component: Resetpw,
+            components: {
+                default: Resetpw,
+                mobile: Resetpw,
+            }
         },
 
 

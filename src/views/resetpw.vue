@@ -28,9 +28,7 @@
             name="emailID"
             placeholder="이메일 아이디를 입력해주세요."
           />
-          <button type="submit" class="login-btn resetpw-btn-pos">
-            임시 비밀번호 받기
-          </button>
+          <button type="submit" class="login-btn resetpw-btn-pos">임시 비밀번호 받기</button>
         </form>
       </div>
       <div class="errmsg resetpw-errmsg">
@@ -41,11 +39,10 @@
     </div>
     <div v-if="!resetpage">
       <div class="resetpw2-txt text-gray2">
-        <span>{{ email }}</span> 으로 <br />임시 비밀번호를 발송하였습니다.
+        <span>{{ email }}</span> 으로
+        <br />임시 비밀번호를 발송하였습니다.
       </div>
-      <button @click="goLogin()" class="login-btn resetpw2-btn-pos">
-        로그인 하기
-      </button>
+      <button @click="goLogin()" class="login-btn resetpw2-btn-pos">로그인 하기</button>
     </div>
     <div class="copyright">COPYRIGHT@SPRINGCLOUD INC. ALL RIHTS RESERVED.</div>
   </div>
@@ -61,7 +58,7 @@ export default {
       email: "",
       errmsg1: "",
       errmsg2: "",
-      resetpage: true,
+      resetpage: true
     };
   },
   methods: {
@@ -83,7 +80,7 @@ export default {
         this.errmsg1 = "해당 계정은 개발자에게 문의해주세요.";
         this.errmsg2 = "";
       } else {
-        alert("API(이름,이메일 검증, 메일발송) 확인 필요");
+        // alert("API(이름,이메일 검증, 메일발송) 확인 필요");
         axios
           .post(
             "http://115.93.143.2:9103/api/users/resetpassword/",
@@ -91,14 +88,15 @@ export default {
             {
               headers: {
                 authorization:
-                  "Basic YWRtaW4xQGFzcHJpbmdjbG91ZC5jb206c3ByaW5nIzAwNw==",
-              },
+                  "Basic YWRtaW4xQGFzcHJpbmdjbG91ZC5jb206c3ByaW5nIzAwNw=="
+              }
             }
           )
-          .then((res) => {
+          .then(res => {
             console.log(res.data);
           })
-          .catch((err) => {
+          .catch(err => {
+            alert(err, "관리자에게 문의해주세요.");
             console.log(err);
           });
         this.resetpage = false;
@@ -117,8 +115,8 @@ export default {
     },
     goLogin() {
       router.push({ name: "Login" });
-    },
-  },
+    }
+  }
 };
 </script>
 <style>
