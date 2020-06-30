@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Main from './views/main.vue'
 import MainM from './views/mainM.vue'
 import Login from './views/login.vue'
-// import Resetpw from './views/resetpw.vue'
+import Resetpw from './views/resetpw.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -24,11 +24,11 @@ export default new Router({
                 mobile: Login,
             }
         },
-        // {
-        //     path: '/resetpw',
-        //     name: 'Resetpw',
-        //     component: Resetpw,
-        // },
+        {
+            path: '/resetpw',
+            name: 'Resetpw',
+            component: Resetpw,
+        },
 
 
     ]
