@@ -181,7 +181,7 @@ import "@/views/main.css";
 export default {
   mixins: [operateMixin],
   name: "MainM",
-  components: { NavbarM, Modal, Tasiohh },
+  components: { NavbarM, Modal, Tasio },
   data: () => ({})
 };
 </script>
