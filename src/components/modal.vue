@@ -2,7 +2,7 @@
   <div id="modal">
     <div class="modalBox modal-container" :class="[title=='msg'? 'modal-msg':'modal-submit']">
       <div class="modal-content">
-        <slot>
+        <slot name="content">
           <div class="modal-car">{{selectedCar.name}}</div>
           <div>
             <b>{{title}}</b> 변경하시겠습니까?
@@ -10,9 +10,11 @@
         </slot>
       </div>
       <div class="modal-footer">
-        <button class="text-blue" @click="closeModal()">취소</button>
-        <button v-if="title=='msg'" @click="submitModal()" class="blue text-white">보내기</button>
-        <button v-else @click="submitModal()" class="blue text-white">변경하기</button>
+        <slot name="btn">
+          <button class="text-blue" @click="closeModal()">취소</button>
+          <button v-if="title=='msg'" @click="submitModal()" class="blue text-white">보내기</button>
+          <button v-else @click="submitModal()" class="blue text-white">변경하기</button>
+        </slot>
       </div>
     </div>
   </div>

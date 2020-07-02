@@ -15,6 +15,7 @@ let operateMixin = {
         isPark: 1,
         isMsg: false,
         msgtxt: "",
+        msgtxtL: 0,
         modalTitle: "",
         modalValue: "",
         msgTo: "사이트 통합관제",
@@ -22,7 +23,7 @@ let operateMixin = {
             name: "사이트 통합관제"
         }],
         drivetime: " ",
-        byte: 0,
+        msgbyte: 0,
         today: "",
         clock: "",
         windowWidth: 0,
@@ -33,7 +34,11 @@ let operateMixin = {
         stopReason: "",
         stopReasonL: 0,
         stopOptList: ["차", "사람", "환경요소", "오류", "기타"],
-        ver: ''
+        ver: '',
+        tasioStatus: false,
+        socket: '',
+        status: false,
+        socketMsg: '',
     }),
     beforeCreate() {
         if (!this.$session.exists()) {
@@ -62,27 +67,37 @@ let operateMixin = {
                 .catch(err => {
                     console.log(err);
                 });
-            this.selectedCar = this.$session.get("selectedCar");
-            if (this.selectedCar) {
+            if (this.$session.get("selectedCar")) {
+                this.selectedCar = this.$session.get("selectedCar")
                 this.dashboard = true;
                 this.submitCar();
+                this.connectSocket();
             }
         }
         setInterval(this.showClock, 1000);
         this.windowWidth = window.innerWidth;
         if (this.windowWidth < 900) {
-            this.ver = 'pad-ver'
+            this.ver = 'pad ver'
         } else {
-            this.ver = 'pad-hor'
+            this.ver = 'pad hor'
         }
     },
     watch: {
+        socketMsg: function () {
+            console.log(this.socketMsg);
+            if (this.socketMsg.what == "EVENT" && this.socketMsg.how.type == "ondemand" && this.socketMsg.how.vehicle_id == this.selectedCar.id) {
+                this.tasioStatus = this.socketMsg.how.value;
+            }
+        },
+        // msgtxt: function () {
+        //     this.msgtxt = this.calcbyte(200, this.msgtxt)
+
+        // },
         stopReason: function () {
             var L = this.stopReason.length
             if (L != this.stopReasonL) {
                 this.stopReason = this.calcbyte(100, this.stopReason)
                 this.stopReasonL = this.stopReason.length;
-
             }
         },
         clock: function () {
@@ -110,6 +125,10 @@ let operateMixin = {
     },
     beforeDestroy() {
         window.removeEventListener("resize", this.onResize);
+        clearInterval(this.showClock);
+        this.socket.close();
+        console.log("socket close");
+        this.status = false;
     },
     computed: {
         blockStopSubmit: function () {
@@ -123,12 +142,34 @@ let operateMixin = {
         }
     },
     methods: {
+        updateTasio(status) {
+            this.tasioStatus = status;
+
+        },
+        getbyte() {
+            var str = document.getElementById('msgtxt').value;
+            this.msgtxt = this.calcbyte(200, str)
+        },
+        connectSocket() {
+            this.socket = new WebSocket("ws://222.114.39.8:9103");
+            this.socket.onopen = () => {
+                this.status = true;
+            };
+            this.socket.onmessage = ({
+                data
+            }) => {
+                this.socketMsg = data;
+            };
+        },
         onResize() {
             this.windowWidth = window.innerWidth;
         },
         resetCar() {
             this.selectedCar = "";
             this.isDash = false;
+            this.socket.close();
+            console.log("socket close");
+            this.status = false;
         },
         submitCar() {
             this.$http
@@ -221,6 +262,7 @@ let operateMixin = {
             var nowMin = this.addZeros(now.getMinutes(), 2);
             var nowSec = this.addZeros(now.getSeconds(), 2);
             this.clock = nowH + ":" + nowMin + ":" + nowSec;
+
         },
         calcDrivetime(time) {
             if (!this.isOn || !this.lastOn) return;
@@ -237,7 +279,6 @@ let operateMixin = {
         },
         calcbyte(maxByte, str) {
             var str_len = str.length;
-
             var rbyte = 0;
             var rlen = 0;
             var one_char = "";
@@ -256,10 +297,12 @@ let operateMixin = {
             }
 
             if (rbyte > maxByte) {
-                // alert("메세지는 최대 " + maxByte + "byte를 초과할 수 없습니다.")
+                if (maxByte == 200) alert("메세지는 최대 " + maxByte + "byte를 초과할 수 없습니다.")
+                this.msgbyte = 200;
                 str2 = str.substr(0, rlen);
                 return str2;
             }
+            this.msgbyte = rbyte;
             return str
         },
 
@@ -475,13 +518,11 @@ let operateMixin = {
                     console.log(err);
                     alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
                 });
-            this.isMsg = false;
-            this.byte = 0;
-            this.msgtxt = "";
+            this.closeMsg();
         },
         closeMsg() {
             this.isMsg = false;
-            this.byte = 0;
+            this.msgbyte = 0;
             this.msgtxt = "";
         },
         pickOpt(opt) {
@@ -493,6 +534,7 @@ let operateMixin = {
             this.stopSMsg = "";
             this.stopEMsg = "";
         },
+
         submitStop() {
             this.stopOpt = "";
             this.stopReason = "";

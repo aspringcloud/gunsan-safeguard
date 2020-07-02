@@ -9,7 +9,7 @@
       @close="resetCar"
       @submit="submitCar"
     >
-      <slot>
+      <template #content>
         <b>차량</b>
         <div>
           <b class="text-blue" style="font-size: 24px;">
@@ -19,7 +19,7 @@
           </b>
           을 선택합니까?
         </div>
-      </slot>
+      </template>
     </modal>
     <!-- submit 모달 -->
     <modal
@@ -29,34 +29,35 @@
       @close="isSubmit = false"
       @submit="submitModal"
     ></modal>
+
     <!-- msg 모달 -->
-    <modal
-      v-if="isMsg"
-      :selectedCar="selectedCar"
-      title="msg"
-      @close="isMsg = false"
-      @submit="sendMsg"
-    >
-      <slot>
+    <modal v-if="isMsg" :selectedCar="selectedCar" title="msg" @close="closeMsg" @submit="sendMsg">
+      <template #content>
         <div class="msg-title">
           <b>사이트</b> 통합관제 화면으로 전송
         </div>
         <textarea
-          @keydown="calcbyte()"
-          @keyup="calcbyte"
+          @keydown="getbyte"
+          @keyup="getbyte"
           v-model="msgtxt"
           name="msgtxt"
           id="msgtxt"
           cols="30"
           rows="10"
         ></textarea>
-        <div class="msg-byte">{{ byte }}/200bytes</div>
-      </slot>
+        <div class="msg-byte">{{ msgbyte }}/200bytes</div>
+      </template>
     </modal>
 
     <!-- 타시오 배차정보 -->
-    <tasio :ver="ver"></tasio>
-
+    {{tasioStatus}}
+    <tasio v-if="tasioStatus" :tasioStatus="tasioStatus" :ver="ver" @newStatus="updateTasio"></tasio>
+    <div
+      @click="tasioStatus='call'"
+      v-if="!tasioStatus"
+      style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
+      class="blue text-white bold"
+    >T</div>
     <!-- 차량 선택 화면 -->
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />
@@ -66,7 +67,7 @@
           <br />선택해주세요.
         </div>
         <select v-model="selectedCar" name="selectCar" id="selectCar">
-          <option value>차량을 선택하세요.</option>
+          <option value selected>차량을 선택하세요.</option>
           <option v-for="car in cars" :key="car.name" :value="car">
             {{
             car.name
@@ -103,7 +104,7 @@
               </div>
               <div class="msgTo-container">
                 <select name="msgTo" id="msgTo">사이트 통합관제</select>
-                <button>메시지 보내기</button>
+                <button @click="isMsg=true">메시지 보내기</button>
               </div>
             </div>
           </div>

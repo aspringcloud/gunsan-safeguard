@@ -32,7 +32,7 @@
     ></modal>
 
     <!-- 타시오 배차정보 -->
-    <tasio ver="mobile"></tasio>
+    <tasio ver="mobile" v-model="tasioStatus"></tasio>
 
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />
@@ -42,7 +42,7 @@
           <br />선택해주세요.
         </div>
         <select v-model="selectedCar" name="selectCar" id="selectCar">
-          <option value>차량을 선택하세요.</option>
+          <option value selected>차량을 선택하세요.</option>
           <option v-for="car in cars" :key="car.name" :value="car">
             {{
             car.name
