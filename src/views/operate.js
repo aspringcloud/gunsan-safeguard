@@ -112,6 +112,15 @@ let operateMixin = {
         this.socketMsg.how.vehicle_id == this.selectedCar.id
       ) {
         this.tasioStatus = this.socketMsg.how.value;
+      } else if (this.socketMsg.what == "RESP") {
+        if (this.socketMsg.how.type == "passenger")
+          this.psng = this.socketMsg.how.current_passenger;
+        else if (this.socketMsg.how.type == "power")
+          this.isOn = this.socketMsg.how.value == "on" ? true : false;
+        else if (this.socketMsg.how.type == "drive")
+          this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
+        else if (this.socketMsg.how.type == "parking")
+          this.isPark = this.socketMsg.how.value == "true" ? true : false;
       }
     },
     stopReason: function() {
@@ -176,7 +185,11 @@ let operateMixin = {
         this.status = true;
       };
       this.socket.onmessage = ({ data }) => {
-        this.socketMsg = data;
+        this.socketMsg = JSON.parse(data);
+      };
+      this.socket.onerror = (err) => {
+        alert("소켓 에러. 새로고침해주세요.");
+        console.log(err);
       };
     },
     onResize() {
@@ -448,7 +461,36 @@ let operateMixin = {
         this.isSubmit = false;
       }
     },
-
+    submitModal_socket() {
+      var msg = {
+        what: "EVENT",
+        who: "safeGuard",
+        how: {
+          type: "",
+          vehicle_id: this.selectedCar.id,
+          site_id: this.site.id,
+          value: "",
+        },
+      };
+      if (this.modalTitle == "차량") {
+        this.selectedCar = "";
+        this.$session.set("selectedCar", false);
+        this.dashboard = false;
+        this.isSubmit = false;
+        return;
+      } else if (this.modalTitle == "전원") {
+        msg.how.type = "power";
+        msg.how.value = this.isOn ? "off" : "on";
+      } else if (this.modalTitle == "주행모드") {
+        msg.how.type = "drive";
+        msg.how.value = this.isAuto == 1 ? "normal" : "auto";
+      } else {
+        msg.how.type = "parking";
+        msg.how.value = this.isPark ? "false" : "true";
+      }
+      this.socket.send(JSON.stringify(msg));
+      this.isSubmit = false;
+    },
     powerOn() {
       if (this.isOn) return;
       else {
@@ -490,16 +532,18 @@ let operateMixin = {
       //       console.log(err);
       //       alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
       //     });
-      //   var msg = {
-      //     what: "EVENT",
-      //     who: "safeGuard",
-      //     how: {
-      //       type: "passenger",
-      //       vehicle_id: this.selectedCar.id,
-      //       // current_passenger:
-      //       // 문의 필요
-      //     },
-      //   };
+      var msg = {
+        what: "EVENT",
+        who: "safeGuard",
+        how: {
+          type: "passenger",
+          vehicle_id: this.selectedCar.id,
+          site_id: this.site.id,
+          current_passenger: this.psngTemp,
+          accumulated_passenger: this.psng + this.psngTemp,
+        },
+      };
+      this.socket.send(JSON.stringify(msg));
     },
 
     autoOn() {

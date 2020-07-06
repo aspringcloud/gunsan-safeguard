@@ -27,7 +27,7 @@
       :selectedCar="selectedCar"
       :title="modalTitle"
       @close="isSubmit = false"
-      @submit="submitModal"
+      @submit="submitModal_socket"
     ></modal>
 
     <!-- msg 모달 -->
