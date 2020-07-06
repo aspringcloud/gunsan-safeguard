@@ -50,8 +50,8 @@
     </modal>
 
     <!-- 타시오 배차정보 -->
-    {{tasioStatus}}
     <tasio v-if="tasioStatus" :tasioStatus="tasioStatus" :ver="ver" @newStatus="updateTasio"></tasio>
+
     <div
       @click="tasioStatus='call'"
       v-if="!tasioStatus"

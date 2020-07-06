@@ -83,16 +83,31 @@ let operateMixin = {
         }
     },
     watch: {
+        tasioStatus: function () {
+            var msg = {
+                "who": ["safeGuard"],
+                "what": "EVENT",
+                "how": {
+                    "type": "ondemand",
+                    "vehicle_id": this.selectedCar.id,
+                    "value": "start"
+                }
+            }
+            if (this.tasioStatus == 'start') {
+                this.socket.send(JSON.stringify(msg));
+                console.log(msg)
+            } else if (this.tasioStatus == 'wait') {
+                msg.how.value = 'complete';
+                this.socket.send(JSON.stringify(msg));
+                console.log(msg)
+            }
+        },
         socketMsg: function () {
             console.log(this.socketMsg);
             if (this.socketMsg.what == "EVENT" && this.socketMsg.how.type == "ondemand" && this.socketMsg.how.vehicle_id == this.selectedCar.id) {
                 this.tasioStatus = this.socketMsg.how.value;
             }
         },
-        // msgtxt: function () {
-        //     this.msgtxt = this.calcbyte(200, this.msgtxt)
-
-        // },
         stopReason: function () {
             var L = this.stopReason.length
             if (L != this.stopReasonL) {

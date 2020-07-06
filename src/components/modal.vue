@@ -3,7 +3,7 @@
     <div class="modalBox modal-container" :class="[title=='msg'? 'modal-msg':'modal-submit']">
       <div class="modal-content">
         <slot name="content">
-          <div class="modal-car">{{selectedCar.name}}</div>
+          <div v-if="selectedCar" class="modal-car">{{selectedCar.name}}</div>
           <div>
             <b>{{title}}</b> 변경하시겠습니까?
           </div>

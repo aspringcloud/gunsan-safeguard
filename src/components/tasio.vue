@@ -1,7 +1,6 @@
 <template>
   <div id="Tasio" :class="ver">
-    {{status}}
-    <div class="modal-back">
+    <div v-if="!isSimple" class="modal-back">
       <div v-if="status=='call'" class="modalBox tasio-alarm">
         <h1>타시오 요청 알림</h1>
         <div class="loc-container">
@@ -33,7 +32,7 @@
             <div class="errmsg">{{remainTime}}</div>
           </div>
         </div>
-        <button @click="update('start')">배차 수락하기</button>
+        <button class="bottom-btn" @click="accept">배차 수락하기</button>
       </div>
 
       <div v-if="status=='denied'" class="modalBox tasio-denied">
@@ -60,32 +59,90 @@
             <div class="content-darkgray">{{psng}}</div>
           </div>
         </div>
-        <button @click="update(false)">확인</button>
+        <button class="bottom-btn" @click="update(false)">확인</button>
+      </div>
+
+      <div v-if="status.includes('t')" class="modalBox tasio-moving">
+        <button class="black-btn" @click="isSimple = true">최소화</button>
+        <div class="tasio-moving-title">
+          <h1>타시오 배차 정보</h1>
+          <div>{{statusTxt}}</div>
+        </div>
+        <div class="moving-loc-container">
+          <div class="moving-loc-box">
+            <div class="moving-loc-title">출발지</div>
+            <div :class="[status=='start'? 'content-red':'content-default']">{{depart}}</div>
+          </div>
+          <img src="@/assets/img/tasio_arrow.png" alt="arrow image" />
+          <div class="moving-loc-box">
+            <div class="moving-loc-title">도착지</div>
+            <div :class="[status=='toEnd'? 'content-red':'content-default']">{{arrival}}</div>
+          </div>
+        </div>
+        <div class="moving-rows">
+          <div class="moving-grid">
+            <div class="tasio-content-title">
+              탑승인원
+              <span :class="[status=='wait'? 'content-red':'content-default']">{{psng}}</span>
+            </div>
+          </div>
+          <div class="moving-grid">
+            <div class="tasio-content-title">
+              탑승자 이름
+              <span :class="[status=='wait'? 'content-red':'content-default']">{{psngName}}</span>
+            </div>
+          </div>
+          <div class="moving-grid">
+            <div class="tasio-content-title">요청시간</div>
+            <div class="content-default">{{reqTime}}</div>
+          </div>
+
+          <div class="moving-grid">
+            <div class="tasio-content-title">수락시간</div>
+            <div class="content-default">{{acceptTime}}</div>
+          </div>
+          <div v-if="status!='start'" class="moving-grid moving-grid-last">
+            <div class="tasio-content-title">출발지 도착시간</div>
+            <div class="content-default">{{arrivedTime}}</div>
+          </div>
+          <div v-if="status=='toEnd'" class="moving-grid moving-grid-last">
+            <div class="tasio-content-title">탑승객 탑승시간</div>
+            <div class="content-default">{{rideTime}}</div>
+          </div>
+        </div>
+        <div v-if="status != 'start'" class="moving-time-container"></div>
+        <button class="bottom-btn" @click="isConfirm=true">{{detailBtnTxt}}</button>
       </div>
     </div>
 
-    <!-- <div v-if="isSimple && !isDetail" class="tasio-simple-container">
-      <h1>타시오 배차 정보</h1>
-      <div>도착지로 이동중</div>
-      <button @click="isDetail=true">자세히</button>
-    </div>-->
+    <modal v-if="isConfirm">
+      <template #content>{{modalTxt}}</template>
+      <template #btn>
+        <button class="text-blue" @click="isConfirm=false">취소</button>
+        <button @click="toNextStatus" class="blue text-white">{{status=="wait"? '탑승':'도착'}}</button>
+      </template>
+    </modal>
 
-    <!-- <div class="tasio-detail-container" v-if="isDetail && status">
-      <div class="tasio-detail-header">
-        <h1>타시오 배차 정보</h1>
-        <div>출발지로 이동중</div>
-      </div>
-    </div>-->
+    <div v-if="isSimple" class="tasio-simple-container">
+      <h1>타시오 배차 정보</h1>
+      <div>{{statusTxt}}</div>
+      <button class="black-btn" @click="isSimple = false">자세히</button>
+    </div>
   </div>
 </template>
 <script>
+import Modal from "@/components/modal";
+
 export default {
   name: "Tasio",
+  components: { Modal },
   props: ["ver", "tasioStatus"],
   data: () => ({
-    isDetail: false,
     isSimple: false,
     remainTotal: 10,
+    acceptTime: "",
+    arrivedTime: "",
+    rideTime: "",
     status: "",
     depart: "자율주행 테마파크",
     arrival: "고군산 탐방센터",
@@ -93,13 +150,33 @@ export default {
     arrTime: "4분",
     moveTime: "8분",
     psngName: "홍길동",
-    reqTime: "오후 1시 42분 32초"
+    reqTime: "오후 1시 42분 32초",
+    isConfirm: false
   }),
   created() {
     this.status = this.tasioStatus;
-    this.timer();
+    if (this.status == "call") this.timer();
   },
+
   computed: {
+    modalTxt() {
+      if (this.status == "start") return this.depart + "에 도착했습니까?";
+      else if (this.status == "wait") return "탑승자가 탑승했습니까?";
+      else if (this.status == "toEnd") return this.arrival + "에 도착했습니까?";
+      return "";
+    },
+    detailBtnTxt() {
+      if (this.status == "start") return "출발지에 도착함";
+      else if (this.status == "wait") return "탑승자 확인함";
+      else if (this.status == "toEnd") return "도착지에 도착함";
+      return "";
+    },
+    statusTxt() {
+      if (this.status == "start") return "출발지로 이동중";
+      else if (this.status == "wait") return "탑승 대기중";
+      else if (this.status == "toEnd") return "도착지로 이동중";
+      return "";
+    },
     remainTime() {
       var min = Math.floor(this.remainTotal / 60);
       if (min) {
@@ -109,8 +186,33 @@ export default {
     }
   },
   methods: {
+    toNextStatus() {
+      if (this.status == "start") {
+        this.arrivedTime = this.getTime();
+        this.update("wait");
+      } else if (this.status == "wait") {
+        this.rideTime = this.getTime();
+        this.status = "toEnd";
+      } else if (this.status == "toEnd") this.update(false);
+      this.isConfirm = false;
+    },
+    accept() {
+      this.timeStop();
+      this.acceptTime = this.getTime();
+      this.update("start");
+    },
+    getTime() {
+      var now = new Date();
+      var h = now.getHours();
+      var m = now.getMinutes() + "분 ";
+      var s = now.getSeconds() + "초";
+      if (h >= 12) {
+        if (h > 12) h -= 12;
+        h = "오후 " + h;
+      } else h = "오전 " + h;
+      return h + "시 " + m + s;
+    },
     update(status) {
-      console.log(status);
       this.status = status;
       this.$emit("newStatus", status);
     },
@@ -150,6 +252,11 @@ export default {
   font-weight: 500;
   font-size: 18px;
   color: #4f4f4f;
+}
+.content-red {
+  font-weight: 500;
+  font-size: 18px;
+  color: #eb5757;
 }
 .denied-loc-box span {
   margin-left: 10px;
@@ -206,8 +313,7 @@ export default {
   justify-content: space-between;
   text-align: center;
 }
-.tasio-alarm button,
-.tasio-denied button {
+.bottom-btn {
   margin-top: 22px;
   position: absolute;
   left: 0;
@@ -290,20 +396,88 @@ export default {
   padding-top: 3px;
   font-size: 13px;
 }
-.tasio-simple-container button {
+.black-btn {
   background: #4f4f4f;
   border-radius: 3px;
   font-weight: 500;
   color: #ffffff;
-}
-.pad .tasio-simple-container button {
   width: 74px;
   height: 34px;
   font-size: 16px;
 }
-.mobile .tasio-simple-container button {
+.mobile .black-btn {
   width: 53px;
   height: 24px;
   font-size: 13px;
+}
+
+/* 디테일 박스  */
+.tasio-moving {
+  width: 370px;
+  height: 399px;
+  position: relative;
+  padding: 13px 20px 0 20px;
+}
+.tasio-moving .black-btn {
+  position: absolute;
+  top: -20px;
+  right: -37px;
+}
+.tasio-moving-title {
+  display: flex;
+  justify-content: space-between;
+}
+.tasio-moving-title h1 {
+  font-weight: 500;
+  font-size: 18px;
+  color: #333333;
+}
+.tasio-moving-title div {
+  font-weight: 500;
+  font-size: 14px;
+  color: #eb5757;
+}
+.moving-loc-container {
+  width: 340px;
+  height: 74px;
+  margin-top: 13px;
+  background: #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 11px 9px;
+}
+.moving-loc-container img {
+  margin-top: 4px;
+}
+.moving-loc-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.moving-loc-title {
+  margin-bottom: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #ffffff;
+}
+.moving-rows {
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: minmax(170px, auto) minmax(170px, auto);
+  grid-template-rows: 44px 77px 77px;
+}
+
+.tasio-content-title span {
+  margin-left: 10px;
+}
+.moving-grid {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 0.5px solid #e0e0e0;
+}
+.moving-grid-last {
+  border: none;
 }
 </style>
