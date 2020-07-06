@@ -34,7 +34,7 @@
     <modal v-if="isMsg" :selectedCar="selectedCar" title="msg" @close="closeMsg" @submit="sendMsg">
       <template #content>
         <div class="msg-title">
-          <b>사이트</b> 통합관제 화면으로 전송
+          <b>{{site.name}}</b> 통합관제 화면으로 전송
         </div>
         <textarea
           @keydown="getbyte"
@@ -103,7 +103,7 @@
                 />
               </div>
               <div class="msgTo-container">
-                <select name="msgTo" id="msgTo">사이트 통합관제</select>
+                <!-- <select name="msgTo" id="msgTo">사이트 통합관제</select> -->
                 <button @click="isMsg=true">메시지 보내기</button>
               </div>
             </div>
