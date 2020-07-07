@@ -1,6 +1,10 @@
 <template>
   <div id="modal">
-    <div class="modalBox modal-container" :class="[title=='msg'? 'modal-msg':'modal-submit']">
+    <div
+      class="modalBox modal-container"
+      :style="{width:width, height:height}"
+      :class="[title=='msg'? 'modal-msg':'modal-submit']"
+    >
       <div class="modal-content">
         <slot name="content">
           <div v-if="selectedCar" class="modal-car">{{selectedCar.name}}</div>
@@ -23,7 +27,7 @@
 <script>
 export default {
   name: "Modal",
-  props: ["selectedCar", "title"],
+  props: ["selectedCar", "title", "width", "height"],
   methods: {
     closeModal() {
       this.$emit("close");

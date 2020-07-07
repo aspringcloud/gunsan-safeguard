@@ -29,7 +29,7 @@
           </div>
           <div class="info-box">
             <div class="tasio-content-title">남은 배차 수락 시간</div>
-            <div class="errmsg">{{remainTime}}</div>
+            <div class="content-red">{{remainTime}}</div>
           </div>
         </div>
         <button class="bottom-btn" @click="accept">배차 수락하기</button>
@@ -46,17 +46,17 @@
           <div class="denied-loc-box">
             <div class="tasio-content-title">
               출발
-              <span class="content-darkgray">{{depart}}</span>
+              <span class="content-default">{{depart}}</span>
             </div>
 
             <div class="tasio-content-title">
               도착
-              <span class="content-darkgray">{{arrival}}</span>
+              <span class="content-default">{{arrival}}</span>
             </div>
           </div>
           <div class="denied-psng-box">
             <div class="tasio-content-title">인원</div>
-            <div class="content-darkgray">{{psng}}</div>
+            <div class="content-default">{{psng}}</div>
           </div>
         </div>
         <button class="bottom-btn" @click="update(false)">확인</button>
@@ -79,7 +79,7 @@
             <div :class="[status=='toEnd'? 'content-red':'content-default']">{{arrival}}</div>
           </div>
         </div>
-        <div class="moving-rows">
+        <div class="moving-rows" :class="[status=='start'?'moving-rows2':'moving-rows3']">
           <div class="moving-grid">
             <div class="tasio-content-title">
               탑승인원
@@ -115,11 +115,19 @@
       </div>
     </div>
 
-    <modal v-if="isConfirm">
-      <template #content>{{modalTxt}}</template>
+    <modal v-if="isConfirm" :width="ver=='mobile'?'220px':'260px'" height="max-content">
+      <template #content>
+        <div class="modal-content-p">
+          <div class="modal-bold" v-if="status!='wait'">{{status=='start'?depart:arrival}}</div>
+          <div>{{modalTxt}}</div>
+        </div>
+      </template>
       <template #btn>
-        <button class="text-blue" @click="isConfirm=false">취소</button>
-        <button @click="toNextStatus" class="blue text-white">{{status=="wait"? '탑승':'도착'}}</button>
+        <button class="text-blue modal-btn" @click="isConfirm=false">취소</button>
+        <button
+          @click="toNextStatus"
+          class="blue text-white modal-btn"
+        >{{status=="wait"? '탑승':'도착'}}</button>
       </template>
     </modal>
 
@@ -139,7 +147,7 @@ export default {
   props: ["ver", "tasioStatus"],
   data: () => ({
     isSimple: false,
-    remainTotal: 10,
+    remainTotal: 5000,
     acceptTime: "",
     arrivedTime: "",
     rideTime: "",
@@ -160,10 +168,8 @@ export default {
 
   computed: {
     modalTxt() {
-      if (this.status == "start") return this.depart + "에 도착했습니까?";
-      else if (this.status == "wait") return "탑승자가 탑승했습니까?";
-      else if (this.status == "toEnd") return this.arrival + "에 도착했습니까?";
-      return "";
+      if (this.status == "wait") return "탑승자가 탑승했습니까?";
+      else return "에 도착했습니까?";
     },
     detailBtnTxt() {
       if (this.status == "start") return "출발지에 도착함";
@@ -243,20 +249,34 @@ export default {
   padding: 0 20px;
   position: relative;
 }
+.mobile .tasio-alarm {
+  width: 322px;
+  height: 261px;
+  padding: 0 14px;
+}
+.tasio-content-title {
+  color: #bdbdbd;
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+.mobile .tasio-content-title {
+  font-size: 13px;
+}
 .content-default {
   font-weight: 500;
   font-size: 18px;
   color: #333333;
 }
-.content-darkgray {
-  font-weight: 500;
-  font-size: 18px;
-  color: #4f4f4f;
+.mobile .content-default {
+  font-size: 14px;
 }
 .content-red {
   font-weight: 500;
   font-size: 18px;
   color: #eb5757;
+}
+.mobile .content-red {
+  font-size: 14px;
 }
 .denied-loc-box span {
   margin-left: 10px;
@@ -267,17 +287,28 @@ export default {
   padding: 0 20px;
   position: relative;
 }
+.mobile .tasio-denied {
+  width: 290px;
+  height: 253px;
+  padding: 0 13px;
+}
 .denied-txt {
   text-align: center;
   font-size: 18px;
   padding: 24px 0;
+}
+.mobile .denied-txt {
+  font-size: 16px;
+  padding: 25px 0;
 }
 .denied-info-container {
   display: flex;
   justify-content: space-between;
   padding: 4px 15px;
 }
-
+.mobile .denied-info-container {
+  padding: 0 14px;
+}
 .tasio-alarm h1,
 .tasio-denied h1 {
   font-weight: 500;
@@ -287,24 +318,35 @@ export default {
   line-height: 52px;
   border-bottom: 0.5px solid #e0e0e0;
 }
+.mobile .tasio-alarm h1,
+.mobile .tasio-denied h1 {
+  font-size: 16px;
+  line-height: 39px;
+  height: 39px;
+}
 .loc-container {
   margin-top: 17px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+.mobile .loc-container {
+  margin-top: 7px;
+  padding: 0 15px;
+}
 .loc-box {
   text-align: center;
 }
-.tasio-content-title {
-  color: #bdbdbd;
-  margin-bottom: 6px;
-  font-size: 16px;
-}
-
 .loc-txt {
   font-size: 16px;
   color: #4f4f4f;
+}
+.mobile .loc-txt {
+  font-size: 13px;
+  color: #bdbdbd;
+}
+.mobile img {
+  height: 12px;
 }
 
 .info-container {
@@ -314,7 +356,6 @@ export default {
   text-align: center;
 }
 .bottom-btn {
-  margin-top: 22px;
   position: absolute;
   left: 0;
   bottom: 0;
@@ -324,6 +365,10 @@ export default {
   color: #ffffff;
   font-weight: 500;
   font-size: 18px;
+}
+.mobile .bottom-btn {
+  font-size: 16px;
+  height: 47px;
 }
 .mobile #Tasio {
   padding-top: 112px;
@@ -339,12 +384,6 @@ export default {
   top: -68px;
   z-index: 10;
 }
-.modalBox-size .tasio-denied {
-  width: 385px;
-  height: 314px;
-  padding: 0 20px;
-}
-
 .tasio-simple-container {
   z-index: 5;
   display: flex;
@@ -356,7 +395,7 @@ export default {
   box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12),
     0px 24px 38px rgba(0, 0, 0, 0.14);
 }
-.pad .tasio-simple-container {
+.tasio-simple-container {
   padding: 8px 14px 8px 20px;
   width: 344px;
   height: 50px;
@@ -373,12 +412,12 @@ export default {
   padding: 8px 12px 8px 15px;
   width: 291px;
   height: 40px;
+  top: 60px;
+  left: 25px;
 }
 .tasio-simple-container h1 {
   font-weight: 500;
   color: #333333;
-}
-.pad .tasio-simple-container h1 {
   font-size: 18px;
 }
 .mobile .tasio-simple-container h1 {
@@ -387,11 +426,10 @@ export default {
 .tasio-simple-container div {
   font-weight: 500;
   color: #eb5757;
-}
-.pad .tasio-simple-container div {
   padding-top: 2px;
   font-size: 14px;
 }
+
 .mobile .tasio-simple-container div {
   padding-top: 3px;
   font-size: 13px;
@@ -414,28 +452,47 @@ export default {
 /* 디테일 박스  */
 .tasio-moving {
   width: 370px;
-  height: 399px;
   position: relative;
   padding: 13px 20px 0 20px;
+}
+.mobile .tasio-moving {
+  width: 302px;
+  padding: 7px 10px 0 10px;
 }
 .tasio-moving .black-btn {
   position: absolute;
   top: -20px;
   right: -37px;
 }
+.mobile .tasio-moving .black-btn {
+  top: -7px;
+  right: -7px;
+}
 .tasio-moving-title {
   display: flex;
   justify-content: space-between;
+}
+.mobile .tasio-moving-title {
+  justify-content: start;
+  align-items: baseline;
 }
 .tasio-moving-title h1 {
   font-weight: 500;
   font-size: 18px;
   color: #333333;
 }
+.mobile .tasio-moving-title h1 {
+  font-size: 16px;
+  padding-left: 3px;
+}
 .tasio-moving-title div {
   font-weight: 500;
   font-size: 14px;
   color: #eb5757;
+}
+.mobile .tasio-moving-title div {
+  font-size: 13px;
+  margin-left: 10px;
 }
 .moving-loc-container {
   width: 340px;
@@ -446,6 +503,12 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
   padding: 11px 9px;
+}
+.mobile .moving-loc-container {
+  margin-top: 8px;
+  width: 282px;
+  height: 57px;
+  padding: 7px 8px;
 }
 .moving-loc-container img {
   margin-top: 4px;
@@ -461,13 +524,35 @@ export default {
   font-size: 14px;
   color: #ffffff;
 }
+.mobile .moving-loc-title {
+  font-size: 13px;
+  margin-bottom: 1px;
+}
 .moving-rows {
   margin-top: 6px;
   display: grid;
   grid-template-columns: minmax(170px, auto) minmax(170px, auto);
-  grid-template-rows: 44px 77px 77px;
 }
-
+.mobile .moving-rows .tasio-content-title {
+  margin: 0;
+}
+.mobile .moving-rows {
+  padding: 1px 3px 9px 3px;
+  /* margin-top: 11px; */
+  grid-template-columns: minmax(140px, auto) minmax(140px, auto);
+}
+.moving-rows2 {
+  grid-template-rows: 44px 77px 60px;
+}
+.mobile .moving-rows2 {
+  grid-template-rows: 35px 52px 47px;
+}
+.moving-rows3 {
+  grid-template-rows: 44px 77px 77px 60px;
+}
+.mobile .moving-rows3 {
+  grid-template-rows: 35px 52px 52px 47px;
+}
 .tasio-content-title span {
   margin-left: 10px;
 }
@@ -477,7 +562,24 @@ export default {
   justify-content: center;
   border-bottom: 0.5px solid #e0e0e0;
 }
+.mobile .moving-grid {
+  border: none;
+}
 .moving-grid-last {
   border: none;
+}
+.modal-content-p {
+  padding: 37px 0;
+}
+.mobile .modal-content-p {
+  padding: 27px 0;
+}
+.modal-bold {
+  font-weight: 500;
+  font-size: 18px;
+  color: #333333;
+}
+.mobile .modal-btn {
+  height: 47px;
 }
 </style>

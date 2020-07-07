@@ -32,7 +32,15 @@
     ></modal>
 
     <!-- 타시오 배차정보 -->
-    <tasio ver="mobile" v-model="tasioStatus"></tasio>
+
+    <tasio v-if="tasioStatus" :tasioStatus="tasioStatus" ver="mobile" @newStatus="updateTasio"></tasio>
+
+    <div
+      @click="tasioStatus='call'"
+      v-if="!tasioStatus"
+      style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
+      class="blue text-white bold"
+    >T</div>
 
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />
