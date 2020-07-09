@@ -23,7 +23,7 @@ Vue.config.productionTip = false
 Vue.prototype.$http = axios;
 
 // 분리 필요
-Vue.prototype.$api = "http://115.93.143.2:9103/api/"
+Vue.prototype.$api = "https://test.aspringcloud.com/api/"
 Vue.prototype.$headers = {
   accept: "application/json",
   authorization: "",

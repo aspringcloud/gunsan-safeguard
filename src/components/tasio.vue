@@ -147,7 +147,7 @@ export default {
   props: ["ver", "tasioStatus"],
   data: () => ({
     isSimple: false,
-    remainTotal: 5000,
+    remainTotal: 120,
     acceptTime: "",
     arrivedTime: "",
     rideTime: "",
@@ -195,10 +195,10 @@ export default {
     toNextStatus() {
       if (this.status == "start") {
         this.arrivedTime = this.getTime();
-        this.update("wait");
+        this.status = "wait";
       } else if (this.status == "wait") {
         this.rideTime = this.getTime();
-        this.status = "toEnd";
+        this.update("toEnd");
       } else if (this.status == "toEnd") this.update(false);
       this.isConfirm = false;
     },

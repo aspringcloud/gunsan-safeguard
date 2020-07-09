@@ -48,6 +48,72 @@
         <div class="msg-byte">{{ msgbyte }}/200bytes</div>
       </template>
     </modal>
+    <div class="msg-toast" :class="{'show-msg-toast':isMsgToast}">
+      <h1>
+        <span>SpringGo</span> 안전요원
+      </h1>
+      <div>메시지를 전송했습니다.</div>
+    </div>
+
+    <!-- passed station modal -->
+    <modal class="passedst-modal" v-if="stModal" width="330px" height="391px">
+      <template #content>
+        <h5>현재위치 변경</h5>
+        <div class="passedst-select-container">
+          <div
+            class="passedst-select-list"
+            :class="{'hide-st':stationInfo.site!=site.id,'active-station':nowSt==stationInfo}"
+            @click="nowSt = stationInfo"
+            v-for="(stationInfo, i) in stationList"
+            :key="i"
+          >
+            {{
+            stationInfo.site == site.id
+            ? stationInfo.name + " (" + stationInfo.mid + ")"
+            : ""
+            }}
+            <div v-if="nowSt==stationInfo" class="active-station"></div>
+          </div>
+        </div>
+      </template>
+      <template #btn>
+        <button class="text-blue" @click="stModal = false">취소</button>
+        <button class="blue text-white" @click="changeSt">선택</button>
+      </template>
+    </modal>
+
+    <!-- request change station modal -->
+    <modal v-if="reqStation" width="442px" height="222px">
+      <template #content>
+        <div class="reqst-container">
+          <div class="reqst-txt">
+            탑승객 수를 변경하기 전,
+            <br />설정된 현재위치가 맞는지 다시 한번 확인해주세요.
+          </div>
+          <div class="reqst-stInfo">
+            현재 위치:
+            <span v-if="station.name">{{ station.name + " (" + station.mid + ")" }}</span>
+            <span v-else>차량의 현재 위치를 선택하세요</span>
+          </div>
+        </div>
+      </template>
+      <template #btn>
+        <button
+          class="text-blue"
+          @click="
+            isStation = true;
+            reqStation = false;
+          "
+        >이상 없음</button>
+        <button
+          class="blue text-white"
+          @click="
+            reqStation = false;
+            stModal = true;
+          "
+        >현재위치 변경하기</button>
+      </template>
+    </modal>
 
     <!-- 타시오 배차정보 -->
     <tasio v-if="tasioStatus" :tasioStatus="tasioStatus" :ver="ver" @newStatus="updateTasio"></tasio>
@@ -103,6 +169,7 @@
                 />
               </div>
               <div class="msgTo-container">
+                <div class="site-box">{{site.alias}} 통합관제</div>
                 <!-- <select name="msgTo" id="msgTo">사이트 통합관제</select> -->
                 <button @click="isMsg=true">메시지 보내기</button>
               </div>
@@ -110,8 +177,19 @@
           </div>
           <div class="box-default infobox">
             <div class="infobx-col">
-              <div class="box-title">현재위치</div>
-              <div class="infobox-txt">{{location}}</div>
+              <div class="box-title station-title">
+                현재위치
+                <img v-if="!station.name" src="@/assets/img/warnP.png" alt="warning" />
+              </div>
+              <div class="station-content">
+                <div class="station-txt" v-if="station.name">
+                  {{ station.name }}
+                  <br />
+                  {{ station.mid }}
+                </div>
+                <div class="empty-station-txt" v-else>차량의 현재 위치를 선택하세요</div>
+                <button @click="stModal = true">변경</button>
+              </div>
             </div>
             <div class="infobox-divider" />
             <div class="infobx-col">
@@ -254,22 +332,14 @@ export default {
 }
 
 #msgtxt {
-  border: none;
   width: 463px;
   height: 148px;
-  background: #fafafa;
-  box-shadow: inset -5px -5px 30px #ffffff, inset 4px 4px 8px #ededed;
-  border-radius: 4px;
-  resize: none;
   font-size: 18px;
   padding: 44px 35px 0 35px;
   margin-top: 23px;
 }
 .msg-byte {
-  color: #828282;
-  font-size: 14px;
   width: 463px;
-  text-align: end;
 }
 #dashboard {
   padding: 30px 36px;
@@ -365,6 +435,8 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  padding-left: 0;
+  padding-right: 0;
 }
 .infobox-divider {
   height: 50px;
@@ -553,7 +625,56 @@ export default {
 .stopBtn {
   height: 42px;
 }
+.site-box {
+  width: 141px;
+}
+.station-title {
+  justify-content: center;
+  margin-bottom: 6px;
+}
+.empty-station-txt {
+  font-size: 14px;
+}
+.station-content {
+  align-items: center;
+}
+.station-content button {
+  margin-left: 10px;
+}
+.passedst-modal h5 {
+  font-size: 18px;
+  height: 52px;
+  line-height: 52px;
+}
+.passedst-select-container {
+  height: 256px;
+}
+.passedst-select-list {
+  width: 310px;
+  font-size: 16px;
+}
+.reqst-stInfo {
+  font-weight: 500;
+  margin-top: 26px;
+}
+.msg-toast {
+  top: 204px;
+  left: calc(50vw - 148px);
+  width: 296px;
+  height: 124px;
+}
+.msg-toast h1 {
+  height: 35px;
+  line-height: 35px;
+}
+.msg-toast div {
+  font-size: 18px;
+}
+
 @media (min-width: 601px) and (max-width: 900px) {
+  .msg-toast {
+    top: 345px;
+  }
   .selectCar-container {
     flex-direction: column;
     margin-top: 235px;

@@ -67,6 +67,7 @@ export default {
   height: 191px;
 }
 .modal-msg {
+  position: relative;
   width: 563px;
   height: 333px;
   padding-top: 22px;
@@ -88,7 +89,6 @@ export default {
 .modal-car {
   font-weight: 500;
 }
-
 @media (max-width: 600px) {
   .modal-submit {
     width: 290px;

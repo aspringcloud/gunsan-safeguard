@@ -100,3 +100,217 @@
     border: 0.5px solid #bdbdbd;
 
 }
+
+.site-box {
+    height: 34px;
+    background: #ffffff;
+    border: 0.5px solid #828282;
+    border-radius: 3px;
+    font-size: 14px;
+    color: #333333;
+    text-align: center;
+    line-height: 34px;
+}
+
+.station-title {
+    display: flex;
+    align-items: center;
+}
+
+.station-title img {
+    margin-left: 4px;
+}
+
+.station-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.empty-station-txt {
+    text-decoration-line: underline;
+    color: #eb5757;
+    line-height: 19px;
+    letter-spacing: -0.02em;
+}
+
+.station-txt {
+    font-size: 14px;
+    line-height: 21px;
+    color: #333333;
+}
+
+.station-content button {
+    width: 52px;
+    height: 32px;
+    color: #4f4f4f;
+    font-weight: 500;
+    font-size: 14px;
+    border: 0.5px solid #828282;
+    border-radius: 3px;
+}
+
+.station-content button:active {
+    border: none;
+    color: #ffffff;
+    background: #2e92b0;
+}
+
+.passedst-modal h5 {
+    margin: 0 10px;
+    font-weight: 500;
+    color: #333333;
+    border-bottom: 0.5px solid #e0e0e0;
+}
+
+.passedst-select-container {
+    margin-top: 8px;
+    margin-bottom: 13px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.passedst-select-list {
+    text-align: center;
+    line-height: 48px;
+    height: 48px;
+    position: relative;
+}
+
+.active-station {
+    background: #d8f1f9;
+}
+
+.hide-st {
+    display: none;
+}
+
+#msgtxt {
+    border: none;
+    background: #fafafa;
+    box-shadow: inset -5px -5px 30px #ffffff, inset 4px 4px 8px #ededed;
+    border-radius: 4px;
+    resize: none;
+}
+
+.msg-byte {
+    color: #828282;
+    font-size: 14px;
+    text-align: end;
+}
+
+.msg-toast {
+    position: fixed;
+    background: #FFFFFF;
+    box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 24px 38px rgba(0, 0, 0, 0.14);
+    z-index: 10;
+    border-radius: 2px;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.show-msg-toast {
+    visibility: visible;
+    animation: fade 2s linear;
+}
+
+@keyframes fade {
+
+    0%,
+    100% {
+        opacity: 0
+    }
+
+    20%,
+    80% {
+        opacity: 1
+    }
+}
+
+.msg-toast h1 {
+    color: #3BBAE2;
+    font-weight: 500;
+    font-size: 14px;
+    padding-left: 13px;
+    border-bottom: 0.5px solid #3BBAE2;
+}
+
+.msg-toast span {
+    font-family: "NanumSquareRound", sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.msg-toast div {
+    color: #333333;
+    text-align: center;
+    line-height: 89px;
+
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #c4c4c4;
+    border-radius: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #828282;
+}
+
+#oplog {
+    position: fixed;
+    background: #FFFFFF;
+    box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 24px 38px rgba(0, 0, 0, 0.14);
+    border-radius: 2px;
+
+}
+
+::-webkit-calendar-picker-indicator {
+    background: url("../assets/img/calendar.png") no-repeat;
+    cursor: pointer;
+}
+
+.oplog-label {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: #BDBDBD;
+}
+
+#oplog select,
+#oplog input {
+    background: #FFFFFF;
+    border: 0.5px solid #828282;
+    border-radius: 3px;
+    width: 100%;
+    height: 34px;
+    padding-left: 13px;
+}
+
+.driveDist-box {
+    width: 58px;
+}
+
+#oplog h1 {
+    font-weight: 500;
+    font-size: 18px;
+    color: #333333;
+}
+
+.oplog-row {
+    width: 100%;
+}

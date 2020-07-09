@@ -1,6 +1,7 @@
 <template>
   <div id="mainM">
     <navbar-m :user="user"></navbar-m>
+
     <!-- 차량 선택 모달 -->
     <modal
       v-if="isDash"
@@ -12,11 +13,7 @@
       <slot>
         <b>차량</b>
         <div>
-          <b class="text-blue" style="font-size: 24px;">
-            {{
-            selectedCar.name
-            }}
-          </b>
+          <b class="text-blue" style="font-size: 24px;">{{ selectedCar.name }}</b>
           을 선택합니까?
         </div>
       </slot>
@@ -28,15 +25,172 @@
       :selectedCar="selectedCar"
       :title="modalTitle"
       @close="isSubmit = false"
-      @submit="submitModal"
+      @submit="submitModal_socket"
     ></modal>
 
-    <!-- 타시오 배차정보 -->
+    <!-- passed station modal -->
+    <modal class="passedst-modal" v-if="stModal" width="250px" height="346px">
+      <template #content>
+        <h5>현재위치 변경</h5>
+        <div class="passedst-select-container">
+          <div
+            class="passedst-select-list"
+            :class="{'hide-st':stationInfo.site!=site.id,'active-station':nowSt==stationInfo}"
+            @click="nowSt = stationInfo"
+            v-for="(stationInfo, i) in stationList"
+            :key="i"
+          >
+            {{
+            stationInfo.site == site.id
+            ? stationInfo.name + " (" + stationInfo.mid + ")"
+            : ""
+            }}
+            <div v-if="nowSt==stationInfo" class="active-station"></div>
+          </div>
+        </div>
+      </template>
+      <template #btn>
+        <button class="text-blue" style="height: 47px;" @click="stModal = false">취소</button>
+        <button class="blue text-white" style="height: 47px;" @click="changeSt">선택</button>
+      </template>
+    </modal>
 
+    <!-- request change station modal -->
+    <modal v-if="reqStation" width="300px" height="240px">
+      <template #content>
+        <div class="reqst-container">
+          <div class="reqst-txt">
+            탑승객 수를 변경하기 전, 설정된 현재위치가 맞는지 다시 한번
+            확인해주세요.
+          </div>
+          <div class="reqst-stInfo">
+            <h5>현재 위치:</h5>
+            <div v-if="station.name">{{ station.name + " (" + station.mid + ")" }}</div>
+            <div v-else>차량의 현재 위치를 선택하세요</div>
+          </div>
+        </div>
+      </template>
+      <template #btn>
+        <button
+          class="text-blue"
+          style="height: 47px;"
+          @click="
+            isStation = true;
+            reqStation = false;
+          "
+        >이상 없음</button>
+        <button
+          class="blue text-white"
+          style="height: 47px;"
+          @click="
+            reqStation = false;
+            stModal = true;
+          "
+        >현재위치 변경하기</button>
+      </template>
+    </modal>
+
+    <!-- msg 모달 -->
+    <modal v-if="isMsg" :selectedCar="selectedCar" title="msg" @close="closeMsg" @submit="sendMsg">
+      <template #content>
+        <div class="msg-title">
+          <b>{{site.name}}</b> 통합관제 화면으로 전송
+        </div>
+        <textarea
+          @keydown="getbyte"
+          @keyup="getbyte"
+          v-model="msgtxt"
+          name="msgtxt"
+          id="msgtxt"
+          cols="30"
+          rows="10"
+        ></textarea>
+        <div class="msg-byte">{{ msgbyte }}/200bytes</div>
+      </template>
+    </modal>
+    <div class="msg-toast" :class="{'show-msg-toast':isMsgToast}">
+      <h1>
+        <span>SpringGo</span> 안전요원
+      </h1>
+      <div>메시지를 전송했습니다.</div>
+    </div>
+
+    <!-- oplog modal -->
+    <!-- <oplog ver="mobile"></oplog> -->
+    <div v-if="isOplog" id="oplog">
+      <h1>운행기록</h1>
+      <div class="oplog-row">
+        <div class="oplog-box">
+          <div class="oplog-label">시작시간</div>
+          <input type="datetime-local" />
+        </div>
+        <div class="oplog-box">
+          <div class="oplog-label">종료시간</div>
+          <input type="datetime-local" />
+        </div>
+      </div>
+      <div class="oplog-row">
+        <div class="oplog-box">
+          <div class="oplog-label">주요이슈</div>
+          <select name id></select>
+        </div>
+        <div class="oplog-box">
+          <div class="oplog-label">주요질문</div>
+          <select name id></select>
+        </div>
+      </div>
+      <div class="oplog-row">
+        <div class="oplog-box">
+          <div class="oplog-sbox driveDist-box">
+            <div class="oplog-label">주행거리</div>
+            <input type="number" id="driveDist" /> km
+          </div>
+          <div class="oplog-sbox">
+            <div class="oplog-label">탑승객 수</div>
+            <input type="number" id="totalPsng" /> 명
+          </div>
+        </div>
+        <div class="oplog-box">
+          <div class="oplog-sbox">
+            <div class="oplog-label">날씨</div>
+            <select name id="weather"></select>
+          </div>
+          <div class="oplog-sbox">
+            <div class="oplog-label">온도</div>
+            <input type="number" id="climate" /> ˚C
+          </div>
+        </div>
+      </div>
+      <div class="oplog-row">
+        <div class="oplog-box">
+          <div class="oplog-label">이벤트</div>
+          <select name id></select>
+        </div>
+        <div class="oplog-box">
+          <div class="oplog-sbox">
+            <div class="oplog-label">DTG size</div>
+            <input type="number" id="DTG" /> KB
+          </div>
+          <div class="oplog-sbox">
+            <div class="oplog-label">DVR size</div>
+            <input type="number" id="DVR" /> GB
+          </div>
+        </div>
+      </div>
+      <div class="oplog-box">
+        <div class="oplog-label">Task</div>
+        <textarea name id cols="30" rows="10"></textarea>
+      </div>
+      <div class="btn-container">
+        <button @click="isOplog=false;">취소</button>
+        <button @click="submitOplog">저장하기</button>
+      </div>
+    </div>
+    <!-- 타시오 배차정보 -->
     <tasio v-if="tasioStatus" :tasioStatus="tasioStatus" ver="mobile" @newStatus="updateTasio"></tasio>
 
     <div
-      @click="tasioStatus='call'"
+      @click="tasioStatus = 'call'"
       v-if="!tasioStatus"
       style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
       class="blue text-white bold"
@@ -51,11 +205,7 @@
         </div>
         <select v-model="selectedCar" name="selectCar" id="selectCar">
           <option value selected>차량을 선택하세요.</option>
-          <option v-for="car in cars" :key="car.name" :value="car">
-            {{
-            car.name
-            }}
-          </option>
+          <option v-for="car in cars" :key="car.name" :value="car">{{ car.name }}</option>
         </select>
       </div>
     </div>
@@ -63,11 +213,11 @@
       <div class="mainM-container">
         <div class="mainM-row1">
           <div class="clock-box box-default">
-            <div class="date text-333">{{today}}</div>
-            <div class="time text-333 bold">{{clock}}</div>
+            <div class="date text-333">{{ today }}</div>
+            <div class="time text-333 bold">{{ clock }}</div>
           </div>
-          <select name="msgTo" id="msgTo">사이트 통합관제</select>
-          <button></button>
+          <div class="site-box">{{site.alias}} 통합관제</div>
+          <button @click="isMsg=true"></button>
         </div>
         <div class="mainM-row2">
           <div>
@@ -79,31 +229,48 @@
             <div class="box-default box-power">
               <div class="box-title">차량 전원</div>
               <img
-                @click="isOn?powerOff():powerOn()"
-                :src=" isOn? require('@/assets/img/switchOn.png'):require('@/assets/img/switchOff.png')"
+                @click="isOn ? powerOff() : powerOn()"
+                :src="
+                  isOn
+                    ? require('@/assets/img/switchOn.png')
+                    : require('@/assets/img/switchOff.png')
+                "
                 alt="차량 전원On"
               />
             </div>
           </div>
           <div class="box-default box-info">
-            <div class="box-title">현재위치</div>
-            <div class="infobox-txt">{{location}}</div>
+            <!-- passed station -->
+            <div class="box-title station-title">
+              현재위치
+              <img v-if="!station.name" src="@/assets/img/warnM.png" alt="warning" />
+            </div>
+            <div class="station-content">
+              <div class="station-txt" v-if="station.name">
+                {{ station.name }}
+                <br />
+                {{ station.mid }}
+              </div>
+              <div class="empty-station-txt" v-else>차량의 현재 위치를 선택하세요</div>
+              <button @click="stModal = true">변경</button>
+            </div>
+
             <div class="box-title">마지막 전원 ON</div>
-            <div class="infobox-txt">{{lastOn}}</div>
+            <div class="infobox-txt">{{ lastOn }}</div>
             <div class="box-title">운행시간</div>
-            <div class="infobox-txt">{{drivetime}}</div>
+            <div class="infobox-txt">{{ drivetime }}</div>
           </div>
         </div>
         <div class="mainM-row3">
           <div class="box-default">
             <div class="box-title">탑승객 수</div>
             <div class="text-333">
-              <span>{{psng}}</span>
+              <span>{{ psng }}</span>
               명
             </div>
             <div class="psng-form">
               <select name="psngForm" id="psngForm" v-model="psngTemp">
-                <option v-for="i in 15" :key="i" :value="i">{{i}}</option>
+                <option v-for="i in 15" :key="i" :value="i">{{ i }}</option>
               </select>
               <button @click="savePsng()">저장</button>
             </div>
@@ -138,24 +305,28 @@
               <button
                 @click="pickOpt('출발')"
                 class="btn-toggle"
-                :class="{'btn-toggle-active': stopOpt=='출발'}"
+                :class="{ 'btn-toggle-active': stopOpt == '출발' }"
               >출발</button>
               <button
                 @click="pickOpt('도착')"
                 class="btn-toggle"
-                :class="{'btn-toggle-active': stopOpt=='도착'}"
+                :class="{ 'btn-toggle-active': stopOpt == '도착' }"
               >도착</button>
             </div>
             <div class="stop-div">
               <div class="box-title">정지사유</div>
               <select v-model="stopOpt" name="stopReason" id="stopReason">
                 <option value>선택하세요</option>
-                <option v-for="(opt,i) in stopOptList" :key="i" :value="opt">{{opt}}</option>
+                <option v-for="(opt, i) in stopOptList" :key="i" :value="opt">
+                  {{
+                  opt
+                  }}
+                </option>
               </select>
             </div>
           </div>
           <input
-            :disabled="!(stopOpt=='오류' || stopOpt=='기타')"
+            :disabled="!(stopOpt == '오류' || stopOpt == '기타')"
             type="text"
             name="stopMsg"
             id="stopMsg"
@@ -166,9 +337,9 @@
               <transition name="fade">
                 <div
                   class="err-box"
-                  :class="[stopSMsg? 'text-blue':'errmsg']"
+                  :class="[stopSMsg ? 'text-blue' : 'errmsg']"
                   v-if="stopEMsg || stopSMsg"
-                >{{stopEMsg}}{{stopSMsg}}</div>
+                >{{ stopEMsg }}{{ stopSMsg }}</div>
               </transition>
             </div>
             <button class="stopBtn" :class="blockStopSubmit" @click="beforeSubmitStop()">전송하기</button>
@@ -179,10 +350,11 @@
   </div>
 </template>
 <script>
+// import Oplog from "@/components/oplog";
 import Tasio from "@/components/tasio";
-
 import Modal from "@/components/modal";
 import NavbarM from "@/components/Navbar-m";
+
 import operateMixin from "@/views/operate.js";
 import "@/views/main.css";
 
@@ -412,5 +584,93 @@ export default {
 .err-box {
   padding-left: 10px;
   font-size: 14px;
+}
+.empty-station-txt {
+  font-size: 13px;
+  width: 101px;
+}
+.stmodal-btn {
+  height: 47px;
+}
+.passedst-modal h5 {
+  font-size: 16px;
+  height: 39px;
+  line-height: 39px;
+}
+.passedst-select-container {
+  height: 230px;
+}
+.passedst-select-list {
+  width: 230px;
+  font-size: 14px;
+}
+.reqst-container {
+  display: flex;
+  flex-direction: column;
+  height: 140px;
+  justify-content: space-between;
+  align-items: center;
+}
+.reqst-txt {
+  font-size: 14px;
+  text-align: center;
+  line-height: 23px;
+  width: 150px;
+}
+.reqst-stInfo h5 {
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  line-height: 22px;
+}
+.reqst-stInfo div {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 25px;
+}
+.site-box {
+  width: 110px;
+}
+.msg-title {
+  font-size: 16px;
+}
+.msg-title b {
+  font-size: 16px;
+}
+#msgtxt {
+  margin-top: 17px;
+  width: 272px;
+  height: 113px;
+  font-size: 14px;
+  padding: 20px;
+}
+.msg-byte {
+  width: 272px;
+}
+.msg-toast {
+  top: 200px;
+  left: calc(50vw - 117px);
+  width: 234px;
+  height: 122px;
+}
+.msg-toast h1 {
+  height: 32px;
+  line-height: 32px;
+}
+.msg-toast div {
+  font-size: 14px;
+}
+#oplog {
+  width: 348px;
+  height: calc(100vh - 60px);
+  overflow: auto;
+  top: 45px;
+  z-index: 20;
+  left: calc(50vw - 176px);
+  padding: 13px 58px 0 48px;
+}
+.oplog-box {
+  margin-top: 10px;
+  width: 100%;
 }
 </style>
