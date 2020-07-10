@@ -140,8 +140,8 @@
         </div>
       </div>
       <div class="oplog-row">
-        <div class="oplog-box">
-          <div class="oplog-sbox driveDist-box">
+        <div class="oplog-box two-box-container">
+          <div class="oplog-sbox">
             <div class="oplog-label">주행거리</div>
             <input type="number" id="driveDist" /> km
           </div>
@@ -150,7 +150,7 @@
             <input type="number" id="totalPsng" /> 명
           </div>
         </div>
-        <div class="oplog-box">
+        <div class="oplog-box two-box-container">
           <div class="oplog-sbox">
             <div class="oplog-label">날씨</div>
             <select name id="weather"></select>
@@ -166,7 +166,7 @@
           <div class="oplog-label">이벤트</div>
           <select name id></select>
         </div>
-        <div class="oplog-box">
+        <div class="oplog-box two-box-container">
           <div class="oplog-sbox">
             <div class="oplog-label">DTG size</div>
             <input type="number" id="DTG" /> KB
@@ -181,9 +181,9 @@
         <div class="oplog-label">Task</div>
         <textarea name id cols="30" rows="10"></textarea>
       </div>
-      <div class="btn-container">
-        <button @click="isOplog=false;">취소</button>
-        <button @click="submitOplog">저장하기</button>
+      <div class="oplog-btn-container">
+        <button class="text-blue" @click="isOplog=false;">취소</button>
+        <button class="text-white blue" @click="submitOplog">저장하기</button>
       </div>
     </div>
     <!-- 타시오 배차정보 -->
@@ -661,16 +661,26 @@ export default {
   font-size: 14px;
 }
 #oplog {
+    position: fixed;
   width: 348px;
   height: calc(100vh - 60px);
-  overflow: auto;
   top: 45px;
-  z-index: 20;
   left: calc(50vw - 176px);
   padding: 13px 58px 0 48px;
 }
 .oplog-box {
   margin-top: 10px;
   width: 100%;
+}
+#oplog textarea {
+  height: 128px;
+}
+.oplog-btn-container {
+  margin-top: 15px;
+  margin-left: -48px;
+  width: 343px;
+}
+.oplog-btn-container button {
+  height: 47px;
 }
 </style>

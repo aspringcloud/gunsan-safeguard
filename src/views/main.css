@@ -270,12 +270,17 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #828282;
 }
+.oplog-back {
+    z-index: 20;
 
+}
 #oplog {
-    position: fixed;
     background: #FFFFFF;
     box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 24px 38px rgba(0, 0, 0, 0.14);
     border-radius: 2px;
+     overflow: auto;
+    z-index: 20;
+    position: absolute;
 
 }
 
@@ -292,25 +297,61 @@
 }
 
 #oplog select,
-#oplog input {
+#oplog input,
+#oplog textarea {
     background: #FFFFFF;
     border: 0.5px solid #828282;
     border-radius: 3px;
-    width: 100%;
-    height: 34px;
     padding-left: 13px;
 }
-
-.driveDist-box {
-    width: 58px;
+#oplog select,
+#oplog input{
+    height: 34px;
 }
+#oplog textarea {
+    padding-top: 5px;
+    padding-bottom: 8px;
+    resize: none;
+    width: 100%;
+}
+.oplog-box > select,
+.oplog-box > input {
+    width: 100%;
 
+}
+.oplog-box {
+    width: 242px;
+}
+.oplog-sbox > input:not(.sbox-input-wide) {
+    width: 58px;
+    margin-right: 5px;
+}
+.oplog-sbox > select{
+    width: 133px;
+}
+.sbox-input-wide {
+    margin-right: 5px;
+    width: 83px;
+}
 #oplog h1 {
     font-weight: 500;
     font-size: 18px;
     color: #333333;
+    padding-bottom: 6px;
 }
 
-.oplog-row {
+.oplog-row, .textarea-box {
     width: 100%;
+}
+.oplog-sbox {
+    display: inline-block;
+}
+.two-box-container {
+    display: flex;
+    justify-content: space-between;
+}
+.oplog-btn-container button {
+    border-top: 0.5px solid #3BBAE2;
+    width: 50%;
+    font-weight: 500;
 }

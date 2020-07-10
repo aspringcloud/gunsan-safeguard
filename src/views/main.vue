@@ -1,6 +1,82 @@
 <template>
   <div id="main">
     <navbar :user="user"></navbar>
+
+    <!-- OPLOG!!!!20.07.10 -->
+    <div  v-if="isOplog" class="modal-back oplog-back">
+<div id="oplog">
+      <h1>운행기록</h1>
+      <div class="oplog-row">
+        <div class="oplog-box">
+          <div class="oplog-label">시작시간</div>
+          <input type="datetime-local" />
+        </div>
+        <div class="oplog-box">
+          <div class="oplog-label">종료시간</div>
+          <input type="datetime-local" />
+        </div>
+      </div>
+      <div class="oplog-row">
+        <div class="oplog-box">
+          <div class="oplog-label">주요이슈</div>
+          <select name id></select>
+        </div>
+        <div class="oplog-box">
+          <div class="oplog-label">주요질문</div>
+          <select name id></select>
+        </div>
+      </div>
+      <div class="oplog-row">
+        <div class="oplog-box two-box-container">
+          <div class="oplog-sbox">
+            <div class="oplog-label">주행거리</div>
+            <input type="number" id="driveDist" /> km
+          </div>
+          <div class="oplog-sbox totalpsng-box">
+            <div class="oplog-label">탑승객 수</div>
+            <input type="number" id="totalPsng" /> 명
+          </div>
+        </div>
+        <div class="oplog-box two-box-container">
+          <div class="oplog-sbox">
+            <div class="oplog-label">날씨</div>
+            <select name id="weather"></select>
+          </div>
+          <div class="oplog-sbox">
+            <div class="oplog-label">온도</div>
+            <input type="number" id="climate" /> ˚C
+          </div>
+        </div>
+      </div>
+      <div class="oplog-row">
+        <div class="oplog-box">
+          <div class="oplog-label">이벤트</div>
+          <select name id></select>
+        </div>
+        <div class="oplog-box two-box-container">
+          <div class="oplog-sbox">
+            <div class="oplog-label">DTG size</div>
+            <input type="number" id="DTG" class="sbox-input-wide"/> KB
+          </div>
+          <div class="oplog-sbox">
+            <div class="oplog-label">DVR size</div>
+            <input type="number" id="DVR" class="sbox-input-wide"/> GB
+          </div>
+        </div>
+      </div>
+      <div class="oplog-row">
+        <div class="textarea-box">
+          <div class="oplog-label">Task</div>
+          <textarea name id ></textarea>
+        </div>
+      </div>
+      <div class="oplog-btn-container">
+        <button class="text-blue" @click="isOplog=false;">취소</button>
+        <button class="text-white blue" @click="submitOplog">저장하기</button>
+      </div>
+    </div>
+    </div>
+
     <!-- 차량 선택 모달 -->
     <modal
       v-if="isDash"
@@ -124,6 +200,7 @@
       style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
       class="blue text-white bold"
     >T</div>
+
     <!-- 차량 선택 화면 -->
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />
@@ -670,8 +747,47 @@ export default {
 .msg-toast div {
   font-size: 18px;
 }
-
+#oplog {
+  padding: 13px 20px 0 20px;
+  width: 544px;
+  top:30px;
+  left: calc(50vw - 272px);
+  height: 559px;
+}
+#oplog textarea {
+  height: 64px;
+}
+.oplog-row {
+  margin-top: 16px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.totalpsng-box {
+  margin-right:47px;
+}
+.oplog-btn-container {
+  position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+.oplog-btn-container button{
+  height: 60px;
+  font-size: 18px;
+}
+.oplog-label {
+  margin-bottom: 6px;
+}
 @media (min-width: 601px) and (max-width: 900px) {
+
+  #oplog {
+    height: 633px;
+    top:calc(50vh - 350px);
+  }
+  #oplog textarea {
+  height: 128px;
+}
   .msg-toast {
     top: 345px;
   }
@@ -722,5 +838,6 @@ export default {
   .errmsg-container {
     top: 52px;
   }
+
 }
 </style>
