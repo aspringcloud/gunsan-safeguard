@@ -25,58 +25,62 @@
     </div>
 
     <!-- 모바일버전 로그인정보 모달-->
-    <div class="modalBox-setting" v-if="loginInfo">
-      <div class="setting-title">
-        <div>로그인 정보</div>
-        <button @click="loginInfo = false">
-          <img width="18px;" src="@/assets/img/close.png" alt="close button" />
-        </button>
-      </div>
-      <div class="setting-login-img">
-        <img src="@/assets/img/profile.png" alt="user profile image" />
-        <div>
-          <div class="setting-username">{{ user.info.last_name }} {{ user.info.first_name }}</div>
-          <button class="setting-btn">사진 변경하기</button>
+    <div class="modal-back" v-if="loginInfo">
+      <div class="modalBox-setting">
+        <div class="setting-title">
+          <div>로그인 정보</div>
+          <button @click="loginInfo = false">
+            <img width="18px;" src="@/assets/img/close.png" alt="close button" />
+          </button>
         </div>
-      </div>
-      <div class="loginInfo-content">
-        <div class="loginInfo-title">이메일 ID</div>
-        <div class="loginInfo-info">{{ user.info.email }}</div>
-        <div class="loginInfo-title">팀</div>
-        <div class="loginInfo-info">{{ user.profile.team }}</div>
-        <div class="loginInfo-title">휴대폰</div>
-        <div class="loginInfo-info">{{ user.profile.phone }}</div>
-        <div class="loginInfo-title">권한</div>
-        <div class="loginInfo-info">{{ user.profile.level }}</div>
+        <div class="setting-login-img">
+          <img src="@/assets/img/profile.png" alt="user profile image" />
+          <div>
+            <div class="setting-username">{{ user.info.last_name }} {{ user.info.first_name }}</div>
+            <button class="setting-btn">사진 변경하기</button>
+          </div>
+        </div>
+        <div class="loginInfo-content">
+          <div class="loginInfo-title">이메일 ID</div>
+          <div class="loginInfo-info">{{ user.info.email }}</div>
+          <div class="loginInfo-title">팀</div>
+          <div class="loginInfo-info">{{ user.profile.team }}</div>
+          <div class="loginInfo-title">휴대폰</div>
+          <div class="loginInfo-info">{{ user.profile.phone }}</div>
+          <div class="loginInfo-title">권한</div>
+          <div class="loginInfo-info">{{ user.profile.level }}</div>
+        </div>
       </div>
     </div>
 
     <!-- 모바일버전 비밀번호 변경 모달-->
-    <div class="modalBox-setting" v-if="changePw">
-      <div class="setting-title">
-        <div>비밀번호 변경</div>
-        <button @click="changePw = false">
-          <img width="18px;" src="@/assets/img/close.png" alt="close button" />
-        </button>
-      </div>
-      <div class="setting-content">
-        <form class="setting-infos" @submit.prevent="resetPw">
-          <label for="currentPw">현재 비밀번호</label>
-          <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
-          <label for="newPw">새 비밀번호</label>
-          <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
-          <label for="renewPw">새 비밀번호 확인</label>
-          <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
-          <div v-if="errmsg" class="errmsg errmsg-pos">{{ errmsg }}</div>
-          <div v-if="successmsg" class="text-blue errmsg-pos">{{ successmsg }}</div>
-          <div class="setting-pwrule">
-            ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
-            <br />※ 비밀번호는 8글자 이상이어야 합니다.
-            <br />※ 비밀번호는
-            숫자로만 입력은 불가능합니다.
-          </div>
-          <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
-        </form>
+    <div class="modal-back" v-if="changePw">
+      <div class="modalBox-setting">
+        <div class="setting-title">
+          <div>비밀번호 변경</div>
+          <button @click="changePw = false">
+            <img width="18px;" src="@/assets/img/close.png" alt="close button" />
+          </button>
+        </div>
+        <div class="setting-content">
+          <form class="setting-infos" @submit.prevent="resetPw">
+            <label for="currentPw">현재 비밀번호</label>
+            <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
+            <label for="newPw">새 비밀번호</label>
+            <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
+            <label for="renewPw">새 비밀번호 확인</label>
+            <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
+            <div v-if="errmsg" class="errmsg errmsg-pos">{{ errmsg }}</div>
+            <div v-if="successmsg" class="text-blue errmsg-pos">{{ successmsg }}</div>
+            <div class="setting-pwrule">
+              ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
+              <br />※ 비밀번호는 8글자 이상이어야 합니다.
+              <br />※ 비밀번호는
+              숫자로만 입력은 불가능합니다.
+            </div>
+            <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -165,6 +169,9 @@ export default {
 .small-menu-menus button:hover,
 .small-menu-menus button:active {
   background-color: rgba(0, 0, 0, 0.1);
+}
+.modal-back {
+  z-index: 10;
 }
 .modalBox-setting {
   position: absolute;

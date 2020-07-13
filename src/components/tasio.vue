@@ -120,7 +120,7 @@
     </div>
 
     <modal
-      style="z-index:30;"
+      style="z-index:30; background:transparent;"
       v-if="isConfirm"
       :width="ver=='mobile'?'220px':'260px'"
       height="max-content"
@@ -409,11 +409,9 @@ export default {
   padding-top: 136px;
 }
 .mobile .modal-back {
-  top: -56px;
   z-index: 25;
 }
 .pad .modal-back {
-  top: -68px;
   z-index: 25;
 }
 .tasio-simple-container {

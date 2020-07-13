@@ -20,8 +20,8 @@
     </div>
 
     <!-- 태블릿,PC버전 환경설정 모달 -->
-    <div v-if="isSetting">
-      <div class="modal-back"></div>
+    <div v-if="isSetting" class="modal-back">
+      <div></div>
       <div class="modalBox modalBox-setting">
         <button class="setting-closebtn" @click="isSetting=false">
           <img src="@/assets/img/closebtn.png" alt="close button" />
@@ -117,6 +117,9 @@ export default {
 }
 .header-right img {
   margin-right: 10px;
+}
+.modal-back {
+  z-index: 10;
 }
 .modalBox-setting {
   position: absolute;
