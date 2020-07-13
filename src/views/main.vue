@@ -168,7 +168,9 @@
           </div>
           <div class="reqst-stInfo">
             현재 위치:
-            <span v-if="station.name">{{ station.name + " (" + station.mid + ")" }}</span>
+            <span
+              v-if="selectedCar.station"
+            >{{ selectedCar.station.name + " (" + selectedCar.station.mid + ")" }}</span>
             <span v-else>차량의 현재 위치를 선택하세요</span>
           </div>
         </div>
@@ -200,7 +202,6 @@
       style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
       class="blue text-white bold"
     >T</div>
-
     <!-- 차량 선택 화면 -->
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />
@@ -256,13 +257,13 @@
             <div class="infobx-col">
               <div class="box-title station-title">
                 현재위치
-                <img v-if="!station.name" src="@/assets/img/warnP.png" alt="warning" />
+                <img v-if="!selectedCar.station" src="@/assets/img/warnP.png" alt="warning" />
               </div>
               <div class="station-content">
-                <div class="station-txt" v-if="station.name">
-                  {{ station.name }}
+                <div class="station-txt" v-if="selectedCar.station">
+                  {{ selectedCar.station.name }}
                   <br />
-                  {{ station.mid }}
+                  {{ selectedCar.station.mid }}
                 </div>
                 <div class="empty-station-txt" v-else>차량의 현재 위치를 선택하세요</div>
                 <button @click="stModal = true">변경</button>
