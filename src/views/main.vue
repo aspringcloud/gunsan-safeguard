@@ -176,25 +176,25 @@
         </div>
       </template>
       <template #btn>
-        <button
-          class="text-blue"
-          @click="
-            isStation = true;
-            reqStation = false;
-          "
-        >이상 없음</button>
+        <button class="text-blue" @click="sameStPsng">이상 없음</button>
         <button
           class="blue text-white"
           @click="
             reqStation = false;
-            stModal = true;
+            stModal = 1;
           "
         >현재위치 변경하기</button>
       </template>
     </modal>
 
     <!-- 타시오 배차정보 -->
-    <tasio v-if="tasioStatus" :tasioStatus="tasioStatus" :ver="ver" @newStatus="updateTasio"></tasio>
+    <tasio
+      v-if="tasioStatus"
+      :tasioStatus="tasioStatus"
+      :ver="ver"
+      @newStatus="updateTasio"
+      @tasioInfo="tasioInfo"
+    ></tasio>
 
     <div
       @click="tasioStatus='call'"
@@ -260,7 +260,7 @@
                 <img v-if="!selectedCar.station" src="@/assets/img/warnP.png" alt="warning" />
               </div>
               <div class="station-content">
-                <div class="station-txt" v-if="selectedCar.station">
+                <div class="station-txt" v-if="selectedCar.station && stationList">
                   {{ stationList[selectedCar.station-1].name }}
                   <br />
                   {{ stationList[selectedCar.station-1].mid }}

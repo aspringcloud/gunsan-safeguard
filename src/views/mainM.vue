@@ -67,7 +67,7 @@
             <h5>현재 위치:</h5>
             <div
               v-if="selectedCar.station"
-            >{{ selectedCar.station.name + " (" + selectedCar.station.mid + ")" }}</div>
+            >{{ stationList[selectedCar.station-1].name + " (" + stationList[selectedCar.station-1].mid + ")" }}</div>
             <div v-else>차량의 현재 위치를 선택하세요</div>
           </div>
         </div>
@@ -190,7 +190,13 @@
     </div>
 
     <!-- 타시오 배차정보 -->
-    <tasio v-if="tasioStatus" :tasioStatus="tasioStatus" ver="mobile" @newStatus="updateTasio"></tasio>
+    <tasio
+      v-if="tasioStatus"
+      :tasioStatus="tasioStatus"
+      ver="mobile"
+      @newStatus="updateTasio"
+      @tasioInfo="tasioInfo"
+    ></tasio>
     <div
       @click="tasioStatus = 'call'"
       v-if="!tasioStatus"
@@ -248,10 +254,10 @@
               <img v-if="!selectedCar.station" src="@/assets/img/warnM.png" alt="warning" />
             </div>
             <div class="station-content">
-              <div class="station-txt" v-if="selectedCar.station">
-                {{ selectedCar.station.name }}
+              <div class="station-txt" v-if="selectedCar.station && stationList">
+                {{ stationList[selectedCar.station-1].name }}
                 <br />
-                {{ selectedCar.station.mid }}
+                {{ stationList[selectedCar.station-1].mid }}
               </div>
               <div class="empty-station-txt" v-else>차량의 현재 위치를 선택하세요</div>
               <button @click="stModal = true">변경</button>

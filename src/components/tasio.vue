@@ -3,6 +3,7 @@
     <div v-if="!isSimple" class="modal-back">
       <div v-if="status=='call'" class="modalBox tasio-alarm">
         <h1>타시오 요청 알림</h1>
+        {{tasioInfo}}
         <div class="loc-container">
           <div class="loc-box">
             <div class="tasio-content-title">출발지</div>
@@ -115,7 +116,12 @@
       </div>
     </div>
 
-    <modal v-if="isConfirm" :width="ver=='mobile'?'220px':'260px'" height="max-content">
+    <modal
+      style="z-index:30;"
+      v-if="isConfirm"
+      :width="ver=='mobile'?'220px':'260px'"
+      height="max-content"
+    >
       <template #content>
         <div class="modal-content-p">
           <div class="modal-bold" v-if="status!='wait'">{{status=='start'?depart:arrival}}</div>
@@ -144,7 +150,7 @@ import Modal from "@/components/modal";
 export default {
   name: "Tasio",
   components: { Modal },
-  props: ["ver", "tasioStatus"],
+  props: ["ver", "tasioStatus", "tasioInfo"],
   data: () => ({
     isSimple: false,
     remainTotal: 120,
@@ -164,6 +170,7 @@ export default {
   created() {
     this.status = this.tasioStatus;
     if (this.status == "call") this.timer();
+    console.log(this.tasioInfo);
   },
 
   computed: {
@@ -194,24 +201,24 @@ export default {
   methods: {
     toNextStatus() {
       if (this.status == "start") {
-        this.arrivedTime = this.getTime();
+        this.arrivedTime = this.getTime(new Date());
         this.status = "wait";
       } else if (this.status == "wait") {
-        this.rideTime = this.getTime();
+        this.rideTime = this.getTime(new Date());
         this.update("toEnd");
       } else if (this.status == "toEnd") this.update(false);
       this.isConfirm = false;
     },
     accept() {
       this.timeStop();
-      this.acceptTime = this.getTime();
+      this.acceptTime = this.getTime(new Date());
       this.update("start");
     },
-    getTime() {
-      var now = new Date();
-      var h = now.getHours();
-      var m = now.getMinutes() + "분 ";
-      var s = now.getSeconds() + "초";
+    getTime(date) {
+      // var now = new Date();
+      var h = date.getHours();
+      var m = date.getMinutes() + "분 ";
+      var s = date.getSeconds() + "초";
       if (h >= 12) {
         if (h > 12) h -= 12;
         h = "오후 " + h;
@@ -583,3 +590,5 @@ export default {
   height: 47px;
 }
 </style>
+
+

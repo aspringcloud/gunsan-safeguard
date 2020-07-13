@@ -1,8 +1,10 @@
 let operateMixin = {
     data: () => ({
+        tasioInfo: false,
+        callTime: false,
         isOplog: false,
         reqStation: false,
-        stationList: [],
+        stationList: false,
         isStation: false,
         stModal: false,
         nowSt: false,
@@ -135,6 +137,7 @@ let operateMixin = {
                 this.socketMsg.how.function == "call"
             ) {
                 this.tasioStatus = "call";
+                this.tasioInfo = this.convertTasioInfo(this.socketMsg.how, this.socketMsg.when)
 
             } else if (this.socketMsg.what == "RESP") {
                 if (this.socketMsg.how.type == "passenger") {
@@ -201,6 +204,17 @@ let operateMixin = {
         },
     },
     methods: {
+        convertTasioInfo(msg, timestamp) {
+            var info = {
+                'psngCnt': msg.passenger,
+                'psngName': unescape(msg.passenger_name),
+                'callTime': new Date(timestamp * 1000),
+                'depart': this.stationList[msg.current_station_id - 1].name,
+                'arrival': this.stationList[msg.target_station_id - 1].name,
+            }
+            console.log(info);
+            return info;
+        },
         getStationList() {
             this.$http
                 .get(this.$api + "stations/", {
@@ -233,6 +247,7 @@ let operateMixin = {
                     console.log(err);
                     alert("서비스 에러입니다. 다시 시도해주세요.");
                 });
+            if (this.stModal == 1) this.savePsng(1);
             this.stModal = false;
         },
         updateTasio(status) {
@@ -566,13 +581,9 @@ let operateMixin = {
             if (!this.isOn) return;
             else {
                 this.isOplog = true;
-                // this.isSubmit = true;
-                // this.modalTitle = "전원";
-                // this.modalValue = "OFF";
             }
         },
         submitOplog() {
-            // alert('함수작성필요')
             var msg = {
                 what: "EVENT",
                 who: "safeGuard",
@@ -586,33 +597,21 @@ let operateMixin = {
             this.socket.send(JSON.stringify(msg));
             this.isOplog = false;
         },
-        savePsng() {
+        sameStPsng() {
+            this.isStation = true;
+            this.reqStation = false;
+            this.savePsng();
+        },
+        savePsng(tag) {
             if (this.psngTemp >= 16) {
                 alert("탑승객 수를 확인해주세요.");
                 this.psngTemp = this.psng;
                 return;
             }
-            if (!this.isStation) {
+            if (!this.isStation && !tag) {
                 this.reqStation = true;
                 return;
             }
-            //   this.$http
-            //     .patch(
-            //       this.$api + "vehicles/" + this.selectedCar.id + "/",
-            //       {
-            //         passenger: this.psngTemp,
-            //       },
-            //       {
-            //         headers: this.$headers,
-            //       }
-            //     )
-            //     .then((res) => {
-            //       this.psng = res.data.passenger;
-            //     })
-            //     .catch((err) => {
-            //       console.log(err);
-            //       alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
-            //     });
             var msg = {
                 what: "EVENT",
                 who: "safeGuard",
@@ -729,6 +728,40 @@ let operateMixin = {
             }
             setTimeout(this.clearStopMsg, 5000);
         },
+        getTasioCall() {
+            var msg = {
+                "who": "tasio_id",
+                "what": "EVENT",
+                "how": {
+                    "type": "ondemand",
+                    "vehicle_id": 6,
+                    "function": "call",
+                    "current_station_id": 2,
+                    "target_station_id": 3,
+                    "passenger": 3,
+                    "passenger_name": "혜리"
+                }
+            }
+            var temp = {
+                "how": {
+                    "function": "call",
+                    "passenger": 3,
+                    "vehicle_id": 6,
+                    "passenger_name": "\ud61c\ub9ac",
+                    "site_id": 2,
+                    "current_station_id": 2,
+                    "vehicle_mid": "SCN999",
+                    "target_station_id": 3,
+                    "type": "ondemand"
+                },
+                "what": "EVENT",
+                "who": "springgos_sejong_1",
+                "when": 1594614867.507743,
+                "where": "sejong_datahub"
+            }
+            console.log(temp)
+            this.socket.send(JSON.stringify(msg));
+        }
     },
 };
 
