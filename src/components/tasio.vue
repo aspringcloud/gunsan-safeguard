@@ -169,11 +169,13 @@ export default {
     isConfirm: false
   }),
   created() {
+    this.status = this.$session.get("tasioStatus");
     if (this.status == "call") this.timer();
+    if (this.$session.get("remainTotal"))
+      this.remainTotal = this.$session.get("remainTotal");
     this.acceptTime = this.$session.get("tasioACT");
     this.arrivedTime = this.$session.get("tasioAT");
     this.rideTime = this.$session.get("tasioRT");
-    this.status = this.$session.get("tasioStatus");
     console.log("received tasio!!", this.tasioInfo);
     console.log("tasiostatus", this.status);
   },
@@ -216,11 +218,7 @@ export default {
         this.update("toEnd");
       } else if (this.status == "toEnd") {
         this.update(false);
-        this.$session.remove("tasioAT");
-        this.$session.remove("tasioRT");
-        this.$session.remove("tasioACT");
-        this.$session.remove("tasioInfo");
-        this.$session.remove("tasioStatus");
+        this.destroySession();
       }
       this.isConfirm = false;
     },
@@ -249,12 +247,24 @@ export default {
         if (this.remainTotal <= 0) {
           this.timeStop();
           this.status = "denied";
-        } else this.remainTotal--;
+          this.destroySession();
+        } else {
+          this.remainTotal--;
+          this.$session.set("remainTotal", this.remainTotal - 1);
+        }
       }, 1000);
     },
     timeStop() {
       clearInterval(this.startTimer);
       this.remainTotal = 120;
+    },
+    destroySession() {
+      this.$session.remove("tasioAT");
+      this.$session.remove("tasioRT");
+      this.$session.remove("tasioACT");
+      this.$session.remove("tasioInfo");
+      this.$session.remove("tasioStatus");
+      this.$session.remove("remainTotal");
     }
   }
 };

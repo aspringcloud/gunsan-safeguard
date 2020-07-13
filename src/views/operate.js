@@ -1,6 +1,7 @@
 let operateMixin = {
     data: () => ({
-        tasioData: false,
+        tasioStatus: false,
+        tasioInfo: false,
         isOplog: false,
         reqStation: false,
         stationList: false,
@@ -55,7 +56,6 @@ let operateMixin = {
         stopReasonL: 0,
         stopOptList: ["차", "사람", "환경요소", "오류", "기타"],
         ver: "",
-        tasioStatus: false,
         socket: false,
         status: false,
         socketMsg: "",
@@ -225,13 +225,21 @@ let operateMixin = {
         },
         timeFormatting(date) {
             var h = date.getHours();
-            var m = date.getMinutes() + "분 ";
-            var s = date.getSeconds() + "초";
+            var m = date.getMinutes();
+            var s = date.getSeconds();
+            var tasioEndH = h;
+            var tasioEndM = m;
+            var tasioEndS = s;
+            if (m + 2 >= 60) {
+                tasioEndM = m - 60;
+                tasioEndH = h + 1;
+            }
+            console.log(tasioEndH, tasioEndM, tasioEndS);
             if (h >= 12) {
                 if (h > 12) h -= 12;
                 h = "오후 " + h;
             } else h = "오전 " + h;
-            return h + "시 " + m + s;
+            return h + "시 " + m + "분" + s + "초";
         },
         getStationList() {
             this.$http
