@@ -239,15 +239,16 @@ let operateMixin = {
                     if (res.data.passed_station == this.nowSt.id) {
                         this.selectedCar.station = this.nowSt.id;
                         this.nowSt = false;
-                        if (this.stModal != 1) this.isStation = true;
+                        this.isStation = this.stModal !== 1;
+                        if (this.stModal === 1) this.savePsng(1);
+                        this.stModal = false;
                     } else alert("다시 시도해주세요.");
                 })
                 .catch((err) => {
                     console.log(err);
                     alert("서비스 에러입니다. 다시 시도해주세요.");
+                    this.stModal = false;
                 });
-            if (this.stModal == 1) this.savePsng(1);
-            this.stModal = false;
         },
         updateTasio(status) {
             this.tasioStatus = status;
@@ -741,24 +742,6 @@ let operateMixin = {
                     "passenger_name": "혜리"
                 }
             }
-            var temp = {
-                "how": {
-                    "function": "call",
-                    "passenger": 3,
-                    "vehicle_id": 6,
-                    "passenger_name": "\ud61c\ub9ac",
-                    "site_id": 2,
-                    "current_station_id": 2,
-                    "vehicle_mid": "SCN999",
-                    "target_station_id": 3,
-                    "type": "ondemand"
-                },
-                "what": "EVENT",
-                "who": "springgos_sejong_1",
-                "when": 1594614867.507743,
-                "where": "sejong_datahub"
-            }
-            console.log(temp)
             this.socket.send(JSON.stringify(msg));
         }
     },
