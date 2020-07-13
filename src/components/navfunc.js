@@ -76,28 +76,30 @@ let navbarMixin = {
                 })
                 .catch(error => {
                     console.log(error.response.data);
-                    var err = error.response.data.new_password2;
+                    var err = error.response.data.new_password1;
+                    if (error.response.data.new_password2) err = error.response.data.new_password2;
                     if (
-                        err.includes("This password is too short. It must contain at least 8 characters.")
+                        err.includes("비밀번호가 너무 짧습니다. 최소 8 문자를 포함해야 합니다.")
 
                     ) {
                         this.errmsg = "8글자 이상의 비밀번호를 입력하세요.";
-                    } else if (err.includes("The two password fields didn't match.")) {
+                    } else if (err.includes("비밀번호가 일치하지 않습니다.")) {
                         this.errmsg = "두 개의 비밀번호가 일치하지 않습니다.";
-                    } else if (err.includes("This field may not be blank.")) {
+                    } else if (err.includes("이 필드는 blank일 수 없습니다.")) {
                         this.errmsg = "비밀번호를 입력해주세요.";
-                    } else if (err.includes("This password is entirely numeric.")) {
+                    } else if (err.includes("비밀번호가 전부 숫자로 되어 있습니다.")) {
                         this.errmsg = "비밀번호에 숫자 외의 문자를 포함하세요.";
                     } else if (
-                        err.includes("The password is too similar to the email address.")) {
+                        err.includes("비밀번호가 이메일 주소와 너무 유사합니다.")) {
                         this.errmsg = "비밀번호가 이메일ID와 너무 유사합니다.";
                     } else if (err.includes("The password is too similar to the username.")) {
                         this.errmsg = "비밀번호가 사용자 이름과 너무 유사합니다.";
-                    } else if (err.includes("This password is too common.")) {
+                    } else if (err.includes("비밀번호가 너무 일상적인 단어입니다.")) {
                         this.errmsg = "평범하지 않은 비밀번호를 입력하세요.";
                     } else {
                         console.log(this.errmsg);
                     }
+                    console.log("here!!", this.errmsg)
                 });
         }
     }
