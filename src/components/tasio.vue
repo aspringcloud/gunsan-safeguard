@@ -378,11 +378,11 @@ export default {
 }
 .mobile .modal-back {
   top: -56px;
-  z-index: 10;
+  z-index: 25;
 }
 .pad .modal-back {
   top: -68px;
-  z-index: 10;
+  z-index: 25;
 }
 .tasio-simple-container {
   z-index: 5;

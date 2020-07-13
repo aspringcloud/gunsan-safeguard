@@ -3,78 +3,78 @@
     <navbar :user="user"></navbar>
 
     <!-- OPLOG!!!!20.07.10 -->
-    <div v-if="isOplog" class="modal-back oplog-back">
-      <div id="oplog">
-        <h1>운행기록</h1>
-        <div class="oplog-row">
-          <div class="oplog-box">
-            <div class="oplog-label">시작시간</div>
-            <input type="datetime-local" />
-          </div>
-          <div class="oplog-box">
-            <div class="oplog-label">종료시간</div>
-            <input type="datetime-local" />
-          </div>
+    <div  v-if="isOplog" class="modal-back oplog-back">
+<div id="oplog">
+      <h1>운행기록</h1>
+      <div class="oplog-row">
+        <div class="oplog-box">
+          <div class="oplog-label">시작시간</div>
+          <input type="datetime-local" />
         </div>
-        <div class="oplog-row">
-          <div class="oplog-box">
-            <div class="oplog-label">주요이슈</div>
-            <select name id></select>
-          </div>
-          <div class="oplog-box">
-            <div class="oplog-label">주요질문</div>
-            <select name id></select>
-          </div>
-        </div>
-        <div class="oplog-row">
-          <div class="oplog-box two-box-container">
-            <div class="oplog-sbox">
-              <div class="oplog-label">주행거리</div>
-              <input type="number" id="driveDist" /> km
-            </div>
-            <div class="oplog-sbox totalpsng-box">
-              <div class="oplog-label">탑승객 수</div>
-              <input type="number" id="totalPsng" /> 명
-            </div>
-          </div>
-          <div class="oplog-box two-box-container">
-            <div class="oplog-sbox">
-              <div class="oplog-label">날씨</div>
-              <select name id="weather"></select>
-            </div>
-            <div class="oplog-sbox">
-              <div class="oplog-label">온도</div>
-              <input type="number" id="climate" /> ˚C
-            </div>
-          </div>
-        </div>
-        <div class="oplog-row">
-          <div class="oplog-box">
-            <div class="oplog-label">이벤트</div>
-            <select name id></select>
-          </div>
-          <div class="oplog-box two-box-container">
-            <div class="oplog-sbox">
-              <div class="oplog-label">DTG size</div>
-              <input type="number" id="DTG" class="sbox-input-wide" /> KB
-            </div>
-            <div class="oplog-sbox">
-              <div class="oplog-label">DVR size</div>
-              <input type="number" id="DVR" class="sbox-input-wide" /> GB
-            </div>
-          </div>
-        </div>
-        <div class="oplog-row">
-          <div class="textarea-box">
-            <div class="oplog-label">Task</div>
-            <textarea name id></textarea>
-          </div>
-        </div>
-        <div class="oplog-btn-container">
-          <button class="text-blue" @click="isOplog=false;">취소</button>
-          <button class="text-white blue" @click="submitOplog">저장하기</button>
+        <div class="oplog-box">
+          <div class="oplog-label">종료시간</div>
+          <input type="datetime-local" />
         </div>
       </div>
+      <div class="oplog-row">
+        <div class="oplog-box">
+          <div class="oplog-label">주요이슈</div>
+          <select name id></select>
+        </div>
+        <div class="oplog-box">
+          <div class="oplog-label">주요질문</div>
+          <select name id></select>
+        </div>
+      </div>
+      <div class="oplog-row">
+        <div class="oplog-box two-box-container">
+          <div class="oplog-sbox">
+            <div class="oplog-label">주행거리</div>
+            <input type="number" id="driveDist" /> km
+          </div>
+          <div class="oplog-sbox totalpsng-box">
+            <div class="oplog-label">탑승객 수</div>
+            <input type="number" id="totalPsng" /> 명
+          </div>
+        </div>
+        <div class="oplog-box two-box-container">
+          <div class="oplog-sbox">
+            <div class="oplog-label">날씨</div>
+            <select name id="weather"></select>
+          </div>
+          <div class="oplog-sbox">
+            <div class="oplog-label">온도</div>
+            <input type="number" id="climate" /> ˚C
+          </div>
+        </div>
+      </div>
+      <div class="oplog-row">
+        <div class="oplog-box">
+          <div class="oplog-label">이벤트</div>
+          <select name id></select>
+        </div>
+        <div class="oplog-box two-box-container">
+          <div class="oplog-sbox">
+            <div class="oplog-label">DTG size</div>
+            <input type="number" id="DTG" class="sbox-input-wide"/> KB
+          </div>
+          <div class="oplog-sbox">
+            <div class="oplog-label">DVR size</div>
+            <input type="number" id="DVR" class="sbox-input-wide"/> GB
+          </div>
+        </div>
+      </div>
+      <div class="oplog-row">
+        <div class="textarea-box">
+          <div class="oplog-label">Task</div>
+          <textarea name id ></textarea>
+        </div>
+      </div>
+      <div class="oplog-btn-container">
+        <button class="text-blue" @click="isOplog=false;">취소</button>
+        <button class="text-white blue" @click="submitOplog">저장하기</button>
+      </div>
+    </div>
     </div>
 
     <!-- 차량 선택 모달 -->
@@ -168,7 +168,9 @@
           </div>
           <div class="reqst-stInfo">
             현재 위치:
-            <span v-if="station.name">{{ station.name + " (" + station.mid + ")" }}</span>
+            <span
+              v-if="selectedCar.station"
+            >{{ selectedCar.station.name + " (" + selectedCar.station.mid + ")" }}</span>
             <span v-else>차량의 현재 위치를 선택하세요</span>
           </div>
         </div>
@@ -256,13 +258,13 @@
             <div class="infobx-col">
               <div class="box-title station-title">
                 현재위치
-                <img v-if="!station.name" src="@/assets/img/warnP.png" alt="warning" />
+                <img v-if="!selectedCar.station" src="@/assets/img/warnP.png" alt="warning" />
               </div>
               <div class="station-content">
-                <div class="station-txt" v-if="station.name">
-                  {{ station.name }}
+                <div class="station-txt" v-if="selectedCar.station">
+                  {{ selectedCar.station.name }}
                   <br />
-                  {{ station.mid }}
+                  {{ selectedCar.station.mid }}
                 </div>
                 <div class="empty-station-txt" v-else>차량의 현재 위치를 선택하세요</div>
                 <button @click="stModal = true">변경</button>
@@ -750,7 +752,7 @@ export default {
 #oplog {
   padding: 13px 20px 0 20px;
   width: 544px;
-  top: 30px;
+  top:30px;
   left: calc(50vw - 272px);
   height: 559px;
 }
@@ -764,15 +766,15 @@ export default {
   justify-content: space-between;
 }
 .totalpsng-box {
-  margin-right: 47px;
+  margin-right:47px;
 }
 .oplog-btn-container {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
-.oplog-btn-container button {
+.oplog-btn-container button{
   height: 60px;
   font-size: 18px;
 }
@@ -780,13 +782,14 @@ export default {
   margin-bottom: 6px;
 }
 @media (min-width: 601px) and (max-width: 900px) {
+
   #oplog {
     height: 633px;
-    top: calc(50vh - 350px);
+    top:calc(50vh - 350px);
   }
   #oplog textarea {
-    height: 128px;
-  }
+  height: 128px;
+}
   .msg-toast {
     top: 345px;
   }
@@ -837,5 +840,6 @@ export default {
   .errmsg-container {
     top: 52px;
   }
+
 }
 </style>

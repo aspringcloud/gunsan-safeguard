@@ -10,13 +10,13 @@
       @close="resetCar"
       @submit="submitCar"
     >
-      <slot>
+      <template #content>
         <b>차량</b>
         <div>
           <b class="text-blue" style="font-size: 24px;">{{ selectedCar.name }}</b>
           을 선택합니까?
         </div>
-      </slot>
+      </template>
     </modal>
 
     <!-- submit 모달 -->
@@ -65,7 +65,9 @@
           </div>
           <div class="reqst-stInfo">
             <h5>현재 위치:</h5>
-            <div v-if="station.name">{{ station.name + " (" + station.mid + ")" }}</div>
+            <div
+              v-if="selectedCar.station"
+            >{{ selectedCar.station.name + " (" + selectedCar.station.mid + ")" }}</div>
             <div v-else>차량의 현재 위치를 선택하세요</div>
           </div>
         </div>
@@ -140,24 +142,26 @@
         </div>
       </div>
       <div class="oplog-row">
-        <div class="oplog-box two-box-container">
+        <div class="oplog-box twobox-container">
           <div class="oplog-sbox">
             <div class="oplog-label">주행거리</div>
-            <input type="number" id="driveDist" /> km
+            <input type="number" id="driveDist" />km
           </div>
           <div class="oplog-sbox">
             <div class="oplog-label">탑승객 수</div>
             <input type="number" id="totalPsng" /> 명
           </div>
         </div>
-        <div class="oplog-box two-box-container">
+        <div class="oplog-box twobox-container">
           <div class="oplog-sbox">
             <div class="oplog-label">날씨</div>
             <select name id="weather"></select>
           </div>
           <div class="oplog-sbox">
             <div class="oplog-label">온도</div>
-            <input type="number" id="climate" /> ˚C
+            <span>
+              <input type="number" id="climate" /> ˚C
+            </span>
           </div>
         </div>
       </div>
@@ -166,12 +170,12 @@
           <div class="oplog-label">이벤트</div>
           <select name id></select>
         </div>
-        <div class="oplog-box two-box-container">
-          <div class="oplog-sbox">
+        <div class="oplog-box twobox-container">
+          <div class="oplog-sbox2">
             <div class="oplog-label">DTG size</div>
             <input type="number" id="DTG" /> KB
           </div>
-          <div class="oplog-sbox">
+          <div class="oplog-sbox2">
             <div class="oplog-label">DVR size</div>
             <input type="number" id="DVR" /> GB
           </div>
@@ -188,7 +192,6 @@
     </div>
     <!-- 타시오 배차정보 -->
     <tasio v-if="tasioStatus" :tasioStatus="tasioStatus" ver="mobile" @newStatus="updateTasio"></tasio>
-
     <div
       @click="tasioStatus = 'call'"
       v-if="!tasioStatus"
@@ -243,13 +246,13 @@
             <!-- passed station -->
             <div class="box-title station-title">
               현재위치
-              <img v-if="!station.name" src="@/assets/img/warnM.png" alt="warning" />
+              <img v-if="!selectedCar.station" src="@/assets/img/warnM.png" alt="warning" />
             </div>
             <div class="station-content">
-              <div class="station-txt" v-if="station.name">
-                {{ station.name }}
+              <div class="station-txt" v-if="selectedCar.station">
+                {{ selectedCar.station.name }}
                 <br />
-                {{ station.mid }}
+                {{ selectedCar.station.mid }}
               </div>
               <div class="empty-station-txt" v-else>차량의 현재 위치를 선택하세요</div>
               <button @click="stModal = true">변경</button>
@@ -505,6 +508,7 @@ export default {
   font-size: 16px;
   color: #333333;
   padding-left: 5px;
+  background: #ffffff;
 }
 .psng-form button {
   width: 42px;
@@ -558,6 +562,7 @@ export default {
   color: #333333;
   margin-top: 7px;
   padding-left: 12px;
+  background: #ffffff;
 }
 .mainM-row4 input {
   width: 282px;
@@ -672,15 +677,8 @@ export default {
   margin-top: 10px;
   width: 100%;
 }
-#oplog textarea {
-  height: 128px;
-}
-.oplog-btn-container {
-  margin-top: 15px;
-  margin-left: -48px;
-  width: 343px;
-}
-.oplog-btn-container button {
+.btn-container button {
   height: 47px;
+  font-size: 16px;
 }
 </style>
