@@ -10,13 +10,13 @@
       @close="resetCar"
       @submit="submitCar"
     >
-      <slot>
+      <template #content>
         <b>차량</b>
         <div>
           <b class="text-blue" style="font-size: 24px;">{{ selectedCar.name }}</b>
           을 선택합니까?
         </div>
-      </slot>
+      </template>
     </modal>
 
     <!-- submit 모달 -->
@@ -65,7 +65,9 @@
           </div>
           <div class="reqst-stInfo">
             <h5>현재 위치:</h5>
-            <div v-if="station.name">{{ station.name + " (" + station.mid + ")" }}</div>
+            <div
+              v-if="selectedCar.station"
+            >{{ selectedCar.station.name + " (" + selectedCar.station.mid + ")" }}</div>
             <div v-else>차량의 현재 위치를 선택하세요</div>
           </div>
         </div>
@@ -186,9 +188,9 @@
         <button class="text-white blue" @click="submitOplog">저장하기</button>
       </div>
     </div>
+
     <!-- 타시오 배차정보 -->
     <tasio v-if="tasioStatus" :tasioStatus="tasioStatus" ver="mobile" @newStatus="updateTasio"></tasio>
-
     <div
       @click="tasioStatus = 'call'"
       v-if="!tasioStatus"
@@ -243,13 +245,13 @@
             <!-- passed station -->
             <div class="box-title station-title">
               현재위치
-              <img v-if="!station.name" src="@/assets/img/warnM.png" alt="warning" />
+              <img v-if="!selectedCar.station" src="@/assets/img/warnM.png" alt="warning" />
             </div>
             <div class="station-content">
-              <div class="station-txt" v-if="station.name">
-                {{ station.name }}
+              <div class="station-txt" v-if="selectedCar.station">
+                {{ selectedCar.station.name }}
                 <br />
-                {{ station.mid }}
+                {{ selectedCar.station.mid }}
               </div>
               <div class="empty-station-txt" v-else>차량의 현재 위치를 선택하세요</div>
               <button @click="stModal = true">변경</button>
@@ -505,6 +507,7 @@ export default {
   font-size: 16px;
   color: #333333;
   padding-left: 5px;
+  background: #ffffff;
 }
 .psng-form button {
   width: 42px;
@@ -558,6 +561,7 @@ export default {
   color: #333333;
   margin-top: 7px;
   padding-left: 12px;
+  background: #ffffff;
 }
 .mainM-row4 input {
   width: 282px;
