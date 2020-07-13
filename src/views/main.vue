@@ -196,12 +196,12 @@
       :tasioInfo="tasioInfo"
     ></tasio>
 
-    <!-- <div
+    <div
       @click="getTasioCall"
       v-if="!tasioStatus"
       style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
       class="blue text-white bold"
-    >T</div>-->
+    >T</div>
     <!-- 차량 선택 화면 -->
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />
@@ -277,7 +277,7 @@
             <div class="infobox-divider" />
             <div class="infobx-col">
               <div class="box-title">운행시간</div>
-              <div class="infobox-txt">{{drivetime}}</div>
+              <div class="infobox-txt">{{isOn?drivetime:''}}</div>
             </div>
           </div>
           <div class="dashboard-col1-row3">

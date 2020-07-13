@@ -44,8 +44,8 @@ export default {
   font-size: 18px;
 }
 #modal {
+  background: rgba(0, 0, 0, 0.25);
   position: fixed;
-  top: -68px;
   bottom: 0;
   left: 0;
   right: 0;
