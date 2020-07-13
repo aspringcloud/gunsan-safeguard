@@ -296,13 +296,42 @@
     background: #FFFFFF;
     border: 0.5px solid #828282;
     border-radius: 3px;
-    width: 100%;
     height: 34px;
     padding-left: 13px;
 }
 
-.driveDist-box {
+#oplog textarea {
+    width: 100%;
+    height: 128px;
+    resize: none;
+    padding: 5px 13px;
+    background: #FFFFFF;
+    border: 0.5px solid #828282;
+    border-radius: 3px;
+}
+
+.oplog-box>select,
+.oplog-box>input {
+    width: 100%;
+}
+
+.oplog-sbox input {
     width: 58px;
+    margin-right: 5px;
+}
+
+.oplog-sbox select {
+    width: 133px;
+}
+
+.oplog-sbox2 input {
+    width: 83px;
+    margin-right: 5px;
+}
+
+.twobox-container {
+    display: flex;
+    justify-content: space-between;
 }
 
 #oplog h1 {
@@ -313,4 +342,18 @@
 
 .oplog-row {
     width: 100%;
+}
+
+.btn-container {
+    width: 100%;
+}
+
+.btn-container button {
+    width: 50%;
+    font-weight: 500;
+}
+
+.btn-container:first-child {
+    color: #3BBAE2;
+
 }

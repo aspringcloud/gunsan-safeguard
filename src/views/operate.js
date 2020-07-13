@@ -3,14 +3,9 @@ let operateMixin = {
         isOplog: false,
         reqStation: false,
         stationList: [],
-        station: {
-            name: false,
-            mid: "",
-            id: ""
-        },
         isStation: false,
         stModal: false,
-        nowSt: "",
+        nowSt: false,
         site: {
             id: "",
             name: "",
@@ -60,7 +55,7 @@ let operateMixin = {
         stopOptList: ["차", "사람", "환경요소", "오류", "기타"],
         ver: "",
         tasioStatus: false,
-        socket: "",
+        socket: false,
         status: false,
         socketMsg: "",
         isMsgToast: false
@@ -76,6 +71,7 @@ let operateMixin = {
         if (this.$session.exists()) {
             this.user = this.$session.get("user");
             this.$headers.authorization = "Basic " + this.$session.get("user").basic;
+            this.getStationList();
             this.$http
                 .get(this.$api + "vehicles/", {
                     headers: this.$headers,
@@ -86,18 +82,20 @@ let operateMixin = {
                         this.cars.push({
                             id: infos[i].id,
                             name: infos[i].name,
+                            station: this.stationList[infos[i].passed_station - 1]
                         });
                     }
+                    console.log('created', this.cars)
                 })
                 .catch((err) => {
                     console.log(err);
                 });
             if (this.$session.get("selectedCar")) {
                 this.selectedCar = this.$session.get("selectedCar");
+                this.nowSt = this.selectedCar.station;
                 this.dashboard = true;
                 this.submitCar();
                 this.connectSocket();
-                this.getStationList();
             }
         }
         setInterval(this.showClock, 1000);
@@ -133,9 +131,11 @@ let operateMixin = {
             if (
                 this.socketMsg.what == "EVENT" &&
                 this.socketMsg.how.type == "ondemand" &&
-                this.socketMsg.how.vehicle_id == this.selectedCar.id
+                this.socketMsg.how.vehicle_id == this.selectedCar.id &&
+                this.socketMsg.how.function == "call"
             ) {
-                this.tasioStatus = this.socketMsg.how.function;
+                this.tasioStatus = "call";
+
             } else if (this.socketMsg.what == "RESP") {
                 if (this.socketMsg.how.type == "passenger") {
                     this.psng = this.socketMsg.how.current_passenger;
@@ -163,6 +163,7 @@ let operateMixin = {
         selectedCar: function () {
             if (this.selectedCar && !this.dashboard) {
                 this.isDash = true;
+                if (!this.selectedCar.station) this.selectedCar.station = false;
             }
         },
         windowWidth: function () {
@@ -181,8 +182,11 @@ let operateMixin = {
     beforeDestroy() {
         window.removeEventListener("resize", this.onResize);
         clearInterval(this.showClock);
-        this.socket.close();
-        console.log("socket close");
+        if (this.socket) {
+            this.socket.close();
+            this.socket = false;
+            console.log("socket close");
+        }
         this.status = false;
     },
     computed: {
@@ -203,7 +207,7 @@ let operateMixin = {
                     headers: this.$headers
                 })
                 .then((res) => {
-                    console.log("st", res.data);
+                    console.log("st1", res.data);
                     this.stationList = res.data;
                 })
                 .catch((err) => console.log(err));
@@ -220,7 +224,7 @@ let operateMixin = {
                 .then((res) => {
                     console.log("station 변경", res);
                     if (res.data.passed_station == this.nowSt.id) {
-                        this.station = this.nowSt;
+                        this.selectedCar.station = this.nowSt;
                         this.nowSt = false;
                         this.isStation = true;
                     } else alert("다시 시도해주세요.");
@@ -258,7 +262,7 @@ let operateMixin = {
             this.windowWidth = window.innerWidth;
         },
         resetCar() {
-            this.selectedCar = "";
+            this.selectedCar = false;
             this.isDash = false;
             this.socket.close();
             console.log("socket close");
@@ -272,6 +276,7 @@ let operateMixin = {
                 .then((res) => {
                     this.$session.set("selectedCar", this.selectedCar);
                     console.log("초기값", res.data);
+
                     if (res.data.site) {
                         this.site.id = res.data.site;
                         this.$http
@@ -440,84 +445,84 @@ let operateMixin = {
             this.modalTitle = v;
             this.isSubmit = true;
         },
-        submitModal() {
-            if (this.modalTitle == "차량") {
-                this.selectedCar = "";
-                this.$session.set("selectedCar", false);
+        // submitModal() {
+        //     if (this.modalTitle == "차량") {
+        //         this.selectedCar = "";
+        //         this.$session.set("selectedCar", false);
 
-                this.dashboard = false;
-                this.isSubmit = false;
-            } else if (this.modalTitle == "전원") {
-                this.$http
-                    .patch(
-                        this.$api + "vehicles/" + this.selectedCar.id + "/", {
-                            drive: !this.isOn,
-                        }, {
-                            headers: this.$headers,
-                        }
-                    )
-                    .then((res) => {
-                        this.isOn = res.data.drive;
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
-                    });
-                this.isSubmit = false;
-            } else if (this.modalTitle == "주행모드") {
-                if (this.isAuto == 1) {
-                    this.$http
-                        .patch(
-                            this.$api + "vehicles/" + this.selectedCar.id + "/", {
-                                drive_mode: 2,
-                            }, {
-                                headers: this.$headers,
-                            }
-                        )
-                        .then((res) => {
-                            this.isAuto = res.data.drive_mode;
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
-                        });
-                } else if (this.isAuto == 2) {
-                    this.$http
-                        .patch(
-                            this.$api + "vehicles/" + this.selectedCar.id + "/", {
-                                drive_mode: 1,
-                            }, {
-                                headers: this.$headers,
-                            }
-                        )
-                        .then((res) => {
-                            this.isAuto = res.data.drive_mode;
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
-                        });
-                }
-                this.isSubmit = false;
-            } else {
-                this.$http
-                    .patch(
-                        this.$api + "vehicles/" + this.selectedCar.id + "/", {
-                            isparked: !this.isPark,
-                        }, {
-                            headers: this.$headers,
-                        }
-                    )
-                    .then((res) => {
-                        this.isPark = res.data.isparked;
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
-                    });
-                this.isSubmit = false;
-            }
-        },
+        //         this.dashboard = false;
+        //         this.isSubmit = false;
+        //     } else if (this.modalTitle == "전원") {
+        //         this.$http
+        //             .patch(
+        //                 this.$api + "vehicles/" + this.selectedCar.id + "/", {
+        //                     drive: !this.isOn,
+        //                 }, {
+        //                     headers: this.$headers,
+        //                 }
+        //             )
+        //             .then((res) => {
+        //                 this.isOn = res.data.drive;
+        //             })
+        //             .catch((err) => {
+        //                 console.log(err);
+        //                 alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
+        //             });
+        //         this.isSubmit = false;
+        //     } else if (this.modalTitle == "주행모드") {
+        //         if (this.isAuto == 1) {
+        //             this.$http
+        //                 .patch(
+        //                     this.$api + "vehicles/" + this.selectedCar.id + "/", {
+        //                         drive_mode: 2,
+        //                     }, {
+        //                         headers: this.$headers,
+        //                     }
+        //                 )
+        //                 .then((res) => {
+        //                     this.isAuto = res.data.drive_mode;
+        //                 })
+        //                 .catch((err) => {
+        //                     console.log(err);
+        //                     alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
+        //                 });
+        //         } else if (this.isAuto == 2) {
+        //             this.$http
+        //                 .patch(
+        //                     this.$api + "vehicles/" + this.selectedCar.id + "/", {
+        //                         drive_mode: 1,
+        //                     }, {
+        //                         headers: this.$headers,
+        //                     }
+        //                 )
+        //                 .then((res) => {
+        //                     this.isAuto = res.data.drive_mode;
+        //                 })
+        //                 .catch((err) => {
+        //                     console.log(err);
+        //                     alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
+        //                 });
+        //         }
+        //         this.isSubmit = false;
+        //     } else {
+        //         this.$http
+        //             .patch(
+        //                 this.$api + "vehicles/" + this.selectedCar.id + "/", {
+        //                     isparked: !this.isPark,
+        //                 }, {
+        //                     headers: this.$headers,
+        //                 }
+        //             )
+        //             .then((res) => {
+        //                 this.isPark = res.data.isparked;
+        //             })
+        //             .catch((err) => {
+        //                 console.log(err);
+        //                 alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
+        //             });
+        //         this.isSubmit = false;
+        //     }
+        // },
         submitModal_socket() {
             var msg = {
                 what: "EVENT",
