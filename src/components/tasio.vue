@@ -169,10 +169,13 @@ export default {
     isConfirm: false
   }),
   created() {
-    this.status = this.tasioStatus;
     if (this.status == "call") this.timer();
+    this.acceptTime = this.$session.get("tasioACT");
+    this.arrivedTime = this.$session.get("tasioAT");
+    this.rideTime = this.$session.get("tasioRT");
+    this.status = this.$session.get("tasioStatus");
     console.log("received tasio!!", this.tasioInfo);
-    this.tasioInfo.callTime = this.getTime(this.tasioInfo.callTime);
+    console.log("tasiostatus", this.status);
   },
 
   computed: {
@@ -204,20 +207,30 @@ export default {
     toNextStatus() {
       if (this.status == "start") {
         this.arrivedTime = this.getTime(new Date());
+        this.$session.set("tasioAT", this.arrivedTime);
+        this.$session.set("tasioStatus", "wait");
         this.status = "wait";
       } else if (this.status == "wait") {
         this.rideTime = this.getTime(new Date());
+        this.$session.set("tasioRT", this.rideTime);
         this.update("toEnd");
-      } else if (this.status == "toEnd") this.update(false);
+      } else if (this.status == "toEnd") {
+        this.update(false);
+        this.$session.remove("tasioAT");
+        this.$session.remove("tasioRT");
+        this.$session.remove("tasioACT");
+        this.$session.remove("tasioInfo");
+        this.$session.remove("tasioStatus");
+      }
       this.isConfirm = false;
     },
     accept() {
       this.timeStop();
       this.acceptTime = this.getTime(new Date());
+      this.$session.set("tasioACT", this.acceptTime);
       this.update("start");
     },
     getTime(date) {
-      // var now = new Date();
       var h = date.getHours();
       var m = date.getMinutes() + "분 ";
       var s = date.getSeconds() + "초";

@@ -1,7 +1,6 @@
 let operateMixin = {
     data: () => ({
-        tasioInfo: false,
-        callTime: false,
+        tasioData: false,
         isOplog: false,
         reqStation: false,
         stationList: false,
@@ -72,6 +71,8 @@ let operateMixin = {
     created() {
         if (this.$session.exists()) {
             this.user = this.$session.get("user");
+            console.log('here', this.$session.get("user").info)
+
             this.$headers.authorization = "Basic " + this.$session.get("user").basic;
             this.getStationList();
             this.$http
@@ -99,6 +100,10 @@ let operateMixin = {
                 this.submitCar();
                 this.connectSocket();
             }
+            if (this.$session.get("tasioInfo")) {
+                this.tasioStatus = this.$session.get("tasioStatus");
+                this.tasioInfo = this.$session.get("tasioInfo");
+            }
         }
         setInterval(this.showClock, 1000);
         this.windowWidth = window.innerWidth;
@@ -120,10 +125,12 @@ let operateMixin = {
                 },
             };
             if (this.tasioStatus == "start") {
+                this.$session.set("tasioStatus", 'start');
                 this.socket.send(JSON.stringify(msg));
                 console.log("여기!!!start!!", msg);
             } else if (this.tasioStatus == "toEnd") {
                 msg.how.function = "complete";
+                this.$session.set("tasioStatus", "toEnd");
                 this.socket.send(JSON.stringify(msg));
                 console.log(msg);
             }
@@ -207,12 +214,24 @@ let operateMixin = {
             var info = {
                 'psngCnt': msg.passenger + "명",
                 'psngName': msg.passenger_name,
-                'callTime': new Date(timestamp * 1000),
+                'callTime': this.timeFormatting(new Date(timestamp * 1000)),
                 'depart': this.stationList[Number(msg.current_station_id) - 1].name,
                 'arrival': this.stationList[Number(msg.target_station_id) - 1].name,
             }
-            this.tasioInfo = info;
             this.tasioStatus = 'call';
+            this.tasioInfo = info;
+            this.$session.set("tasioStatus", 'call');
+            this.$session.set("tasioInfo", info);
+        },
+        timeFormatting(date) {
+            var h = date.getHours();
+            var m = date.getMinutes() + "분 ";
+            var s = date.getSeconds() + "초";
+            if (h >= 12) {
+                if (h > 12) h -= 12;
+                h = "오후 " + h;
+            } else h = "오전 " + h;
+            return h + "시 " + m + s;
         },
         getStationList() {
             this.$http
