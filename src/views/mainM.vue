@@ -73,20 +73,13 @@
         </div>
       </template>
       <template #btn>
-        <button
-          class="text-blue"
-          style="height: 47px;"
-          @click="
-            isStation = true;
-            reqStation = false;
-          "
-        >이상 없음</button>
+        <button class="text-blue" style="height: 47px;" @click="sameStPsng">이상 없음</button>
         <button
           class="blue text-white"
           style="height: 47px;"
           @click="
             reqStation = false;
-            stModal = true;
+            stModal = 1;
           "
         >현재위치 변경하기</button>
       </template>
@@ -195,7 +188,7 @@
       :tasioStatus="tasioStatus"
       ver="mobile"
       @newStatus="updateTasio"
-      @tasioInfo="tasioInfo"
+      :tasioInfo="tasioInfo"
     ></tasio>
     <div
       @click="tasioStatus = 'call'"

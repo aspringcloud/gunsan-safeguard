@@ -193,7 +193,7 @@
       :tasioStatus="tasioStatus"
       :ver="ver"
       @newStatus="updateTasio"
-      @tasioInfo="tasioInfo"
+      :tasioInfo="tasioInfo"
     ></tasio>
 
     <div

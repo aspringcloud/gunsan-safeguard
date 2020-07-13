@@ -3,18 +3,17 @@
     <div v-if="!isSimple" class="modal-back">
       <div v-if="status=='call'" class="modalBox tasio-alarm">
         <h1>타시오 요청 알림</h1>
-        {{tasioInfo}}
         <div class="loc-container">
           <div class="loc-box">
             <div class="tasio-content-title">출발지</div>
-            <h5 class="content-default">{{depart}}</h5>
+            <h5 class="content-default">{{tasioInfo.depart}}</h5>
             <div class="loc-txt">까지 예상 이동시간</div>
             <div class="content-default">4분</div>
           </div>
           <img src="@/assets/img/tasio_arrow.png" alt="arrow image" />
           <div class="loc-box">
             <div class="tasio-content-title">도착지</div>
-            <h5 class="content-default">{{arrival}}</h5>
+            <h5 class="content-default">{{tasioInfo.arrival}}</h5>
             <div class="loc-txt">까지 예상 이동시간</div>
             <div class="content-default">4분</div>
           </div>
@@ -22,11 +21,11 @@
         <div class="info-container">
           <div class="info-box">
             <div class="tasio-content-title">탑승인원</div>
-            <div class="content-default">{{psng}}</div>
+            <div class="content-default">{{tasioInfo.psngCnt}}</div>
           </div>
           <div class="info-box">
             <div class="tasio-content-title">요청시간</div>
-            <div class="content-default">{{reqTime}}</div>
+            <div class="content-default">{{tasioInfo.callTime}}</div>
           </div>
           <div class="info-box">
             <div class="tasio-content-title">남은 배차 수락 시간</div>
@@ -39,7 +38,7 @@
       <div v-if="status=='denied'" class="modalBox tasio-denied">
         <h1>타시오 요청 취소 알림</h1>
         <div class="denied-txt">
-          <span class="bold">{{reqTime}}</span> 발생한
+          <span class="bold">{{tasioInfo.callTime}}</span> 발생한
           <br />타시오 요청이
           <span class="errmsg">자동 취소</span>됐습니다.
         </div>
@@ -47,17 +46,17 @@
           <div class="denied-loc-box">
             <div class="tasio-content-title">
               출발
-              <span class="content-default">{{depart}}</span>
+              <span class="content-default">{{tasioInfo.depart}}</span>
             </div>
 
             <div class="tasio-content-title">
               도착
-              <span class="content-default">{{arrival}}</span>
+              <span class="content-default">{{tasioInfo.arrival}}</span>
             </div>
           </div>
           <div class="denied-psng-box">
             <div class="tasio-content-title">인원</div>
-            <div class="content-default">{{psng}}</div>
+            <div class="content-default">{{tasioInfo.psngCnt}}</div>
           </div>
         </div>
         <button class="bottom-btn" @click="update(false)">확인</button>
@@ -72,30 +71,34 @@
         <div class="moving-loc-container">
           <div class="moving-loc-box">
             <div class="moving-loc-title">출발지</div>
-            <div :class="[status=='start'? 'content-red':'content-default']">{{depart}}</div>
+            <div :class="[status=='start'? 'content-red':'content-default']">{{tasioInfo.depart}}</div>
           </div>
           <img src="@/assets/img/tasio_arrow.png" alt="arrow image" />
           <div class="moving-loc-box">
             <div class="moving-loc-title">도착지</div>
-            <div :class="[status=='toEnd'? 'content-red':'content-default']">{{arrival}}</div>
+            <div :class="[status=='toEnd'? 'content-red':'content-default']">{{tasioInfo.arrival}}</div>
           </div>
         </div>
         <div class="moving-rows" :class="[status=='start'?'moving-rows2':'moving-rows3']">
           <div class="moving-grid">
             <div class="tasio-content-title">
               탑승인원
-              <span :class="[status=='wait'? 'content-red':'content-default']">{{psng}}</span>
+              <span
+                :class="[status=='wait'? 'content-red':'content-default']"
+              >{{tasioInfo.psngCnt}}</span>
             </div>
           </div>
           <div class="moving-grid">
             <div class="tasio-content-title">
               탑승자 이름
-              <span :class="[status=='wait'? 'content-red':'content-default']">{{psngName}}</span>
+              <span
+                :class="[status=='wait'? 'content-red':'content-default']"
+              >{{tasioInfo.psngName}}</span>
             </div>
           </div>
           <div class="moving-grid">
             <div class="tasio-content-title">요청시간</div>
-            <div class="content-default">{{reqTime}}</div>
+            <div class="content-default">{{tasioInfo.callTime}}</div>
           </div>
 
           <div class="moving-grid">
@@ -124,7 +127,10 @@
     >
       <template #content>
         <div class="modal-content-p">
-          <div class="modal-bold" v-if="status!='wait'">{{status=='start'?depart:arrival}}</div>
+          <div
+            class="modal-bold"
+            v-if="status!='wait'"
+          >{{status=='start'?tasioInfo.depart:tasioInfo.arrival}}</div>
           <div>{{modalTxt}}</div>
         </div>
       </template>
@@ -158,19 +164,15 @@ export default {
     arrivedTime: "",
     rideTime: "",
     status: "",
-    depart: "자율주행 테마파크",
-    arrival: "고군산 탐방센터",
-    psng: "3명",
     arrTime: "4분",
     moveTime: "8분",
-    psngName: "홍길동",
-    reqTime: "오후 1시 42분 32초",
     isConfirm: false
   }),
   created() {
     this.status = this.tasioStatus;
     if (this.status == "call") this.timer();
-    console.log(this.tasioInfo);
+    console.log("received tasio!!", this.tasioInfo);
+    this.tasioInfo.callTime = this.getTime(this.tasioInfo.callTime);
   },
 
   computed: {

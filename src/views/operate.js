@@ -136,8 +136,7 @@ let operateMixin = {
                 this.socketMsg.how.vehicle_id == this.selectedCar.id &&
                 this.socketMsg.how.function == "call"
             ) {
-                this.tasioStatus = "call";
-                this.tasioInfo = this.convertTasioInfo(this.socketMsg.how, this.socketMsg.when)
+                this.convertTasioInfo(this.socketMsg.how, this.socketMsg.when);
 
             } else if (this.socketMsg.what == "RESP") {
                 if (this.socketMsg.how.type == "passenger") {
@@ -206,14 +205,14 @@ let operateMixin = {
     methods: {
         convertTasioInfo(msg, timestamp) {
             var info = {
-                'psngCnt': msg.passenger,
-                'psngName': unescape(msg.passenger_name),
+                'psngCnt': msg.passenger + "명",
+                'psngName': msg.passenger_name,
                 'callTime': new Date(timestamp * 1000),
-                'depart': this.stationList[msg.current_station_id - 1].name,
-                'arrival': this.stationList[msg.target_station_id - 1].name,
+                'depart': this.stationList[Number(msg.current_station_id) - 1].name,
+                'arrival': this.stationList[Number(msg.target_station_id) - 1].name,
             }
-            console.log(info);
-            return info;
+            this.tasioInfo = info;
+            this.tasioStatus = 'call';
         },
         getStationList() {
             this.$http
@@ -240,7 +239,7 @@ let operateMixin = {
                     if (res.data.passed_station == this.nowSt.id) {
                         this.selectedCar.station = this.nowSt.id;
                         this.nowSt = false;
-                        this.isStation = true;
+                        if (this.stModal != 1) this.isStation = true;
                     } else alert("다시 시도해주세요.");
                 })
                 .catch((err) => {
