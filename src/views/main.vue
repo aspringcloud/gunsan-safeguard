@@ -197,7 +197,7 @@
     ></tasio>
 
     <div
-      @click="tasioStatus='call'"
+      @click="getTasioCall"
       v-if="!tasioStatus"
       style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
       class="blue text-white bold"
