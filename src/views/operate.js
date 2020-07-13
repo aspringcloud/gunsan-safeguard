@@ -82,7 +82,7 @@ let operateMixin = {
                         this.cars.push({
                             id: infos[i].id,
                             name: infos[i].name,
-                            station: this.stationList[infos[i].passed_station - 1]
+                            station: infos[i].passed_station
                         });
                     }
                     console.log('created', this.cars)
@@ -92,7 +92,7 @@ let operateMixin = {
                 });
             if (this.$session.get("selectedCar")) {
                 this.selectedCar = this.$session.get("selectedCar");
-                this.nowSt = this.selectedCar.station;
+                this.nowSt = this.stationList[this.selectedCar.station];
                 this.dashboard = true;
                 this.submitCar();
                 this.connectSocket();
@@ -224,7 +224,7 @@ let operateMixin = {
                 .then((res) => {
                     console.log("station 변경", res);
                     if (res.data.passed_station == this.nowSt.id) {
-                        this.selectedCar.station = this.nowSt;
+                        this.selectedCar.station = this.nowSt.id;
                         this.nowSt = false;
                         this.isStation = true;
                     } else alert("다시 시도해주세요.");
@@ -572,7 +572,18 @@ let operateMixin = {
             }
         },
         submitOplog() {
-            alert('함수작성필요')
+            // alert('함수작성필요')
+            var msg = {
+                what: "EVENT",
+                who: "safeGuard",
+                how: {
+                    type: "power",
+                    vehicle_id: this.selectedCar.id,
+                    site_id: this.site.id,
+                    value: "off",
+                },
+            }
+            this.socket.send(JSON.stringify(msg));
             this.isOplog = false;
         },
         savePsng() {
