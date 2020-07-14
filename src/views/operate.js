@@ -242,13 +242,27 @@ let operateMixin = {
             return h + "시 " + m + "분" + s + "초";
         },
         getStationList() {
+            this.stationList = {};
             this.$http
                 .get(this.$api + "stations/", {
                     headers: this.$headers
                 })
                 .then((res) => {
-                    console.log("st1", res.data);
+                    // console.log("----------")
+                    // console.log("res", res.data);
+                    // for (var station of res.data) {
+                    //     console.log("st", station);
+                    //     console.log('여기', this.stationList[station.site]);
+                    //     if (this.stationList[station.site]) {
+                    //         this.stationList[station.site].push(station);
+                    //     } else {
+                    //         this.stationList[station.site] = [station];
+                    //     }
+                    //     console.log('리스트', this.stationList);
+
+                    // }
                     this.stationList = res.data;
+                    console.log('st', this.stationList)
                 })
                 .catch((err) => console.log(err));
         },
@@ -304,7 +318,7 @@ let operateMixin = {
             this.windowWidth = window.innerWidth;
         },
         resetCar() {
-            this.selectedCar = false;
+            this.selectedCar = "";
             this.isDash = false;
             this.socket.close();
             console.log("socket close");

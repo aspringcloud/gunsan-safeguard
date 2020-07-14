@@ -99,7 +99,6 @@ let navbarMixin = {
                     } else {
                         console.log(this.errmsg);
                     }
-                    console.log("here!!", this.errmsg)
                 });
         }
     }
