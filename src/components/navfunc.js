@@ -18,6 +18,7 @@ let navbarMixin = {
                     })
                     .then(res => {
                         this.user.profile = res.data.profile;
+                        this.$session.set("user", this.user);
                         this.isSetting = true;
                         this.loginInfo = true;
                         this.errmsg = "";

@@ -42,7 +42,6 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import router from "../router";
 
 export default {
@@ -100,7 +99,7 @@ export default {
         this.$cookie.set("saveID", 1, 7);
         this.$cookie.set("emailID", this.user.email, 7);
       }
-      axios
+      this.$http
         .post(this.$api + "auth/login/", {
           email: this.user.email,
           password: this.user.pw

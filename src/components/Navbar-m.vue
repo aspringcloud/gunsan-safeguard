@@ -127,6 +127,9 @@ export default {
 .main-header {
   height: 56px;
   padding: 0 24px;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 .header-title {
   font-size: 14px;

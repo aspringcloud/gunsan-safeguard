@@ -6,11 +6,6 @@ import axios from "axios";
 
 import "@/assets/css/mainStyle.css";
 
-// import io from 'socket.io-client';
-// const socket = io('ws://115.93.143.2:9104/ws/vehicle');
-
-// Vue.prototype.$socket = socket;
-
 const VueCookie = require('vue-cookie');
 
 var options = {

@@ -37,6 +37,11 @@ button {
     background: none;
 }
 
+button:active,
+button:focus {
+    outline: none;
+}
+
 a {
     color: #82c0df;
 }
@@ -62,10 +67,4 @@ a {
     background: rgba(0, 0, 0, 0.25);
 
 
-}
-
-button:active,
-button:focus {
-    /* border: 0; */
-    outline: none;
 }

@@ -111,7 +111,6 @@
     </div>
 
     <!-- oplog modal -->
-    <!-- <oplog ver="mobile"></oplog> -->
     <div v-if="isOplog" id="oplog">
       <h1>운행기록</h1>
       <div class="oplog-row">
@@ -190,13 +189,14 @@
       @newStatus="updateTasio"
       :tasioInfo="tasioInfo"
     ></tasio>
-    <div
+    <!-- <div
       @click="tasioStatus = 'call'"
       v-if="!tasioStatus"
       style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
       class="blue text-white bold"
-    >T</div>
+    >T</div>-->
 
+    <!-- 차량 선택 화면 -->
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />
       <div>
@@ -210,6 +210,8 @@
         </select>
       </div>
     </div>
+
+    <!-- Dashboard -->
     <div id="dashboard" v-else>
       <div class="mainM-container">
         <div class="mainM-row1">
@@ -368,11 +370,15 @@ export default {
 </script>
 <style scoped>
 #mainM {
-  margin-top: 56px;
+  padding-top: 56px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .selectCar-container {
   flex-direction: column;
-  margin-top: 235px;
+  /* margin-top: 235px; */
   align-items: center;
   text-align: center;
 }
@@ -386,7 +392,8 @@ export default {
   margin-bottom: 68px;
 }
 #dashboard {
-  padding: 14px 24px;
+  display: flex;
+  align-items: center;
 }
 .mainM-container {
   width: 312px;
