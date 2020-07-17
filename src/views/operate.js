@@ -71,6 +71,7 @@ let operateMixin = {
     created() {
         if (this.$session.exists()) {
             this.user = this.$session.get("user");
+
             console.log('here', this.$session.get("user").info)
 
             this.$headers.authorization = "Basic " + this.$session.get("user").basic;
@@ -130,9 +131,11 @@ let operateMixin = {
                 console.log("여기!!!start!!", msg);
             } else if (this.tasioStatus == "toEnd") {
                 msg.how.function = "complete";
-                this.$session.set("tasioStatus", "toEnd");
+                // this.$session.set("tasioStatus", "toEnd");
                 this.socket.send(JSON.stringify(msg));
                 console.log(msg);
+            } else if (this.tasioStatus == false) {
+                this.tasioInfo = false;
             }
         },
         socketMsg: function () {

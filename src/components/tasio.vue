@@ -246,7 +246,7 @@ export default {
       this.startTimer = setInterval(() => {
         if (this.remainTotal <= 0) {
           this.timeStop();
-          this.status = "denied";
+          this.update("denied");
           this.destroySession();
         } else {
           this.remainTotal--;

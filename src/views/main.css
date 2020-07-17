@@ -26,12 +26,14 @@
 
 #dashboard {
     background: #d8f1f9;
-    min-height: 100vh;
+    padding: 30px 0;
     width: 100%;
     min-width: max-content;
-    height: 100%;
+    min-height: max-content;
+    /* height: max-content; */
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .box-default {

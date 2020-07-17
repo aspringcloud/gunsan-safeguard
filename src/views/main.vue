@@ -394,11 +394,15 @@ export default {
 
 <style scoped>
 #main {
-  margin-top: 68px;
+  padding-top: 68px;
+  height: 100vh;
+  min-height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.selectCar-container {
-  margin-top: 186px;
-  margin-bottom: 100px;
+#dashboard {
+  height: 100%;
 }
 .selectCar-container img {
   margin-top: 34px;
@@ -418,9 +422,6 @@ export default {
 }
 .msg-byte {
   width: 463px;
-}
-#dashboard {
-  padding: 30px 36px;
 }
 .box-default {
   padding: 12px;
@@ -781,6 +782,9 @@ export default {
   margin-bottom: 6px;
 }
 @media (min-width: 601px) and (max-width: 900px) {
+  #main {
+    height: 970px;
+  }
   #oplog {
     height: 633px;
     top: calc(50vh - 350px);
@@ -793,7 +797,6 @@ export default {
   }
   .selectCar-container {
     flex-direction: column;
-    margin-top: 235px;
     align-items: center;
     text-align: center;
   }
