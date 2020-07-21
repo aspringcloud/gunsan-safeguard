@@ -131,23 +131,24 @@ let operateMixin = {
                 console.log("여기!!!go!!", msg);
             } else if (this.tasioStatus == "toEnd") {
                 msg.how.function = "arrived";
-                // this.$session.set("tasioStatus", "toEnd");
                 this.socket.send(JSON.stringify(msg));
                 console.log(msg);
             } else if (this.tasioStatus == false) {
                 this.tasioInfo = false;
+
             }
         },
         socketMsg: function () {
             console.log(this.socketMsg);
-            if (
-                this.socketMsg.what == "EVENT" &&
+            if (this.socketMsg.what == "EVENT" &&
                 this.socketMsg.how.type == "ondemand" &&
-                this.socketMsg.how.vehicle_id == this.selectedCar.id &&
-                this.socketMsg.how.function == "call"
-            ) {
-                this.convertTasioInfo(this.socketMsg.how, this.socketMsg.when);
-
+                this.socketMsg.how.vehicle_id == this.selectedCar.id) {
+                if (this.socketMsg.how.function == "call") {
+                    this.convertTasioInfo(this.socketMsg.how, this.socketMsg.when);
+                } else if (this.socketMsg.how.function == "cancel_call") {
+                    this.tasioStatus = "cancel";
+                    this.$session.set("tasioStatus", "cancel");
+                }
             } else if (this.socketMsg.what == "RESP") {
                 if (this.socketMsg.how.type == "passenger") {
                     this.psng = this.socketMsg.how.current_passenger;

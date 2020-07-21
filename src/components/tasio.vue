@@ -35,12 +35,12 @@
         <button class="bottom-btn" @click="accept">배차 수락하기</button>
       </div>
 
-      <div v-if="status=='denied'" class="modalBox tasio-denied">
+      <div v-if="status=='denied' || status=='cancel'" class="modalBox tasio-denied">
         <h1>타시오 요청 취소 알림</h1>
         <div class="denied-txt">
           <span class="bold">{{tasioInfo.callTime}}</span> 발생한
           <br />타시오 요청이
-          <span class="errmsg">자동 취소</span>됐습니다.
+          <span class="errmsg">{{status=='denied'?'자동 취소':'탑승자에 의해 취소'}}</span>됐습니다.
         </div>
         <div class="denied-info-container">
           <div class="denied-loc-box">
@@ -62,7 +62,10 @@
         <button class="bottom-btn" @click="update(false)">확인</button>
       </div>
 
-      <div v-if="status.includes('t')" class="modalBox tasio-moving">
+      <div
+        v-if="status != 'denied' && status != 'call' && status != 'cancel'"
+        class="modalBox tasio-moving"
+      >
         <button class="black-btn" @click="isSimple = true">최소화</button>
         <div class="tasio-moving-title">
           <h1>타시오 배차 정보</h1>
@@ -169,17 +172,8 @@ export default {
     isConfirm: false
   }),
   created() {
-    this.status = this.$session.get("tasioStatus");
-    if (this.status == "call") this.timer();
-    if (this.$session.get("remainTotal"))
-      this.remainTotal = this.$session.get("remainTotal");
-    this.acceptTime = this.$session.get("tasioACT");
-    this.arrivedTime = this.$session.get("tasioAT");
-    this.rideTime = this.$session.get("tasioRT");
-    console.log("received tasio!!", this.tasioInfo);
-    console.log("tasiostatus", this.status);
+    this.tasioCall();
   },
-
   computed: {
     modalTxt() {
       if (this.status == "wait") return "탑승자가 탑승했습니까?";
@@ -205,7 +199,29 @@ export default {
       } else return this.remainTotal + "초";
     }
   },
+  watch: {
+    tasioStatus: function() {
+      if (this.tasioStatus == "cancel") {
+        this.status = "cancel";
+        this.timeStop();
+        this.destroySession();
+      } else if (this.tasioStatus == "call") {
+        this.tasioCall();
+      }
+    }
+  },
   methods: {
+    tasioCall() {
+      this.status = this.$session.get("tasioStatus");
+      if (this.status == "call") this.timer();
+      if (this.$session.get("remainTotal"))
+        this.remainTotal = this.$session.get("remainTotal");
+      this.acceptTime = this.$session.get("tasioACT");
+      this.arrivedTime = this.$session.get("tasioAT");
+      this.rideTime = this.$session.get("tasioRT");
+      console.log("received tasio!!", this.tasioInfo);
+      console.log("tasiostatus", this.status);
+    },
     toNextStatus() {
       if (this.status == "go") {
         this.arrivedTime = this.getTime(new Date());
