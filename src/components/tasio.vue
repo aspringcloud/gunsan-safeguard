@@ -71,7 +71,7 @@
         <div class="moving-loc-container">
           <div class="moving-loc-box">
             <div class="moving-loc-title">출발지</div>
-            <div :class="[status=='start'? 'content-red':'content-default']">{{tasioInfo.depart}}</div>
+            <div :class="[status=='go'? 'content-red':'content-default']">{{tasioInfo.depart}}</div>
           </div>
           <img src="@/assets/img/tasio_arrow.png" alt="arrow image" />
           <div class="moving-loc-box">
@@ -79,7 +79,7 @@
             <div :class="[status=='toEnd'? 'content-red':'content-default']">{{tasioInfo.arrival}}</div>
           </div>
         </div>
-        <div class="moving-rows" :class="[status=='start'?'moving-rows2':'moving-rows3']">
+        <div class="moving-rows" :class="[status=='go'?'moving-rows2':'moving-rows3']">
           <div class="moving-grid">
             <div class="tasio-content-title">
               탑승인원
@@ -105,7 +105,7 @@
             <div class="tasio-content-title">수락시간</div>
             <div class="content-default">{{acceptTime}}</div>
           </div>
-          <div v-if="status!='start'" class="moving-grid moving-grid-last">
+          <div v-if="status!='go'" class="moving-grid moving-grid-last">
             <div class="tasio-content-title">출발지 도착시간</div>
             <div class="content-default">{{arrivedTime}}</div>
           </div>
@@ -114,7 +114,7 @@
             <div class="content-default">{{rideTime}}</div>
           </div>
         </div>
-        <div v-if="status != 'start'" class="moving-time-container"></div>
+        <div v-if="status != 'go'" class="moving-time-container"></div>
         <button class="bottom-btn" @click="isConfirm=true">{{detailBtnTxt}}</button>
       </div>
     </div>
@@ -130,7 +130,7 @@
           <div
             class="modal-bold"
             v-if="status!='wait'"
-          >{{status=='start'?tasioInfo.depart:tasioInfo.arrival}}</div>
+          >{{status=='go'?tasioInfo.depart:tasioInfo.arrival}}</div>
           <div>{{modalTxt}}</div>
         </div>
       </template>
@@ -186,13 +186,13 @@ export default {
       else return "에 도착했습니까?";
     },
     detailBtnTxt() {
-      if (this.status == "start") return "출발지에 도착함";
+      if (this.status == "go") return "출발지에 도착함";
       else if (this.status == "wait") return "탑승자 확인함";
       else if (this.status == "toEnd") return "도착지에 도착함";
       return "";
     },
     statusTxt() {
-      if (this.status == "start") return "출발지로 이동중";
+      if (this.status == "go") return "출발지로 이동중";
       else if (this.status == "wait") return "탑승 대기중";
       else if (this.status == "toEnd") return "도착지로 이동중";
       return "";
@@ -207,7 +207,7 @@ export default {
   },
   methods: {
     toNextStatus() {
-      if (this.status == "start") {
+      if (this.status == "go") {
         this.arrivedTime = this.getTime(new Date());
         this.$session.set("tasioAT", this.arrivedTime);
         this.$session.set("tasioStatus", "wait");
@@ -226,7 +226,7 @@ export default {
       this.timeStop();
       this.acceptTime = this.getTime(new Date());
       this.$session.set("tasioACT", this.acceptTime);
-      this.update("start");
+      this.update("go");
     },
     getTime(date) {
       var h = date.getHours();

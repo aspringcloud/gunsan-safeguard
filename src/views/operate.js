@@ -122,15 +122,15 @@ let operateMixin = {
                 how: {
                     type: "ondemand",
                     vehicle_id: this.selectedCar.id,
-                    function: "start",
+                    function: "go",
                 },
             };
-            if (this.tasioStatus == "start") {
-                this.$session.set("tasioStatus", 'start');
+            if (this.tasioStatus == "go") {
+                this.$session.set("tasioStatus", 'go');
                 this.socket.send(JSON.stringify(msg));
-                console.log("여기!!!start!!", msg);
+                console.log("여기!!!go!!", msg);
             } else if (this.tasioStatus == "toEnd") {
-                msg.how.function = "complete";
+                msg.how.function = "arrived";
                 // this.$session.set("tasioStatus", "toEnd");
                 this.socket.send(JSON.stringify(msg));
                 console.log(msg);
