@@ -154,7 +154,7 @@
         </div>
       </template>
       <template #btn>
-        <button class="text-blue" @click="stModal = false">취소</button>
+        <button class="text-blue" @click="stModal = false; nowSt = false;">취소</button>
         <button class="blue text-white" @click="changeSt">선택</button>
       </template>
     </modal>
