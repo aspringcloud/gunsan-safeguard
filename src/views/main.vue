@@ -138,7 +138,7 @@
         <div class="passedst-select-container">
           <div
             class="passedst-select-list"
-            :class="{'hide-st':stationInfo.site!=site.id,'active-station':nowSt==stationInfo}"
+            :class="{'hide-st':stationInfo.site != site.id,'active-station':nowSt==stationInfo}"
             @click="nowSt = stationInfo"
             v-for="(stationInfo, i) in stationList"
             :key="i"
@@ -148,6 +148,7 @@
             ? stationInfo.name + " (" + stationInfo.mid + ")"
             : ""
             }}
+            <!-- {{stationInfo.name}}{{ stationInfo.site}} -->
             <div v-if="nowSt==stationInfo" class="active-station"></div>
           </div>
         </div>
