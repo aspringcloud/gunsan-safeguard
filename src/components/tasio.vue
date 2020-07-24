@@ -74,12 +74,18 @@
         <div class="moving-loc-container">
           <div class="moving-loc-box">
             <div class="moving-loc-title">출발지</div>
-            <div :class="[status=='go'? 'content-red':'content-default']">{{tasioInfo.depart}}</div>
+            <div
+              class="text-overflow-st"
+              :class="[status=='go'? 'content-st-red':'content-st-default']"
+            >{{tasioInfo.depart}}</div>
           </div>
           <img src="@/assets/img/tasio_arrow.png" alt="arrow image" />
           <div class="moving-loc-box">
             <div class="moving-loc-title">도착지</div>
-            <div :class="[status=='toEnd'? 'content-red':'content-default']">{{tasioInfo.arrival}}</div>
+            <div
+              class="text-overflow-st"
+              :class="[status=='toEnd'? 'content-st-red':'content-st-default']"
+            >{{tasioInfo.arrival}}</div>
           </div>
         </div>
         <div class="moving-rows" :class="[status=='go'?'moving-rows2':'moving-rows3']">
@@ -92,29 +98,30 @@
             </div>
           </div>
           <div class="moving-grid">
-            <div class="tasio-content-title">
+            <div class="tasio-content-title name-box">
               탑승자 이름
-              <span
+              <div
+                class="text-overflow-name"
                 :class="[status=='wait'? 'content-red':'content-default']"
-              >{{tasioInfo.psngName}}</span>
+              >{{tasioInfo.psngName}}</div>
             </div>
           </div>
           <div class="moving-grid">
-            <div class="tasio-content-title">요청시간</div>
-            <div class="content-default">{{tasioInfo.callTime}}</div>
+            <div class="tasio-content-title justify-center">요청시간</div>
+            <div class="content-default justify-center">{{tasioInfo.callTime}}</div>
           </div>
 
           <div class="moving-grid">
-            <div class="tasio-content-title">수락시간</div>
-            <div class="content-default">{{acceptTime}}</div>
+            <div class="tasio-content-title justify-center">수락시간</div>
+            <div class="content-default justify-center">{{acceptTime}}</div>
           </div>
           <div v-if="status!='go'" class="moving-grid moving-grid-last">
-            <div class="tasio-content-title">출발지 도착시간</div>
-            <div class="content-default">{{arrivedTime}}</div>
+            <div class="tasio-content-title justify-center">출발지 도착시간</div>
+            <div class="content-default justify-center">{{arrivedTime}}</div>
           </div>
           <div v-if="status=='toEnd'" class="moving-grid moving-grid-last">
-            <div class="tasio-content-title">탑승객 탑승시간</div>
-            <div class="content-default">{{rideTime}}</div>
+            <div class="tasio-content-title justify-center">탑승객 탑승시간</div>
+            <div class="content-default justify-center">{{rideTime}}</div>
           </div>
         </div>
         <div v-if="status != 'go'" class="moving-time-container"></div>
@@ -302,8 +309,13 @@ export default {
   height: 261px;
   padding: 0 14px;
 }
+.justify-center {
+  justify-content: center;
+}
 .tasio-content-title {
   color: #bdbdbd;
+  display: flex;
+  align-items: baseline;
   margin-bottom: 6px;
   font-size: 16px;
 }
@@ -315,16 +327,56 @@ export default {
   font-size: 18px;
   color: #333333;
 }
+.content-st-default {
+  font-weight: 500;
+  font-size: 16px;
+  color: #333333;
+}
+.text-overflow-st {
+  width: 144px;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+.mobile .text-overflow-st {
+  width: 112px;
+}
+.name-box {
+  justify-content: space-between;
+}
+.text-overflow-name {
+  display: inline-block;
+  width: 83px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.mobile .text-overflow-name {
+  width: 65px;
+}
 .mobile .content-default {
   font-size: 14px;
+}
+.mobile .content-st-default {
+  font-size: 12px;
 }
 .content-red {
   font-weight: 500;
   font-size: 18px;
   color: #eb5757;
 }
+.content-st-red {
+  font-weight: 500;
+  font-size: 16px;
+  color: #eb5757;
+}
 .mobile .content-red {
   font-size: 14px;
+}
+.mobile .content-st-red {
+  font-size: 12px;
 }
 .denied-loc-box span {
   margin-left: 10px;
@@ -499,7 +551,7 @@ export default {
 .tasio-moving {
   width: 370px;
   position: relative;
-  padding: 13px 20px 0 20px;
+  padding: 13px 20px;
 }
 .mobile .tasio-moving {
   width: 302px;
@@ -544,17 +596,19 @@ export default {
   width: 340px;
   height: 74px;
   margin-top: 13px;
+  margin-left: -5px;
   background: #e0e0e0;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 11px 9px;
+  padding: 11px 3px;
 }
 .mobile .moving-loc-container {
   margin-top: 8px;
+  margin-left: 0;
   width: 282px;
   height: 57px;
-  padding: 7px 8px;
+  padding: 7px 3px;
 }
 .moving-loc-container img {
   margin-top: 4px;
@@ -577,15 +631,14 @@ export default {
 .moving-rows {
   margin-top: 6px;
   display: grid;
-  grid-template-columns: minmax(170px, auto) minmax(170px, auto);
+  grid-template-columns: 165px 165px;
 }
 .mobile .moving-rows .tasio-content-title {
   margin: 0;
 }
 .mobile .moving-rows {
   padding: 1px 3px 9px 3px;
-  /* margin-top: 11px; */
-  grid-template-columns: minmax(140px, auto) minmax(140px, auto);
+  grid-template-columns: 138px 138px;
 }
 .moving-rows2 {
   grid-template-rows: 44px 77px 60px;
