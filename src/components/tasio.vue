@@ -8,14 +8,14 @@
             <div class="tasio-content-title">출발지</div>
             <h5 class="content-default">{{tasioInfo.depart}}</h5>
             <div class="loc-txt">까지 예상 이동시간</div>
-            <div class="content-default">{{tasioInfo.currentETA}}</div>
+            <div class="content-default">{{tasioInfo.currentETA}}분</div>
           </div>
           <img src="@/assets/img/tasio_arrow.png" alt="arrow image" />
           <div class="loc-box">
             <div class="tasio-content-title">도착지</div>
             <h5 class="content-default">{{tasioInfo.arrival}}</h5>
             <div class="loc-txt">까지 예상 이동시간</div>
-            <div class="content-default">{{tasioInfo.targetETA}}</div>
+            <div class="content-default">{{tasioInfo.targetETA}}분</div>
           </div>
         </div>
         <div class="info-container">
@@ -174,8 +174,6 @@ export default {
     arrivedTime: "",
     rideTime: "",
     status: "",
-    arrTime: "4분",
-    moveTime: "8분",
     isConfirm: false
   }),
   created() {
