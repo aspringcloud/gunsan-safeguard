@@ -147,7 +147,7 @@ let operateMixin = {
             ) {
                 if (!this.tasioStatus && this.socketMsg.how.function == "call") {
                     this.convertTasioInfo(this.socketMsg.how, this.socketMsg.when);
-                } else if (this.socketMsg.how.function == "cancel_call") {
+                } else if (this.socketMsg.how.function == "cancel_call" && this.socketMsg.how.uid == this.tasioInfo.uid) {
                     this.tasioStatus = "cancel";
                     this.$session.set("tasioStatus", "cancel");
                 }
