@@ -123,6 +123,7 @@ let operateMixin = {
                     type: "ondemand",
                     vehicle_id: this.selectedCar.id,
                     function: "go",
+                    uid: this.tasioInfo.uid
                 },
             };
             if (this.tasioStatus == "go") {
@@ -219,6 +220,9 @@ let operateMixin = {
             var info = {
                 psngCnt: msg.passenger + "명",
                 psngName: msg.passenger_name,
+                currentETA: this.getTasioCurrentETA(msg.current_station_eta),
+                uid: msg.uid,
+                targetETA: parseInt(msg.target_station_eta),
                 callTime: this.timeFormatting(new Date(timestamp * 1000)),
                 depart: this.stationList[Number(msg.current_station_id) - 1].name,
                 arrival: this.stationList[Number(msg.target_station_id) - 1].name,
@@ -227,6 +231,14 @@ let operateMixin = {
             this.tasioInfo = info;
             this.$session.set("tasioStatus", "call");
             this.$session.set("tasioInfo", info);
+        },
+        getTasioCurrentETA(eta) {
+            var result = undefined;
+            for (var str of eta) {
+                var now = JSON.parse(str);
+                if (Object.keys(now)[0] == this.selectedCar.id) result = Object.values(now)[0];
+            }
+            return result;
         },
         timeFormatting(date) {
             var h = date.getHours();
