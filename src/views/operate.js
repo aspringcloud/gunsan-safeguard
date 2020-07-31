@@ -638,7 +638,10 @@ let operateMixin = {
         powerOff() {
             if (!this.isOn) return;
             else {
-                this.isOplog = true;
+                // this.isOplog = true;
+                this.isSubmit = true;
+                this.modalTitle = "전원";
+                this.modalValue = "OFF";
             }
         },
         submitOplog() {
