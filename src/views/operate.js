@@ -143,7 +143,7 @@ let operateMixin = {
             if (
                 this.socketMsg.what == "EVENT" &&
                 this.socketMsg.how.type == "ondemand" &&
-                this.socketMsg.how.vehicle_id == this.selectedCar.id
+                this.socketMsg.how.site_id == this.site.id
             ) {
                 if (!this.tasioStatus && this.socketMsg.how.function == "call") {
                     this.convertTasioInfo(this.socketMsg.how, this.socketMsg.when);
@@ -795,7 +795,7 @@ let operateMixin = {
                 what: "EVENT",
                 how: {
                     type: "ondemand",
-                    vehicle_id: this.selectedCar.id,
+                    vehicle_id: 4,
                     function: "call",
                     current_station_id: 2,
                     target_station_id: 3,

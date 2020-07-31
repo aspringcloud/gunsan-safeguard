@@ -119,6 +119,10 @@
             <div class="tasio-content-title justify-center">출발지 도착시간</div>
             <div class="content-default justify-center">{{arrivedTime}}</div>
           </div>
+          <!-- <div v-if="status=='wait'" class="moving-grid moving-grid-last">
+            <div class="tasio-content-title justify-center">대기시간</div>
+            <div class="content-default justify-center">{{waitTime}}</div>
+          </div>-->
           <div v-if="status=='toEnd'" class="moving-grid moving-grid-last">
             <div class="tasio-content-title justify-center">탑승객 탑승시간</div>
             <div class="content-default justify-center">{{rideTime}}</div>
@@ -233,6 +237,8 @@ export default {
         this.$session.set("tasioAT", this.arrivedTime);
         this.$session.set("tasioStatus", "wait");
         this.status = "wait";
+        // this.remainTotal = 300;
+        // this.timer();
       } else if (this.status == "wait") {
         this.rideTime = this.getTime(new Date());
         this.$session.set("tasioRT", this.rideTime);
