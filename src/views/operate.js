@@ -299,6 +299,7 @@ let operateMixin = {
                     console.log("station 변경", res);
                     if (res.data.passed_station == this.nowSt.id) {
                         this.selectedCar.station = this.nowSt.id;
+                        this.$session.set("selectedCar", this.selectedCar)
                         this.nowSt = false;
                         this.isStation = this.stModal !== 1;
                         if (this.stModal === 1) this.savePsng(1);
