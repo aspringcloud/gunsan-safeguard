@@ -40,43 +40,61 @@
           >비밀번호 변경</button>
         </div>
         <div v-if="loginInfo" class="setting-content setting-loginInfo">
-          <div class="setting-login-img">
-            <img src="@/assets/img/profile.png" alt="user profile image" />
-            <div>
-              <div class="setting-username">{{ user.info.last_name }} {{ user.info.first_name }}</div>
-              <button class="setting-btn">사진 변경하기</button>
-            </div>
-          </div>
-          <div class="setting-infos">
+          <div class="input-box">
             <label for="email">이메일 ID</label>
             <input name="email" type="text" :value="user.info.email" readonly />
+          </div>
+          <div class="input-box">
+            <label for="team">이름</label>
+            <input
+              name="team"
+              type="text"
+              :value="user.info.last_name + ' ' + user.info.first_name"
+              readonly
+            />
+          </div>
+          <div class="input-box">
             <label for="team">팀</label>
             <input name="team" type="text" :value="user.profile.team" readonly />
+          </div>
+          <div class="input-box">
             <label for="phone">휴대폰</label>
             <input name="phone" type="text" :value="user.profile.phone" readonly />
+          </div>
+          <div class="input-box">
             <label for="auth">권한</label>
             <input name="auth" type="text" :value="user.profile.level" readonly />
           </div>
         </div>
 
         <div v-if="!loginInfo" class="setting-content">
-          <form class="setting-infos" @submit.prevent="resetPw">
-            <label for="currentPw">현재 비밀번호</label>
-            <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
-            <label for="newPw">새 비밀번호</label>
-            <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
-            <label for="renewPw">새 비밀번호 확인</label>
-            <input v-model="repw" type="password" name="renewPw" placeholder="새로운 비밀번호를 다시 입력하세요." />
-            <button class="setting-btn rspw-btn-pos" type="submit">변경하기</button>
+          <form class="resetpw-container" @submit.prevent=" resetPw">
+            <div class="input-box">
+              <label for="currentPw">현재 비밀번호</label>
+              <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
+            </div>
+            <div class="input-box">
+              <label for="newPw">새 비밀번호</label>
+              <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
+            </div>
+            <div class="input-box">
+              <label for="renewPw">새 비밀번호 확인</label>
+              <input
+                v-model="repw"
+                type="password"
+                name="renewPw"
+                placeholder="새로운 비밀번호를 다시 입력하세요."
+              />
+            </div>
             <div v-if="errmsg" class="errmsg errmsg-pos">{{ errmsg }}</div>
             <div v-if="successmsg" class="text-blue errmsg-pos">{{ successmsg }}</div>
+            <div class="setting-pwrule">
+              ※ 이메일ID, 이름을 포함할 수 없습니다.
+              <br />※ 8글자 이상이어야 합니다.
+              <br />※ 숫자로만 입력은 불가능합니다.
+            </div>
+            <button class="setting-btn" type="submit">변경하기</button>
           </form>
-          <div class="setting-pwrule">
-            ※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.
-            <br />※ 비밀번호는 8글자 이상이어야 합니다.
-            <br />※ 비밀번호는
-            숫자로만 입력은 불가능합니다.
-          </div>
         </div>
       </div>
     </div>
@@ -124,7 +142,7 @@ export default {
 .modalBox-setting {
   position: absolute;
   border-radius: 14px;
-  height: 500px;
+  height: 384px;
   width: 383px;
   top: 68px;
   right: 100px;
@@ -140,10 +158,6 @@ export default {
   display: flex;
   height: 60px;
   box-shadow: 0px 0.5px 0px rgba(0, 0, 0, 0.3);
-}
-.setting-btn {
-  width: 117px;
-  height: 40px;
 }
 .setting-tab button {
   background: #f3f3f3;
@@ -169,26 +183,57 @@ export default {
   width: 270px;
   margin-bottom: 10px;
 }
-
 .setting-content {
   padding-top: 30px;
 }
-.setting-infos label {
-  margin-top: 8px;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-.errmsg-pos {
-  top: 240px;
-}
-.setting-pwrule {
-  margin-top: 30px;
-  font-size: 14px;
+.setting-content label {
+  font-size: 13px;
+  line-height: 30px;
+  color: #555555;
+  display: inline-block;
 }
 
-.rspw-btn-pos {
-  margin-top: 43px;
+.input-box {
+  width: 324px;
+  display: flex;
+  justify-content: space-between;
 }
+.setting-loginInfo input {
+  width: 247px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+.resetpw-container input {
+  width: 222px;
+  margin-bottom: 15px;
+  padding-left: 10px;
+}
+.errmsg-pos {
+  top: 149px;
+  left: 132px;
+  font-size: 12px;
+  margin-top: 5px;
+  width: 222px;
+}
+.setting-pwrule {
+  line-height: 21px;
+  font-size: 12px;
+  margin-top: 30px;
+  margin-left: 102px;
+}
+.setting-btn {
+  margin-left: 102px;
+  margin-top: 10px;
+  width: 222px;
+  line-height: 30px;
+  height: 30px;
+  background: #2e92b0;
+  border-radius: 2px;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 13px;
+}
+
 @media (min-width: 601px) and (max-width: 960px) {
   .modalBox-setting {
     margin: 0 auto;

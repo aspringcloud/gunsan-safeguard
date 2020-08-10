@@ -1,5 +1,7 @@
 let operateMixin = {
     data: () => ({
+        isTasioToast: false,
+        lastPing: false,
         tasioStatus: false,
         tasioInfo: false,
         isOplog: false,
@@ -136,11 +138,18 @@ let operateMixin = {
                 console.log(msg);
             } else if (this.tasioStatus == false) {
                 this.tasioInfo = false;
+            } else if (this.tasioStatus == "noRide") {
+                msg.how.function = "cancel_call";
+                this.socket.send(JSON.stringify(msg));
+                this.isTasioToast = true;
+                setTimeout(() => (this.isTasioToast = false), 2000);
+                this.tasioStatus = "sentCancel"
+                console.log("미탑승", msg)
             }
         },
         socketMsg: function () {
-            console.log(this.socketMsg);
             if (
+                this.isOn &&
                 this.socketMsg.what == "EVENT" &&
                 this.socketMsg.how.type == "ondemand" &&
                 this.socketMsg.how.site_id == this.site.id
@@ -164,6 +173,10 @@ let operateMixin = {
                     this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
                 else if (this.socketMsg.how.type == "parking")
                     this.isPark = this.socketMsg.how.value == "true" ? true : false;
+            } else if (this.socketMsg.what == "PING") {
+                console.log(new Date(this.socketMsg.when * 1000).getTime() - new Date(this.lastPing).getTime())
+                this.lastPing = new Date(this.socketMsg.when * 1000);
+                console.log('ping!', new Date(this.lastPing));
             }
         },
         stopReason: function () {
@@ -236,12 +249,8 @@ let operateMixin = {
             this.$session.set("tasioInfo", info);
         },
         getTasioCurrentETA(eta) {
-            var result = undefined;
-            for (var str of eta) {
-                var now = JSON.parse(str);
-                if (Object.keys(now)[0] == this.selectedCar.id) result = Object.values(now)[0];
-            }
-            return result;
+            eta = JSON.parse(eta);
+            return eta[this.selectedCar.id];
         },
         timeFormatting(date) {
             var h = date.getHours();
@@ -268,19 +277,6 @@ let operateMixin = {
                     headers: this.$headers,
                 })
                 .then((res) => {
-                    // console.log("----------")
-                    // console.log("res", res.data);
-                    // for (var station of res.data) {
-                    //     console.log("st", station);
-                    //     console.log('여기', this.stationList[station.site]);
-                    //     if (this.stationList[station.site]) {
-                    //         this.stationList[station.site].push(station);
-                    //     } else {
-                    //         this.stationList[station.site] = [station];
-                    //     }
-                    //     console.log('리스트', this.stationList);
-
-                    // }
                     this.stationList = res.data;
                     console.log("st", this.stationList);
                 })
@@ -324,6 +320,7 @@ let operateMixin = {
             this.socket = new WebSocket("ws://222.114.39.8:11411");
             this.socket.onopen = () => {
                 this.status = true;
+                this.lastPing = new Date();
             };
             this.socket.onmessage = ({
                 data
@@ -441,6 +438,10 @@ let operateMixin = {
         },
         showClock() {
             var now = new Date();
+
+            //socket 재 연결
+            if ((now.getTime() - new Date(this.lastPing).getTime()) > 25000) this.connectSocket();
+
             var day = now.getDay();
             var week = ["일", "월", "화", "수", "목", "금", "토"];
             this.today =
@@ -522,84 +523,6 @@ let operateMixin = {
             this.modalTitle = v;
             this.isSubmit = true;
         },
-        // submitModal() {
-        //     if (this.modalTitle == "차량") {
-        //         this.selectedCar = "";
-        //         this.$session.set("selectedCar", false);
-
-        //         this.dashboard = false;
-        //         this.isSubmit = false;
-        //     } else if (this.modalTitle == "전원") {
-        //         this.$http
-        //             .patch(
-        //                 this.$api + "vehicles/" + this.selectedCar.id + "/", {
-        //                     drive: !this.isOn,
-        //                 }, {
-        //                     headers: this.$headers,
-        //                 }
-        //             )
-        //             .then((res) => {
-        //                 this.isOn = res.data.drive;
-        //             })
-        //             .catch((err) => {
-        //                 console.log(err);
-        //                 alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
-        //             });
-        //         this.isSubmit = false;
-        //     } else if (this.modalTitle == "주행모드") {
-        //         if (this.isAuto == 1) {
-        //             this.$http
-        //                 .patch(
-        //                     this.$api + "vehicles/" + this.selectedCar.id + "/", {
-        //                         drive_mode: 2,
-        //                     }, {
-        //                         headers: this.$headers,
-        //                     }
-        //                 )
-        //                 .then((res) => {
-        //                     this.isAuto = res.data.drive_mode;
-        //                 })
-        //                 .catch((err) => {
-        //                     console.log(err);
-        //                     alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
-        //                 });
-        //         } else if (this.isAuto == 2) {
-        //             this.$http
-        //                 .patch(
-        //                     this.$api + "vehicles/" + this.selectedCar.id + "/", {
-        //                         drive_mode: 1,
-        //                     }, {
-        //                         headers: this.$headers,
-        //                     }
-        //                 )
-        //                 .then((res) => {
-        //                     this.isAuto = res.data.drive_mode;
-        //                 })
-        //                 .catch((err) => {
-        //                     console.log(err);
-        //                     alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
-        //                 });
-        //         }
-        //         this.isSubmit = false;
-        //     } else {
-        //         this.$http
-        //             .patch(
-        //                 this.$api + "vehicles/" + this.selectedCar.id + "/", {
-        //                     isparked: !this.isPark,
-        //                 }, {
-        //                     headers: this.$headers,
-        //                 }
-        //             )
-        //             .then((res) => {
-        //                 this.isPark = res.data.isparked;
-        //             })
-        //             .catch((err) => {
-        //                 console.log(err);
-        //                 alert(err + "\n문제가 발생하였습니다. 다시 시도해주세요.");
-        //             });
-        //         this.isSubmit = false;
-        //     }
-        // },
         submitModal_socket() {
             var msg = {
                 what: "EVENT",
@@ -795,17 +718,24 @@ let operateMixin = {
         },
         getTasioCall() {
             var msg = {
-                who: "tasio_id",
                 what: "EVENT",
+                // where: "sejong_datahub",
+                who: "tasio_id",
                 how: {
-                    type: "ondemand",
-                    vehicle_id: 4,
+                    current_station_eta: "['{'4': 25.0, '5': 29.0}']",
+                    current_station_id: 11,
                     function: "call",
-                    current_station_id: 2,
-                    target_station_id: 3,
-                    passenger: 3,
-                    passenger_name: "혜리",
+                    passenger: 1,
+                    passenger_name: "Test",
+                    site_id: 1,
+                    target_station_eta: 4,
+                    target_station_id: 18,
+                    type: "ondemand",
+                    uid: "fc3x860IvOf1eoq7AjPLPFCTV193",
+                    vehicle_id: 4,
+                    vehicle_mid: "SCN004",
                 },
+
             };
             this.socket.send(JSON.stringify(msg));
         },

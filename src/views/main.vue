@@ -131,6 +131,13 @@
       <div>메시지를 전송했습니다.</div>
     </div>
 
+    <div class="msg-toast" :class="{'show-msg-toast':isTasioToast}">
+      <h1>
+        <span>SpringGo</span> 안전요원
+      </h1>
+      <div>배차를 취소했습니다.</div>
+    </div>
+
     <!-- passed station modal -->
     <modal class="passedst-modal" v-if="stModal" width="330px" height="391px">
       <template #content>
@@ -197,12 +204,13 @@
       :tasioInfo="tasioInfo"
     ></tasio>
 
-    <!-- <div
+    <div
       @click="getTasioCall"
       v-if="!tasioStatus"
       style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
       class="blue text-white bold"
-    >T</div>-->
+    >T</div>
+
     <!-- 차량 선택 화면 -->
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />

@@ -89,7 +89,7 @@
           </div>
         </div>
         <div class="moving-rows" :class="[status=='go'?'moving-rows2':'moving-rows3']">
-          <div class="moving-grid">
+          <div class="moving-grid moving-grid-first">
             <div class="tasio-content-title">
               탑승인원
               <span
@@ -97,7 +97,7 @@
               >{{tasioInfo.psngCnt}}</span>
             </div>
           </div>
-          <div class="moving-grid">
+          <div class="moving-grid moving-grid-first">
             <div class="tasio-content-title name-box">
               탑승자 이름
               <div
@@ -115,21 +115,28 @@
             <div class="tasio-content-title justify-center">수락시간</div>
             <div class="content-default justify-center">{{acceptTime}}</div>
           </div>
-          <div v-if="status!='go'" class="moving-grid moving-grid-last">
+          <div v-if="status!='go'" class="moving-grid">
             <div class="tasio-content-title justify-center">출발지 도착시간</div>
             <div class="content-default justify-center">{{arrivedTime}}</div>
           </div>
-          <!-- <div v-if="status=='wait'" class="moving-grid moving-grid-last">
+          <div v-if="status=='wait'" class="moving-grid">
             <div class="tasio-content-title justify-center">대기시간</div>
-            <div class="content-default justify-center">{{waitTime}}</div>
-          </div>-->
-          <div v-if="status=='toEnd'" class="moving-grid moving-grid-last">
+            <div
+              class="justify-center"
+              :class="[waitTime>=300 ? 'content-red': 'content-default']"
+            >{{waitedTime}}</div>
+          </div>
+          <div v-if="status=='toEnd'" class="moving-grid">
             <div class="tasio-content-title justify-center">탑승객 탑승시간</div>
             <div class="content-default justify-center">{{rideTime}}</div>
           </div>
         </div>
         <div v-if="status != 'go'" class="moving-time-container"></div>
-        <button class="bottom-btn" @click="isConfirm=true">{{detailBtnTxt}}</button>
+        <div v-if="status =='wait'" class="wait-btn-container">
+          <button class="noride-btn" @click="noRide">탑승하지 않음</button>
+          <button class="ride-btn" @click="isConfirm=true">{{detailBtnTxt}}</button>
+        </div>
+        <button v-else class="bottom-btn" @click="isConfirm=true">{{detailBtnTxt}}</button>
       </div>
     </div>
 
@@ -178,7 +185,9 @@ export default {
     arrivedTime: "",
     rideTime: "",
     status: "",
-    isConfirm: false
+    isConfirm: false,
+    waitTime: 0,
+    timeover: false
   }),
   created() {
     this.tasioCall();
@@ -200,6 +209,13 @@ export default {
       else if (this.status == "toEnd") return "도착지로 이동중";
       return "";
     },
+    waitedTime() {
+      var min = Math.floor(this.waitTime / 60);
+      if (min) {
+        var sec = this.waitTime - min * 60;
+        return min + "분 " + sec + "초";
+      } else return this.waitTime + "초";
+    },
     remainTime() {
       var min = Math.floor(this.remainTotal / 60);
       if (min) {
@@ -214,8 +230,12 @@ export default {
         this.status = "cancel";
         this.timeStop();
         this.destroySession();
+        this.update(false);
       } else if (this.tasioStatus == "call") {
         this.tasioCall();
+      } else if (this.tasioStatus == "sentCancel") {
+        this.destroySession();
+        this.update(false);
       }
     }
   },
@@ -225,6 +245,8 @@ export default {
       if (this.status == "call") this.timer();
       if (this.$session.get("remainTotal"))
         this.remainTotal = this.$session.get("remainTotal");
+      if (this.$session.get("waitTime"))
+        this.waitTime = this.$session.get("waitTime");
       this.acceptTime = this.$session.get("tasioACT");
       this.arrivedTime = this.$session.get("tasioAT");
       this.rideTime = this.$session.get("tasioRT");
@@ -237,9 +259,9 @@ export default {
         this.$session.set("tasioAT", this.arrivedTime);
         this.$session.set("tasioStatus", "wait");
         this.status = "wait";
-        // this.remainTotal = 300;
-        // this.timer();
+        this.waiting();
       } else if (this.status == "wait") {
+        this.stopWait();
         this.rideTime = this.getTime(new Date());
         this.$session.set("tasioRT", this.rideTime);
         this.update("toEnd");
@@ -269,6 +291,12 @@ export default {
       this.status = status;
       this.$emit("newStatus", status);
     },
+    waiting() {
+      this.waitingTimer = setInterval(() => {
+        this.waitTime++;
+        this.$session.set("waitTime", this.waitTime + 1);
+      }, 1000);
+    },
     timer() {
       this.startTimer = setInterval(() => {
         if (this.remainTotal <= 0) {
@@ -280,6 +308,15 @@ export default {
           this.$session.set("remainTotal", this.remainTotal - 1);
         }
       }, 1000);
+    },
+    noRide() {
+      this.stopWait();
+      this.update("noRide");
+    },
+    stopWait() {
+      clearInterval(this.waitingTimer);
+      this.$session.remove("waitTime");
+      this.waitTime = 0;
     },
     timeStop() {
       clearInterval(this.startTimer);
@@ -458,6 +495,28 @@ export default {
   display: flex;
   justify-content: space-between;
   text-align: center;
+}
+.wait-btn-container {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 60px;
+  display: flex;
+}
+.noride-btn {
+  width: 50%;
+  font-size: 18px;
+  line-height: 27px;
+  color: #333333;
+  border-top: 0.5px solid #3bbae2;
+}
+.ride-btn {
+  width: 50%;
+  font-size: 18px;
+  line-height: 27px;
+  background: #3bbae2;
+  color: #ffffff;
 }
 .bottom-btn {
   position: absolute;
@@ -663,12 +722,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-bottom: 0.5px solid #e0e0e0;
+  border-top: 0.5px solid #e0e0e0;
+}
+.tasio-hr {
 }
 .mobile .moving-grid {
   border: none;
 }
-.moving-grid-last {
+.moving-grid-first {
   border: none;
 }
 .modal-content-p {
