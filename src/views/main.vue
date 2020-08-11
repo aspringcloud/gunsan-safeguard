@@ -204,12 +204,12 @@
       :tasioInfo="tasioInfo"
     ></tasio>
 
-    <div
+    <!-- <div
       @click="getTasioCall"
       v-if="!tasioStatus"
       style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
       class="blue text-white bold"
-    >T</div>
+    >T</div>-->
 
     <!-- 차량 선택 화면 -->
     <div class="selectCar-container" v-if="!dashboard">
@@ -397,7 +397,7 @@ import "@/views/main.css";
 export default {
   mixins: [operateMixin],
   name: "Main",
-  components: { Modal, Navbar, Tasio }
+  components: { Modal, Navbar, Tasio },
 };
 </script>
 
