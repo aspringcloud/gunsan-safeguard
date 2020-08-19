@@ -303,7 +303,7 @@
         </div>
         <div class="box-default mainM-row4">
           <div class="mainM-row4-row1">
-            <div class="stop-div">
+            <!-- <div class="stop-div">
               <div class="box-title">구분</div>
               <button
                 @click="pickOpt('출발')"
@@ -315,7 +315,7 @@
                 class="btn-toggle"
                 :class="{ 'btn-toggle-active': stopOpt == '도착' }"
               >도착</button>
-            </div>
+            </div>-->
             <div class="stop-div">
               <div class="box-title">정지사유</div>
               <select v-model="stopOpt" name="stopReason" id="stopReason">
@@ -365,7 +365,7 @@ export default {
   mixins: [operateMixin],
   name: "MainM",
   components: { NavbarM, Modal, Tasio },
-  data: () => ({})
+  data: () => ({}),
 };
 </script>
 <style scoped>
