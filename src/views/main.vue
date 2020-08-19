@@ -335,7 +335,7 @@
         </div>
         <div class="dashboard-col2">
           <div class="box-default stopMsg-container">
-            <div class="dashboard-col2-row1">
+            <!-- <div class="dashboard-col2-row1">
               <div class="box-title">구분</div>
               <div class="dashboard-col2-btn-container">
                 <button
@@ -349,10 +349,10 @@
                   :class="{'btn-toggle-active': stopOpt=='도착'}"
                 >도착</button>
               </div>
-            </div>
+            </div>-->
             <div class="dashboard-col2-row2">
               <div class="box-title">정지사유</div>
-              <div class="dashboard-col2-btn-container">
+              <div class="dashboard-col2-gunsan-container">
                 <button
                   v-for="(opt,i) in stopOptList"
                   :key="i"
@@ -673,6 +673,19 @@ export default {
   margin-top: 5px;
   margin-bottom: 13px;
 }
+.dashboard-col2-gunsan-container {
+  margin-top: 17px;
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  column-gap: 15px;
+  row-gap: 31px;
+  margin-bottom: 26px;
+}
+.dashboard-col2-gunsan-container .btn-toggle {
+  border-radius: 10px;
+  width: 95px;
+  height: 42px;
+}
 .dashboard-col2-btn-container .btn-toggle {
   border-radius: 10px;
   min-width: 74px;
@@ -849,6 +862,16 @@ export default {
   }
   .errmsg-container {
     top: 52px;
+  }
+  /* gunsan */
+  .dashboard-col2-gunsan-container {
+    grid-template-columns: repeat(4, max-content);
+    margin-top: 15px;
+    row-gap: 20px;
+    margin-bottom: 15px;
+  }
+  .dashboard-col2-gunsan-container .btn-toggle {
+    width: 100px;
   }
 }
 </style>

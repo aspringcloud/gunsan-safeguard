@@ -15,7 +15,7 @@
     <!-- 햄버거 메뉴 오픈 -->
     <div class="small-menu" v-if="openHam">
       <div class="small-menu-title">
-        <b>{{ user.info.first_name }}</b> 님 안녕하세요
+        <b>{{ user.info.first_name }}</b>님 안녕하세요
       </div>
       <div class="small-menu-menus">
         <button @click="openSetting()">로그인 정보</button>
