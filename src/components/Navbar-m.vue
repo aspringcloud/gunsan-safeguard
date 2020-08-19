@@ -91,7 +91,7 @@ export default {
 
   data: () => ({
     openHam: false,
-    changePw: false
+    changePw: false,
   }),
   methods: {
     openmobilepw() {
@@ -115,8 +115,8 @@ export default {
       } else {
         this.openHam = !this.openHam;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="header-right">
-        <span>{{ user.info.first_name }}</span>님 안녕하세요!
+        <span>{{ user.info.username}}</span>님 안녕하세요!
         <button @click="openSetting">
           <img src="@/assets/img/setting.png" alt="setting button" />
           환경설정
@@ -107,7 +107,7 @@ import "@/components/navbar.css";
 export default {
   name: "Navbar",
   mixins: [navbarMixin],
-  methods: {}
+  methods: {},
 };
 </script>
 <style scoped>
