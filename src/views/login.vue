@@ -1,8 +1,8 @@
 <template>
   <div id="login" class="login">
     <div class="login-logos">
-      <img src="@/assets/img/Logo_SC.png" alt="스프링고 로고" />
-      <img src="@/assets/img/Logo_AM.png" alt="AI모빌리티 로고" />
+      <img src="@/assets/img/logo_gs.png" alt="군산시 로고" />
+      <img src="@/assets/img/Logo_SC.png" alt="스프링클라우드 로고" />
     </div>
     <div class="text-blue login-title1">SpringGo</div>
     <div class="text-blue login-title2">안전요원 로그인</div>
