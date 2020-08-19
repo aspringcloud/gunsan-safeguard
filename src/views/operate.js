@@ -5,9 +5,9 @@ let operateMixin = {
     tasioStatus: false,
     tasioInfo: false,
     isOplog: false,
-    reqStation: false,
+    // reqStation: false,
     stationList: false,
-    isStation: false,
+    // isStation: false,
     stModal: false,
     nowSt: false,
     site: {
@@ -314,8 +314,8 @@ let operateMixin = {
             this.selectedCar.station = this.nowSt.id;
             this.$session.set("selectedCar", this.selectedCar);
             this.nowSt = false;
-            this.isStation = this.stModal !== 1;
-            if (this.stModal === 1) this.savePsng(1);
+            // this.isStation = this.stModal !== 1;
+            // if (this.stModal === 1) this.savePsng(1);
             this.stModal = false;
           } else alert("다시 시도해주세요.");
         })
@@ -603,21 +603,21 @@ let operateMixin = {
       this.socket.send(JSON.stringify(msg));
       this.isOplog = false;
     },
-    sameStPsng() {
-      this.isStation = true;
-      this.reqStation = false;
-      this.savePsng();
-    },
-    savePsng(tag) {
+    // sameStPsng() {
+    //   this.isStation = true;
+    //   this.reqStation = false;
+    //   this.savePsng();
+    // },
+    savePsng() {
       if (this.psngTemp >= 16) {
         alert("탑승객 수를 확인해주세요.");
         this.psngTemp = this.psng;
         return;
       }
-      if (!this.isStation && !tag) {
-        this.reqStation = true;
-        return;
-      }
+      //   if (!this.isStation && !tag) {
+      // this.reqStation = true;
+      // return;
+      //   }
       var msg = {
         what: "EVENT",
         who: "safeGuard",
