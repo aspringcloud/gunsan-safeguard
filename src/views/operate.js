@@ -341,7 +341,7 @@ let operateMixin = {
       this.msgtxt = document.getElementById("msgtxt").value;
     },
     connectSocket() {
-      this.socket = new WebSocket("wss://222.114.39.8:11511");
+      this.socket = new WebSocket("ws://222.114.39.8:11411");
       this.socket.onopen = () => {
         this.status = true;
         this.lastPing = new Date();
