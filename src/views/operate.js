@@ -185,13 +185,14 @@ let operateMixin = {
         if (this.socketMsg.how.type == "passenger") {
           this.psng = this.socketMsg.how.current_passenger;
           this.isStation = false;
-        } else if (this.socketMsg.how.type == "power")
-          this.isOn = this.socketMsg.how.value == "on" ? true : false;
+        }
       } else if (this.socketMsg.what == "RESP") {
         if (this.socketMsg.how.type == "drive")
           this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
         else if (this.socketMsg.how.type == "parking")
           this.isPark = this.socketMsg.how.value == "true" ? true : false;
+        else if (this.socketMsg.how.type == "power")
+          this.isOn = this.socketMsg.how.value == "on" ? true : false;
       } else if (this.socketMsg.what == "PING") {
         console.log(
           new Date(this.socketMsg.when * 1000).getTime() -
