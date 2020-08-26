@@ -150,7 +150,7 @@ let operateMixin = {
       } else if (this.tasioStatus == false) {
         this.tasioInfo = false;
       } else if (this.tasioStatus == "noRide") {
-        msg.how.function = "+";
+        msg.how.function = "cancel_call";
         this.socket.send(JSON.stringify(msg));
         this.isTasioToast = true;
         setTimeout(() => (this.isTasioToast = false), 2000);
@@ -341,9 +341,7 @@ let operateMixin = {
       this.msgtxt = document.getElementById("msgtxt").value;
     },
     connectSocket() {
-      this.socket = new WebSocket("wss://222.114.39.8:11511", [],{
-                rejectUnauthorized: false
-            });
+      this.socket = new WebSocket("wss://ws.tasio.io:11511", []);
       this.socket.onopen = () => {
         this.status = true;
         this.lastPing = new Date();
@@ -569,7 +567,7 @@ let operateMixin = {
         return;
       } else if (this.modalTitle == "전원") {
         msg.how.type = "power";
-        msg.how.value = this.isOn ? "off" : "on";
+        msg.how.value = this.isOn ? "false" : "true";
       } else if (this.modalTitle == "주행모드") {
         msg.how.type = "drive";
         msg.how.value = this.isAuto == 1 ? "normal" : "auto";
