@@ -159,6 +159,15 @@ let operateMixin = {
       }
     },
     socketMsg: function() {
+      console.log(this.socketMsg);
+      if (
+        this.socketMsg.how.type == "passenger" &&
+        this.socketMsg.how.vehicle_id == this.selectedCar.id
+      ) {
+        this.psng = this.socketMsg.how.current_passenger;
+        this.psngTemp = this.socketMsg.how.current_passenger;
+        this.isStation = false;
+      }
       if (
         this.isOn &&
         this.socketMsg.what == "EVENT" &&
@@ -180,11 +189,6 @@ let operateMixin = {
         ) {
           this.tasioStatus = "cancel";
           this.$session.set("tasioStatus", "cancel");
-        }
-      } else if (this.socketMsg.vehicle_id == this.selectedCar.id) {
-        if (this.socketMsg.how.type == "passenger") {
-          this.psng = this.socketMsg.how.current_passenger;
-          this.isStation = false;
         }
       } else if (this.socketMsg.what == "RESP") {
         if (this.socketMsg.how.type == "drive")
@@ -342,9 +346,7 @@ let operateMixin = {
       this.msgtxt = document.getElementById("msgtxt").value;
     },
     connectSocket() {
-      this.socket = new WebSocket("wss://222.114.39.8:11511", [],{
-                rejectUnauthorized: false
-            });
+      this.socket = new WebSocket("wss://ws.tasio.io:11511", []);
       this.socket.onopen = () => {
         this.status = true;
         this.lastPing = new Date();
@@ -570,7 +572,7 @@ let operateMixin = {
         return;
       } else if (this.modalTitle == "전원") {
         msg.how.type = "power";
-        msg.how.value = this.isOn ? "false" : "true";
+        msg.how.value = this.isOn ? "off" : "on";
       } else if (this.modalTitle == "주행모드") {
         msg.how.type = "drive";
         msg.how.value = this.isAuto == 1 ? "normal" : "auto";

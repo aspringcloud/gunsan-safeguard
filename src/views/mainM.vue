@@ -56,7 +56,7 @@
     </modal>
 
     <!-- request change station modal -->
-    <modal v-if="reqStation" width="300px" height="240px">
+    <!-- <modal v-if="reqStation" width="300px" height="240px">
       <template #content>
         <div class="reqst-container">
           <div class="reqst-txt">
@@ -83,7 +83,7 @@
           "
         >현재위치 변경하기</button>
       </template>
-    </modal>
+    </modal>-->
 
     <!-- msg 모달 -->
     <modal v-if="isMsg" :selectedCar="selectedCar" title="msg" @close="closeMsg" @submit="sendMsg">

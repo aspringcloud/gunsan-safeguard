@@ -167,7 +167,7 @@
     </modal>
 
     <!-- request change station modal -->
-    <modal v-if="reqStation" width="442px" height="222px">
+    <!-- <modal v-if="reqStation" width="442px" height="222px">
       <template #content>
         <div class="reqst-container">
           <div class="reqst-txt">
@@ -193,7 +193,7 @@
           "
         >현재위치 변경하기</button>
       </template>
-    </modal>
+    </modal> -->
 
     <!-- 타시오 배차정보 -->
     <tasio
