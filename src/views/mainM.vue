@@ -258,7 +258,7 @@
               <button @click="stModal = true">변경</button>
             </div>
 
-            <div class="box-title">마지막 전원 ON</div>
+            <div class="box-title">마지막 전원 OFF</div>
             <div class="infobox-txt">{{ lastOn }}</div>
             <div class="box-title">운행시간</div>
             <div class="infobox-txt">{{ drivetime }}</div>
