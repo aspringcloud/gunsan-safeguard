@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="header-right">
-        <span>{{ user.info.username}}</span>님 안녕하세요!
+        <span>{{username}}</span>님 안녕하세요!
         <button @click="openSetting">
           <img src="@/assets/img/setting.png" alt="setting button" />
           환경설정
@@ -46,12 +46,7 @@
           </div>
           <div class="input-box">
             <label for="team">이름</label>
-            <input
-              name="team"
-              type="text"
-              :value="user.info.last_name + ' ' + user.info.first_name"
-              readonly
-            />
+            <input name="team" type="text" :value="user.username" readonly />
           </div>
           <div class="input-box">
             <label for="team">팀</label>

@@ -257,6 +257,10 @@ let operateMixin = {
       else if (!this.stopOpt) return "disabled-stopBtn";
       else return "";
     },
+    username() {
+      console.log("name", this.user.username);
+      return this.calcbyte(12, this.user.username);
+    },
   },
   methods: {
     convertTasioInfo(msg, timestamp) {
