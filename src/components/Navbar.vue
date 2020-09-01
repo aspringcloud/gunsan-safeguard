@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="header-right">
-        <span>{{username}}</span>님 안녕하세요!
+        <span>{{ calcUserName}}</span>님 안녕하세요!
         <button @click="openSetting">
           <img src="@/assets/img/setting.png" alt="setting button" />
           환경설정

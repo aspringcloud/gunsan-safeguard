@@ -190,8 +190,17 @@ let operateMixin = {
           this.tasioStatus = "cancel";
           this.$session.set("tasioStatus", "cancel");
         }
+<<<<<<< HEAD
       } else if (this.socketMsg.what == "RESP") {
         if (this.socketMsg.how.type == "drive")
+=======
+      } else if (this.socketMsg.how.vehicle_id == this.selectedCar.id) {
+        if (this.socketMsg.how.type == "passenger") {
+          this.psng = this.socketMsg.how.current_passenger;
+          this.isStation = false;
+        }
+        else if (this.socketMsg.how.type == "drive")
+>>>>>>> 3cb80a02f0cda11ea006af48352a377008144654
           this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
         else if (this.socketMsg.how.type == "parking")
           this.isPark = this.socketMsg.how.value == "true" ? true : false;
@@ -732,9 +741,50 @@ let operateMixin = {
     },
 
     submitStop() {
-      this.stopOpt = "";
-      this.stopReason = "";
       this.stopSMsg = "이벤트가 전송됐습니다.";
+      var msg = {
+        where: "sejong_datahub",
+        who: "tasio_id",
+        what: "EVENT",
+        how: {
+          type: "reason_stop",
+          site_id: this.site.id,
+          vehicle_id: this.selectedCar.id,
+          // 반드시 하단의 5가지 중 하나.
+          // "차량", "사람", "환경요소", "오류", "기타" 에 각각 해당
+          // "car", "people", "object", "error", "etc"
+          reason_type: "",
+          // reason_type이 "error" 또는 "etc"일 때만, reason 출력. 그외의 경우에는 출력하지 않음
+        },
+      };
+      if (this.stopOpt == "차") {
+        msg.how.reason_type = "car";
+        this.socket.send(JSON.stringify(msg));
+        this.stopOpt = "";
+        this.stopReason = "";
+      } else if (this.stopOpt == "사람") {
+        msg.how.reason_type = "people";
+        this.socket.send(JSON.stringify(msg));
+        this.stopOpt = "";
+        this.stopReason = "";
+      } else if (this.stopOpt == "환경요소") {
+        msg.how.reason_type = "object";
+        this.socket.send(JSON.stringify(msg));
+        this.stopOpt = "";
+        this.stopReason = "";
+      } else if (this.stopOpt == "오류") {
+        msg.how.reason_type = "error";
+        msg.how["reason"] = this.stopReason;
+        this.socket.send(JSON.stringify(msg));
+        this.stopOpt = "";
+        this.stopReason = "";
+      } else if (this.stopOpt == "기타") {
+        msg.how.reason_type = "etc";
+        msg.how["reason"] = this.stopReason;
+        this.socket.send(JSON.stringify(msg));
+        this.stopOpt = "";
+        this.stopReason = "";
+      }
     },
     beforeSubmitStop() {
       this.clearStopMsg();

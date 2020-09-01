@@ -280,7 +280,7 @@
             </div>
             <div class="infobox-divider" />
             <div class="infobx-col">
-              <div class="box-title">마지막 전원 ON</div>
+              <div class="box-title">마지막 전원 OFF</div>
               <div class="infobox-txt">{{lastOn}}</div>
             </div>
             <div class="infobox-divider" />

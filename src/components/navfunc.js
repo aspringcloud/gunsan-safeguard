@@ -9,6 +9,32 @@ let navbarMixin = {
         errmsg: "",
         successmsg: "",
     }),
+    computed:{
+        calcUserName(){
+            var str_len = this.user.info.username.length;
+      var rbyte = 0;
+      var rlen = 0;
+      var one_char = "";
+
+      for (var i = 0; i < str_len; i++) {
+        one_char = this.user.info.username.charAt(i);
+        if (escape(one_char).length > 4) {
+          rbyte += 2;
+        } else {
+          rbyte++;
+        }
+        if (rbyte <= 12) {
+          rlen = i + 1;
+        }
+      }
+
+      if (rbyte > 12) {
+        return this.user.info.username.substr(0, rlen)+"...";
+      } else {
+        return this.user.info.username+"...";
+      }
+        },
+    },
     methods: {
         openSetting() {
             if (!this.user.profile) {
