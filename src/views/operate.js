@@ -159,15 +159,6 @@ let operateMixin = {
       }
     },
     socketMsg: function() {
-      console.log(this.socketMsg);
-      if (
-        this.socketMsg.how.type == "passenger" &&
-        this.socketMsg.how.vehicle_id == this.selectedCar.id
-      ) {
-        this.psng = this.socketMsg.how.current_passenger;
-        this.psngTemp = this.socketMsg.how.current_passenger;
-        this.isStation = false;
-      }
       if (
         this.isOn &&
         this.socketMsg.what == "EVENT" &&
@@ -190,17 +181,11 @@ let operateMixin = {
           this.tasioStatus = "cancel";
           this.$session.set("tasioStatus", "cancel");
         }
-<<<<<<< HEAD
-      } else if (this.socketMsg.what == "RESP") {
-        if (this.socketMsg.how.type == "drive")
-=======
       } else if (this.socketMsg.how.vehicle_id == this.selectedCar.id) {
         if (this.socketMsg.how.type == "passenger") {
           this.psng = this.socketMsg.how.current_passenger;
           this.isStation = false;
-        }
-        else if (this.socketMsg.how.type == "drive")
->>>>>>> 3cb80a02f0cda11ea006af48352a377008144654
+        } else if (this.socketMsg.how.type == "drive")
           this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
         else if (this.socketMsg.how.type == "parking")
           this.isPark = this.socketMsg.how.value == "true" ? true : false;
@@ -265,10 +250,6 @@ let operateMixin = {
         return "disabled-stopBtn";
       else if (!this.stopOpt) return "disabled-stopBtn";
       else return "";
-    },
-    username() {
-      console.log("name", this.user.username);
-      return this.calcbyte(12, this.user.username);
     },
   },
   methods: {
@@ -585,7 +566,7 @@ let operateMixin = {
         return;
       } else if (this.modalTitle == "전원") {
         msg.how.type = "power";
-        msg.how.value = this.isOn ? "off" : "on";
+        msg.how.value = this.isOn ? "false" : "true";
       } else if (this.modalTitle == "주행모드") {
         msg.how.type = "drive";
         msg.how.value = this.isAuto == 1 ? "normal" : "auto";
