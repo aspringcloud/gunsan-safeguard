@@ -758,7 +758,7 @@ let operateMixin = {
         this.stopOpt = "";
         this.stopReason = "";
       } else if (this.stopOpt == "환경요소") {
-        msg.how.reason_type = "object";
+        msg.how.reason_type = "environmental factor";
         this.socket.send(JSON.stringify(msg));
         this.stopOpt = "";
         this.stopReason = "";
