@@ -26,7 +26,8 @@ let operateMixin = {
     },
     dashboard: false,
     isDash: false,
-    cars: [{
+    cars: [
+      {
         id: 4,
         name: 1146,
       },
@@ -50,9 +51,11 @@ let operateMixin = {
     modalTitle: "",
     modalValue: "",
     msgTo: "사이트 통합관제",
-    centers: [{
-      name: "사이트 통합관제",
-    }, ],
+    centers: [
+      {
+        name: "사이트 통합관제",
+      },
+    ],
     drivetime: " ",
     msgbyte: 0,
     today: "",
@@ -190,6 +193,7 @@ let operateMixin = {
       } else if (this.socketMsg.how.vehicle_id == this.selectedCar.id) {
         if (this.socketMsg.how.type == "passenger") {
           this.psng = this.socketMsg.how.current_passenger;
+          this.psngTemp = this.socketMsg.how.current_passenger;
           this.isStation = false;
         } else if (this.socketMsg.how.type == "drive")
           this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
@@ -200,7 +204,7 @@ let operateMixin = {
       } else if (this.socketMsg.what == "PING") {
         console.log(
           new Date(this.socketMsg.when * 1000).getTime() -
-          new Date(this.lastPing).getTime()
+            new Date(this.lastPing).getTime()
         );
         this.lastPing = new Date(this.socketMsg.when * 1000);
         console.log("ping!", new Date(this.lastPing));
@@ -316,9 +320,11 @@ let operateMixin = {
     changeSt() {
       this.$http
         .patch(
-          this.$api + "vehicles/" + this.selectedCar.id + "/", {
+          this.$api + "vehicles/" + this.selectedCar.id + "/",
+          {
             passed_station: this.nowSt.id,
-          }, {
+          },
+          {
             headers: this.$headers,
           }
         )
@@ -353,9 +359,7 @@ let operateMixin = {
         this.status = true;
         this.lastPing = new Date();
       };
-      this.socket.onmessage = ({
-        data
-      }) => {
+      this.socket.onmessage = ({ data }) => {
         this.socketMsg = JSON.parse(data);
       };
       this.socket.onerror = (err) => {
@@ -411,7 +415,8 @@ let operateMixin = {
           if (res.data.lon && res.data.lat) {
             this.$http
               .get(
-                `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`, {
+                `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
+                {
                   headers: {
                     Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1",
                   },
