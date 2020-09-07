@@ -26,8 +26,7 @@ let operateMixin = {
     },
     dashboard: false,
     isDash: false,
-    cars: [
-      {
+    cars: [{
         id: 4,
         name: 1146,
       },
@@ -51,11 +50,9 @@ let operateMixin = {
     modalTitle: "",
     modalValue: "",
     msgTo: "사이트 통합관제",
-    centers: [
-      {
-        name: "사이트 통합관제",
-      },
-    ],
+    centers: [{
+      name: "사이트 통합관제",
+    }, ],
     drivetime: " ",
     msgbyte: 0,
     today: "",
@@ -204,7 +201,7 @@ let operateMixin = {
       } else if (this.socketMsg.what == "PING") {
         console.log(
           new Date(this.socketMsg.when * 1000).getTime() -
-            new Date(this.lastPing).getTime()
+          new Date(this.lastPing).getTime()
         );
         this.lastPing = new Date(this.socketMsg.when * 1000);
         console.log("ping!", new Date(this.lastPing));
@@ -320,11 +317,9 @@ let operateMixin = {
     changeSt() {
       this.$http
         .patch(
-          this.$api + "vehicles/" + this.selectedCar.id + "/",
-          {
+          this.$api + "vehicles/" + this.selectedCar.id + "/", {
             passed_station: this.nowSt.id,
-          },
-          {
+          }, {
             headers: this.$headers,
           }
         )
@@ -359,7 +354,9 @@ let operateMixin = {
         this.status = true;
         this.lastPing = new Date();
       };
-      this.socket.onmessage = ({ data }) => {
+      this.socket.onmessage = ({
+        data
+      }) => {
         this.socketMsg = JSON.parse(data);
       };
       this.socket.onerror = (err) => {
@@ -384,7 +381,7 @@ let operateMixin = {
         })
         .then((res) => {
           this.$session.set("selectedCar", this.selectedCar);
-          console.log("초기값", res.data);
+          console.log("해당 차량 데이터 API로 불러오기", res.data);
 
           if (res.data.site) {
             this.site.id = res.data.site;
@@ -398,6 +395,13 @@ let operateMixin = {
                 if (this.siteDict[res.data.mid])
                   this.site.alias = this.siteDict[res.data.mid];
                 else this.site.alias = this.siteDict.none;
+                this.selectedCar.station = res.data.passed_station;
+                this.psng = res.data.passenger;
+                this.isOn = res.data.drive;
+                this.isAuto = res.data.drive_mode;
+                if (!this.psng) this.psng = 0;
+                this.psngTemp = this.psng;
+                this.isPark = res.data.isparked;
                 console.log(this.site);
               })
               .catch((err) => {
@@ -405,33 +409,27 @@ let operateMixin = {
                 this.site.name = "서비스 에러";
               });
           }
-          this.selectedCar.station = res.data.passed_station;
-          this.psng = res.data.passenger;
-          this.isOn = res.data.drive;
-          this.isAuto = res.data.drive_mode;
-          if (!this.psng) this.psng = 0;
-          this.psngTemp = this.psng;
-          this.isPark = res.data.isparked;
-          if (res.data.lon && res.data.lat) {
-            this.$http
-              .get(
-                `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
-                {
-                  headers: {
-                    Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1",
-                  },
-                }
-              )
-              .then((res) => {
-                this.location = res.data.documents[0].address.address_name;
-              })
-              .catch((err) => {
-                console.log(err);
-                this.location = "서비스 에러";
-              });
-          } else {
-            this.location = "위치정보 없음";
-          }
+
+          // if (res.data.lon && res.data.lat) {
+          //   this.$http
+          //     .get(
+          //       `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
+          //       {
+          //         headers: {
+          //           Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1",
+          //         },
+          //       }
+          //     )
+          //     .then((res) => {
+          //       this.location = res.data.documents[0].address.address_name;
+          //     })
+          //     .catch((err) => {
+          //       console.log(err);
+          //       this.location = "서비스 에러";
+          //     });
+          // } else {
+          //   this.location = "위치정보 없음";
+          // }
         })
         .catch((err) => {
           console.log(err);
