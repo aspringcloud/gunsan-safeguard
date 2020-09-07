@@ -5,12 +5,13 @@
       <div class="text-blue resetpw-title1">SpringGo</div>
       <div class="text-blue resetpw-title2">비밀번호 재설정</div>
     </div>
-    <div class="mobile-justify" v-if="resetpage">
-      <div class="resetpw-txt text-gray2">
-        이메일로 임시 비밀번호를 발송합니다.
-        <br />본인 확인을 위해 이름과 이메일 아이디를 입력해 주세요.
-      </div>
-      <div class="login-form">
+    <!-- <div class="mobile-justify"> -->
+    <div class="resetpw-txt text-gray2">
+      임시비밀번호 발급을 원하시면<br />
+      bcchoi@aspringcloud.com 으로<br />
+      이메일 아이디, 이름을 보내주시기 바랍니다.
+    </div>
+    <!-- <div class="login-form">
         <form @submit.prevent="resetpw">
           <label for="name" class="text-gray2">이름</label>
           <input
@@ -28,7 +29,9 @@
             name="emailID"
             placeholder="이메일 아이디를 입력해주세요."
           />
-          <button type="submit" class="login-btn resetpw-btn-pos">임시 비밀번호 받기</button>
+          <button type="submit" class="login-btn resetpw-btn-pos">
+            임시 비밀번호 받기
+          </button>
         </form>
       </div>
       <div class="errmsg resetpw-errmsg">
@@ -39,11 +42,13 @@
     </div>
     <div v-if="!resetpage">
       <div class="resetpw2-txt text-gray2">
-        <span>{{ email }}</span> 으로
-        <br />임시 비밀번호를 발송하였습니다.
+        <span>{{ email }}</span> 으로 <br />임시 비밀번호를 발송하였습니다.
       </div>
-      <button @click="goLogin()" class="login-btn resetpw2-btn-pos">로그인 하기</button>
-    </div>
+      <button @click="goLogin()" class="login-btn resetpw2-btn-pos">
+        로그인 하기
+      </button>
+    </div> -->
+    <!-- </div> -->
     <div class="copyright">Copyright ⓒ GUNSANCITY. All right reserved</div>
   </div>
 </template>
@@ -142,31 +147,14 @@ export default {
   margin-top: 20px;
   font-size: 30px;
   line-height: 30px;
-  margin-bottom: 73px;
 }
 .resetpw-txt {
-  font-size: 16px;
-  font-weight: 500;
-  width: 464px;
-  margin-bottom: 30px;
-}
-.resetpw-btn-pos {
-  margin-top: 34px;
-}
-.resetpw-errmsg {
-  margin-top: 20px;
-}
-.resetpw2-txt {
-  margin-top: 80px;
+  margin-top: 200px;
   font-weight: 500;
   font-size: 16px;
+  line-height: 23px;
   text-align: center;
-}
-.resetpw2-txt span {
-  color: #eb5757;
-}
-.resetpw2-btn-pos {
-  margin-top: 144px;
+  color: #4f4f4f;
 }
 @media (max-width: 600px) {
   .btn-back {
@@ -186,10 +174,8 @@ export default {
   .resetpw-title2 {
     font-size: 24px;
     margin-top: 12px;
-    margin-bottom: 67px;
   }
   .resetpw-txt {
-    width: 240px;
     text-align: center;
     font-weight: normal;
     font-size: 14px;
@@ -198,21 +184,6 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  .resetpw-errmsg {
-    width: 311px;
-    margin-top: 14px;
-  }
-  .resetpw-btn-pos {
-    margin-top: 20px;
-  }
-  .resetpw2-txt {
-    margin-top: 126px;
-    font-weight: normal;
-    font-size: 14px;
-  }
-  .resetpw2-btn-pos {
-    margin-top: 224px;
   }
 }
 
@@ -225,20 +196,8 @@ export default {
   .resetpw-title1 {
     margin-top: 89px;
   }
-  .resetpw-title2 {
-    margin-bottom: 125px;
-  }
   .resetpw-txt {
-    width: 420px;
-  }
-  .resetpw-btn-pos {
-    margin-top: 54px;
-  }
-  .resetpw2-txt {
-    margin-top: 75px;
-  }
-  .resetpw2-btn-pos {
-    margin-top: 164px;
+    margin-top: 280px;
   }
 }
 </style>
