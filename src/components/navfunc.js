@@ -106,6 +106,7 @@ let navbarMixin = {
                 })
                 .catch(error => {
                     console.log(error.response.data[0]);
+                    this.successmsg = ""
                     this.errmsg = error.response.data[0]
                     // if (error.response.data.new_password1) this.errmsg = error.response.data.new_password1;
                     // else this.errmsg = error.response.data.new_password2[0];
