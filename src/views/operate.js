@@ -175,7 +175,7 @@ let operateMixin = {
           this.convertTasioInfo(this.socketMsg.how, this.socketMsg.when);
         } else if (
           this.tasioStatus &&
-          this.socketMsg.how.function == "canecel_call" &&
+          this.socketMsg.how.function == "cancel_call" &&
           this.socketMsg.how.uid == this.tasioInfo.uid
         ) {
           this.tasioStatus = "cancel";
