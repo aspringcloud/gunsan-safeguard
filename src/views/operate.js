@@ -307,8 +307,11 @@ let operateMixin = {
         .catch((err) => console.log(err));
     },
     getNewSt() {
-      this.$http.get(this.$api + "vehicles/" + this.selectedCar.id + "/")
+      this.$http.get(this.$api + "vehicles/" + this.selectedCar.id + "/", {
+          headers: this.$headers,
+        })
         .then((res) => {
+          console.log(res.data)
           this.nowSt.id = res.data.passed_station;
           this.selectedCar.station = res.data.passed_station;
           this.$session.set("selectedCar", this.selectedCar)
@@ -479,7 +482,7 @@ let operateMixin = {
       var now = new Date();
 
       //socket 재 연결
-      if (now.getTime() - new Date(this.lastPing).getTime() > 30000)
+      if (now.getTime() - new Date(this.lastPing).getTime() > 70000)
         // this.connectSocket();
         alert("웹소켓 연결이 끊어졌습니다. 새로고침해주세요.")
 
