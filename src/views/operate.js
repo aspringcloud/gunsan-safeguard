@@ -181,13 +181,6 @@ let operateMixin = {
           this.tasioStatus = "cancel";
           this.$session.set("tasioStatus", "cancel");
         }
-        // else if (
-        //   this.socketMsg.how.function == "cancel_call" &&
-        //   this.socketMsg.how.uid == this.tasioInfo.uid
-        // ) {
-        //   this.tasioStatus = "cancel";
-        //   this.$session.set("tasioStatus", "cancel");
-        // }
       } else if (this.socketMsg.how.vehicle_id == this.selectedCar.id) {
         if (this.socketMsg.how.type == "passenger") {
           this.psng = this.socketMsg.how.current_passenger;
@@ -199,6 +192,8 @@ let operateMixin = {
           this.isPark = this.socketMsg.how.value == "true" ? true : false;
         else if (this.socketMsg.how.type == "power")
           this.isOn = this.socketMsg.how.value == "true" ? true : false;
+      } else if (this.socketMsg.how.type == "door" && this.socketMsg.how.value == "false") {
+        this.getNewSt()
       } else if (this.socketMsg.what == "PING") {
         console.log(
           new Date(this.socketMsg.when * 1000).getTime() -
@@ -310,6 +305,17 @@ let operateMixin = {
           console.log("st", this.stationList);
         })
         .catch((err) => console.log(err));
+    },
+    getNewSt() {
+      this.$http.get(this.$api + "vehicles/" + this.selectedCar.id + "/")
+        .then((res) => {
+          this.nowSt.id = res.data.passed_station;
+          this.selectedCar.station = res.data.passed_station;
+          this.$session.set("selectedCar", this.selectedCar)
+        }).catch((err) => {
+          console.log(err)
+          alert("station 정보 api 오류입니다. 새로고침 해주세요.")
+        })
     },
     changeSt() {
       this.$http
@@ -475,7 +481,7 @@ let operateMixin = {
       //socket 재 연결
       if (now.getTime() - new Date(this.lastPing).getTime() > 30000)
         // this.connectSocket();
-        alert("websocket is disconnected! please refresh the page!")
+        alert("웹소켓 연결이 끊어졌습니다. 새로고침해주세요.")
 
       var day = now.getDay();
       var week = ["일", "월", "화", "수", "목", "금", "토"];
