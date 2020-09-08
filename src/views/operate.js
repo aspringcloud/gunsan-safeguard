@@ -183,13 +183,14 @@ let operateMixin = {
         ) {
           this.tasioStatus = "cancel";
           this.$session.set("tasioStatus", "cancel");
-        } else if (
-          this.socketMsg.how.function == "cancel_call" &&
-          this.socketMsg.how.uid == this.tasioInfo.uid
-        ) {
-          this.tasioStatus = "cancel";
-          this.$session.set("tasioStatus", "cancel");
         }
+        // else if (
+        //   this.socketMsg.how.function == "cancel_call" &&
+        //   this.socketMsg.how.uid == this.tasioInfo.uid
+        // ) {
+        //   this.tasioStatus = "cancel";
+        //   this.$session.set("tasioStatus", "cancel");
+        // }
       } else if (this.socketMsg.how.vehicle_id == this.selectedCar.id) {
         if (this.socketMsg.how.type == "passenger") {
           this.psng = this.socketMsg.how.current_passenger;

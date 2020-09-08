@@ -187,7 +187,7 @@ export default {
     status: "",
     isConfirm: false,
     waitTime: 0,
-    timeover: false
+    timeover: false,
   }),
   created() {
     this.tasioCall();
@@ -222,22 +222,22 @@ export default {
         var sec = this.remainTotal - min * 60;
         return min + "분 " + sec + "초";
       } else return this.remainTotal + "초";
-    }
+    },
   },
   watch: {
-    tasioStatus: function() {
+    tasioStatus: function () {
       if (this.tasioStatus == "cancel") {
         this.status = "cancel";
         this.timeStop();
         this.destroySession();
-        this.update(false);
+        // this.update(false);
       } else if (this.tasioStatus == "call") {
         this.tasioCall();
       } else if (this.tasioStatus == "sentCancel") {
         this.destroySession();
         this.update(false);
       }
-    }
+    },
   },
   methods: {
     tasioCall() {
@@ -329,8 +329,8 @@ export default {
       this.$session.remove("tasioInfo");
       this.$session.remove("tasioStatus");
       this.$session.remove("remainTotal");
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
