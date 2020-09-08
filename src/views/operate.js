@@ -307,11 +307,12 @@ let operateMixin = {
         .catch((err) => console.log(err));
     },
     getNewSt() {
+      console.log("getNewSt실행")
       this.$http.get(this.$api + "vehicles/" + this.selectedCar.id + "/", {
           headers: this.$headers,
         })
         .then((res) => {
-          console.log(res.data)
+          console.log("getNewSt 받아오기", res.data)
           this.nowSt.id = res.data.passed_station;
           this.selectedCar.station = res.data.passed_station;
           this.$session.set("selectedCar", this.selectedCar)
