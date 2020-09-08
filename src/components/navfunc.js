@@ -62,6 +62,7 @@ let navbarMixin = {
                 this.isSetting = true;
                 this.errmsg = "";
                 this.successmsg = "";
+                this.currentpw = "";
                 this.newpw = "";
                 this.repw = "";
             }
@@ -101,6 +102,7 @@ let navbarMixin = {
                     this.$session.set("user", temp);
                     this.$headers.authorization =
                         "Basic " + this.$session.get("user").basic;
+                    this.currentpw = "";
                     this.newpw = "";
                     this.repw = "";
                 })
