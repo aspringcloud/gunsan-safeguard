@@ -105,10 +105,11 @@ let navbarMixin = {
                     this.repw = "";
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    console.log(error.response.data[0]);
+                    this.errmsg = error.response.data[0]
                     // if (error.response.data.new_password1) this.errmsg = error.response.data.new_password1;
                     // else this.errmsg = error.response.data.new_password2[0];
-                    this.errmsg = error.reponse.data[0];
+                    // this.errmsg = error.reponse.data[0];
                     // var err = error.response.data.new_password1;
                     // if (error.response.data.new_password2) err = error.response.data.new_password2;
                     // if (
