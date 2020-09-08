@@ -159,6 +159,15 @@ let operateMixin = {
       }
     },
     socketMsg: function() {
+      console.log(this.socketMsg);
+      if (
+        this.socketMsg.how.type == "passenger" &&
+        this.socketMsg.how.vehicle_id == this.selectedCar.id
+      ) {
+        this.psng = this.socketMsg.how.current_passenger;
+        this.psngTemp = this.socketMsg.how.current_passenger;
+        this.isStation = false;
+      }
       if (
         this.isOn &&
         this.socketMsg.what == "EVENT" &&
@@ -184,13 +193,14 @@ let operateMixin = {
       } else if (this.socketMsg.how.vehicle_id == this.selectedCar.id) {
         if (this.socketMsg.how.type == "passenger") {
           this.psng = this.socketMsg.how.current_passenger;
+          this.psngTemp = this.socketMsg.how.current_passenger;
           this.isStation = false;
         } else if (this.socketMsg.how.type == "drive")
           this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
         else if (this.socketMsg.how.type == "parking")
           this.isPark = this.socketMsg.how.value == "true" ? true : false;
         else if (this.socketMsg.how.type == "power")
-          this.isOn = this.socketMsg.how.value == "on" ? true : false;
+          this.isOn = this.socketMsg.how.value == "true" ? true : false;
       } else if (this.socketMsg.what == "PING") {
         console.log(
           new Date(this.socketMsg.when * 1000).getTime() -
@@ -370,7 +380,15 @@ let operateMixin = {
         })
         .then((res) => {
           this.$session.set("selectedCar", this.selectedCar);
-          console.log("초기값", res.data);
+          console.log("해당 차량 데이터 API로 불러오기", res.data);
+
+          this.selectedCar.station = res.data.passed_station;
+          this.psng = res.data.passenger;
+          this.isOn = res.data.drive;
+          this.isAuto = res.data.drive_mode;
+          if (!this.psng) this.psng = 0;
+          this.psngTemp = this.psng;
+          this.isPark = res.data.isparked;
 
           if (res.data.site) {
             this.site.id = res.data.site;
@@ -391,33 +409,27 @@ let operateMixin = {
                 this.site.name = "서비스 에러";
               });
           }
-          this.selectedCar.station = res.data.passed_station;
-          this.psng = res.data.passenger;
-          this.isOn = res.data.drive;
-          this.isAuto = res.data.drive_mode;
-          if (!this.psng) this.psng = 0;
-          this.psngTemp = this.psng;
-          this.isPark = res.data.isparked;
-          if (res.data.lon && res.data.lat) {
-            this.$http
-              .get(
-                `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
-                {
-                  headers: {
-                    Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1",
-                  },
-                }
-              )
-              .then((res) => {
-                this.location = res.data.documents[0].address.address_name;
-              })
-              .catch((err) => {
-                console.log(err);
-                this.location = "서비스 에러";
-              });
-          } else {
-            this.location = "위치정보 없음";
-          }
+
+          // if (res.data.lon && res.data.lat) {
+          //   this.$http
+          //     .get(
+          //       `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
+          //       {
+          //         headers: {
+          //           Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1",
+          //         },
+          //       }
+          //     )
+          //     .then((res) => {
+          //       this.location = res.data.documents[0].address.address_name;
+          //     })
+          //     .catch((err) => {
+          //       console.log(err);
+          //       this.location = "서비스 에러";
+          //     });
+          // } else {
+          //   this.location = "위치정보 없음";
+          // }
         })
         .catch((err) => {
           console.log(err);
@@ -749,7 +761,7 @@ let operateMixin = {
         this.stopOpt = "";
         this.stopReason = "";
       } else if (this.stopOpt == "환경요소") {
-        msg.how.reason_type = "object";
+        msg.how.reason_type = "environmental factor";
         this.socket.send(JSON.stringify(msg));
         this.stopOpt = "";
         this.stopReason = "";
