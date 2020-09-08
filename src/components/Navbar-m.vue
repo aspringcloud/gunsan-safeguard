@@ -61,7 +61,7 @@
         <div class="setting-content">
           <form @submit.prevent="resetPw">
             <label for="currentPw">현재 비밀번호</label>
-            <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
+            <input id="currentPw" type="password" name="currentPw" />
             <label for="newPw">새 비밀번호</label>
             <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
             <label for="renewPw">새 비밀번호 확인</label>

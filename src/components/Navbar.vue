@@ -66,7 +66,7 @@
           <form class="resetpw-container" @submit.prevent=" resetPw">
             <div class="input-box">
               <label for="currentPw">현재 비밀번호</label>
-              <input id="currentPw" value="1234567890" disabled type="password" name="newPw" />
+              <input id="currentPw" v-model="currentpw" type="password" name="currentPw" />
             </div>
             <div class="input-box">
               <label for="newPw">새 비밀번호</label>

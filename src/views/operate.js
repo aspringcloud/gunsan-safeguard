@@ -26,8 +26,7 @@ let operateMixin = {
     },
     dashboard: false,
     isDash: false,
-    cars: [
-      {
+    cars: [{
         id: 4,
         name: 1146,
       },
@@ -51,11 +50,9 @@ let operateMixin = {
     modalTitle: "",
     modalValue: "",
     msgTo: "사이트 통합관제",
-    centers: [
-      {
-        name: "사이트 통합관제",
-      },
-    ],
+    centers: [{
+      name: "사이트 통합관제",
+    }, ],
     drivetime: " ",
     msgbyte: 0,
     today: "",
@@ -82,6 +79,7 @@ let operateMixin = {
     }
   },
   created() {
+    this.connectSocket();
     if (this.$session.exists()) {
       this.user = this.$session.get("user");
 
@@ -112,7 +110,6 @@ let operateMixin = {
         this.nowSt = this.stationList[this.selectedCar.station];
         this.dashboard = true;
         this.submitCar();
-        this.connectSocket();
       }
       if (this.$session.get("tasioInfo")) {
         this.tasioStatus = this.$session.get("tasioStatus");
@@ -128,7 +125,7 @@ let operateMixin = {
     }
   },
   watch: {
-    tasioStatus: function() {
+    tasioStatus: function () {
       var msg = {
         who: ["safeGuard"],
         what: "EVENT",
@@ -158,7 +155,7 @@ let operateMixin = {
         console.log("미탑승", msg);
       }
     },
-    socketMsg: function() {
+    socketMsg: function () {
       console.log(this.socketMsg);
       if (
         this.socketMsg.how.type == "passenger" &&
@@ -177,8 +174,8 @@ let operateMixin = {
         if (!this.tasioStatus && this.socketMsg.how.function == "call") {
           this.convertTasioInfo(this.socketMsg.how, this.socketMsg.when);
         } else if (
-          this.tasioStatus == "call" &&
-          this.socketMsg.how.function != "call" &&
+          this.tasioStatus &&
+          this.socketMsg.how.function == "canecel_call" &&
           this.socketMsg.how.uid == this.tasioInfo.uid
         ) {
           this.tasioStatus = "cancel";
@@ -205,31 +202,31 @@ let operateMixin = {
       } else if (this.socketMsg.what == "PING") {
         console.log(
           new Date(this.socketMsg.when * 1000).getTime() -
-            new Date(this.lastPing).getTime()
+          new Date(this.lastPing).getTime()
         );
         this.lastPing = new Date(this.socketMsg.when * 1000);
         console.log("ping!", new Date(this.lastPing));
       }
     },
-    stopReason: function() {
+    stopReason: function () {
       var L = this.stopReason.length;
       if (L != this.stopReasonL) {
         this.stopReason = this.calcbyte(100, this.stopReason);
         this.stopReasonL = this.stopReason.length;
       }
     },
-    clock: function() {
+    clock: function () {
       if (this.drivetime != " ") {
         this.calcDrivetime(this.lastOn);
       }
     },
-    selectedCar: function() {
+    selectedCar: function () {
       if (this.selectedCar && !this.dashboard) {
         this.isDash = true;
         if (!this.selectedCar.station) this.selectedCar.station = false;
       }
     },
-    windowWidth: function() {
+    windowWidth: function () {
       if (this.windowWidth < 900) {
         this.ver = "pad verti";
       } else {
@@ -253,7 +250,7 @@ let operateMixin = {
     this.status = false;
   },
   computed: {
-    blockStopSubmit: function() {
+    blockStopSubmit: function () {
       if (
         (this.stopOpt == "오류" || this.stopOpt == "기타") &&
         !this.stopReason
@@ -317,11 +314,9 @@ let operateMixin = {
     changeSt() {
       this.$http
         .patch(
-          this.$api + "vehicles/" + this.selectedCar.id + "/",
-          {
+          this.$api + "vehicles/" + this.selectedCar.id + "/", {
             passed_station: this.nowSt.id,
-          },
-          {
+          }, {
             headers: this.$headers,
           }
         )
@@ -356,7 +351,9 @@ let operateMixin = {
         this.status = true;
         this.lastPing = new Date();
       };
-      this.socket.onmessage = ({ data }) => {
+      this.socket.onmessage = ({
+        data
+      }) => {
         this.socketMsg = JSON.parse(data);
       };
       this.socket.onerror = (err) => {
@@ -370,8 +367,8 @@ let operateMixin = {
     resetCar() {
       this.selectedCar = "";
       this.isDash = false;
-      this.socket.close();
-      console.log("socket close");
+      // this.socket.close();
+      // console.log("socket close");
       this.status = false;
     },
     submitCar() {
@@ -476,8 +473,9 @@ let operateMixin = {
       var now = new Date();
 
       //socket 재 연결
-      if (now.getTime() - new Date(this.lastPing).getTime() > 25000)
-        this.connectSocket();
+      if (now.getTime() - new Date(this.lastPing).getTime() > 30000)
+        // this.connectSocket();
+        alert("websocket is disconnected! please refresh the page!")
 
       var day = now.getDay();
       var week = ["일", "월", "화", "수", "목", "금", "토"];

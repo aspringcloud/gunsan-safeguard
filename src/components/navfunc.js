@@ -4,6 +4,7 @@ let navbarMixin = {
     data: () => ({
         newpw: "",
         repw: "",
+        currentpw: "",
         isSetting: false,
         loginInfo: false,
         errmsg: "",
@@ -82,9 +83,11 @@ let navbarMixin = {
         resetPw() {
             this.$http
                 .post(
-                    this.$api + "auth/password/change/", {
-                        new_password1: this.newpw,
-                        new_password2: this.repw
+                    this.$api + "users/change_password/", {
+                        e_mail_id: this.user.info.email,
+                        old_password: this.currentpw,
+                        new_password: this.newpw,
+                        confirm_new_password: this.repw
                     }, {
                         headers: this.$headers
                     }
