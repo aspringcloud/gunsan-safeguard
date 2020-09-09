@@ -313,9 +313,10 @@ let operateMixin = {
         })
         .then((res) => {
           console.log("getNewSt 받아오기", res.data)
-          this.nowSt.id = res.data.passed_station;
+          console.log(this.nowSt);
           this.selectedCar.station = res.data.passed_station;
           this.$session.set("selectedCar", this.selectedCar)
+          console.log("station이"+res.data.passed_station+"으로 변경됩니다.")
         }).catch((err) => {
           console.log(err)
           // alert("station 정보 api 오류입니다. 새로고침 해주세요.")
