@@ -318,7 +318,7 @@ let operateMixin = {
           this.$session.set("selectedCar", this.selectedCar)
         }).catch((err) => {
           console.log(err)
-          alert("station 정보 api 오류입니다. 새로고침 해주세요.")
+          // alert("station 정보 api 오류입니다. 새로고침 해주세요.")
         })
     },
     changeSt() {
@@ -483,9 +483,9 @@ let operateMixin = {
       var now = new Date();
 
       //socket 재 연결
-      if (now.getTime() - new Date(this.lastPing).getTime() > 70000)
+      // if (this.socket && now.getTime() - new Date(this.lastPing).getTime() > 70000)
         // this.connectSocket();
-        alert("웹소켓 연결이 끊어졌습니다. 새로고침해주세요.")
+        // alert("웹소켓 연결이 끊어졌습니다. 새로고침해주세요.")
 
       var day = now.getDay();
       var week = ["일", "월", "화", "수", "목", "금", "토"];
