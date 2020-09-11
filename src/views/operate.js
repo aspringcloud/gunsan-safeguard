@@ -5,9 +5,7 @@ let operateMixin = {
     tasioStatus: false,
     tasioInfo: false,
     isOplog: false,
-    // reqStation: false,
     stationList: false,
-    // isStation: false,
     stModal: false,
     nowSt: false,
     site: {
@@ -47,7 +45,7 @@ let operateMixin = {
     date: "",
     isOn: 1,
     isSubmit: false,
-    lastOn: " ",
+    lastOff: " ",
     location: "경기도 안성시 죽산면 죽산리 343-1",
     psng: 0,
     isAuto: 1,
@@ -95,24 +93,6 @@ let operateMixin = {
 
       this.$headers.authorization = "Basic " + this.$session.get("user").basic;
       this.getStationList();
-      // this.$http
-      //     .get(this.$api + "vehicles/", {
-      //         headers: this.$headers,
-      //     })
-      //     .then((res) => {
-      //         var infos = res.data;
-      //         for (let i = 0; i < infos.length; i++) {
-      //             this.cars.push({
-      //                 id: infos[i].id,
-      //                 name: infos[i].name,
-      //                 station: infos[i].passed_station,
-      //             });
-      //         }
-      //         console.log("created", this.cars);
-      //     })
-      //     .catch((err) => {
-      //         console.log(err);
-      //     });
       if (this.$session.get("selectedCar")) {
         this.selectedCar = this.$session.get("selectedCar");
         this.nowSt = this.stationList[this.selectedCar.station];
@@ -169,8 +149,10 @@ let operateMixin = {
         this.socketMsg.how.type == "passenger" &&
         this.socketMsg.how.vehicle_id == this.selectedCar.id
       ) {
-        this.psng = this.socketMsg.how.current_passenger;
-        this.psngTemp = this.socketMsg.how.current_passenger;
+        var tpsng = this.socketMsg.how.current_passenger
+        if(tpsng < 0 )tpsng = 0
+        this.psng = tpsng;
+        this.psngTemp = tpsng;
         this.isStation = false;
       }
       if (
@@ -191,8 +173,10 @@ let operateMixin = {
         }
       } else if (this.socketMsg.how.vehicle_id == this.selectedCar.id) {
         if (this.socketMsg.how.type == "passenger") {
-          this.psng = this.socketMsg.how.current_passenger;
-          this.psngTemp = this.socketMsg.how.current_passenger;
+          var tpsng = this.socketMsg.how.current_passenger;
+          if(tpsng < 0) tpsng = 0;
+          this.psng = tpsng;
+          this.psngTemp = tpsng;
           this.isStation = false;
         } else if (this.socketMsg.how.type == "drive")
           this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
@@ -220,7 +204,7 @@ let operateMixin = {
     },
     clock: function () {
       if (this.drivetime != " ") {
-        this.calcDrivetime(this.lastOn);
+        this.calcDrivetime(this.lastOff);
       }
     },
     selectedCar: function () {
@@ -345,8 +329,6 @@ let operateMixin = {
             this.selectedCar.station = this.nowSt.id;
             this.$session.set("selectedCar", this.selectedCar);
             this.nowSt = false;
-            // this.isStation = this.stModal !== 1;
-            // if (this.stModal === 1) this.savePsng(1);
             this.stModal = false;
           } else alert("다시 시도해주세요.");
         })
@@ -400,12 +382,26 @@ let operateMixin = {
           console.log("해당 차량 데이터 API로 불러오기", res.data);
 
           this.selectedCar.station = res.data.passed_station;
-          this.psng = res.data.passenger;
+          var tpsng = res.data.passensger;
+          if ( !tpsng || tpsng<0 ) tpsng = 0;
+          this.psng = tpsng;
+          this.psngTemp = tpsng;
           this.isOn = res.data.drive;
           this.isAuto = res.data.drive_mode;
-          if (!this.psng) this.psng = 0;
-          this.psngTemp = this.psng;
           this.isPark = res.data.isparked;
+
+
+          // 마지막 OFF **********************************
+          // var time = res.data.latest_power_off;
+          // console.log("latest_power_off",time);
+          // time = time.split("-").join("/");
+          // time = time.replace("T", " ");
+          // time = time.replace("Z", "");
+          // time = time.replace("+09:00", ""); 
+          // this.lastOff = time;
+
+          // 최근 켜짐으로부터 운행 시간 계산 함수
+          // this.calcDrivetime(res.data.latest_power_on);
 
           if (res.data.site) {
             this.site.id = res.data.site;
@@ -427,50 +423,6 @@ let operateMixin = {
               });
           }
 
-          // if (res.data.lon && res.data.lat) {
-          //   this.$http
-          //     .get(
-          //       `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${res.data.lon}&y=${res.data.lat}&input_coord=WGS84`,
-          //       {
-          //         headers: {
-          //           Authorization: "KakaoAK 13d764d3755ffa0f1ee21f204fd52fe1",
-          //         },
-          //       }
-          //     )
-          //     .then((res) => {
-          //       this.location = res.data.documents[0].address.address_name;
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-          //       this.location = "서비스 에러";
-          //     });
-          // } else {
-          //   this.location = "위치정보 없음";
-          // }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      this.$http
-        .get(this.$api + "oplogs/vehicle/" + this.selectedCar.id, {
-          headers: this.$headers,
-        })
-        .then((res) => {
-          var i = res.data.length;
-          if (i) {
-            var time = res.data[i - 1].time_start;
-            console.log(time);
-            time = time.split("-").join("/");
-            time = time.replace("T", " ");
-            time = time.replace("Z", "");
-            time = time.replace("+09:00", "");
-            this.lastOn = time;
-            this.calcDrivetime(time);
-          } else {
-            this.lastOn = " ";
-            this.drivetime = " ";
-          }
         })
         .catch((err) => {
           console.log(err);
@@ -513,8 +465,7 @@ let operateMixin = {
       this.clock = nowH + ":" + nowMin + ":" + nowSec;
     },
     calcDrivetime(time) {
-      if (!this.isOn || !this.lastOn) return;
-      else {
+      if(!this.lastOff) return
         var timediff = new Date() - new Date(time);
         var diffD = parseInt(timediff / 86400000);
         timediff %= 86400000;
@@ -523,7 +474,6 @@ let operateMixin = {
         var diffM = parseInt(timediff / 60000);
         this.drivetime = `${diffH}시간 ${diffM}분`;
         if (diffD) this.drivetime = `${diffD}일 ` + this.drivetime;
-      }
     },
     calcbyte(maxByte, str) {
       var str_len = str.length;
@@ -639,21 +589,12 @@ let operateMixin = {
       this.socket.send(JSON.stringify(msg));
       this.isOplog = false;
     },
-    // sameStPsng() {
-    //   this.isStation = true;
-    //   this.reqStation = false;
-    //   this.savePsng();
-    // },
     savePsng() {
       if (this.psngTemp >= 16) {
         alert("탑승객 수를 확인해주세요.");
         this.psngTemp = this.psng;
         return;
       }
-      //   if (!this.isStation && !tag) {
-      // this.reqStation = true;
-      // return;
-      //   }
       var msg = {
         what: "EVENT",
         who: "safeGuard",
@@ -761,11 +702,7 @@ let operateMixin = {
           type: "reason_stop",
           site_id: this.site.id,
           vehicle_id: this.selectedCar.id,
-          // 반드시 하단의 5가지 중 하나.
-          // "차량", "사람", "환경요소", "오류", "기타" 에 각각 해당
-          // "car", "people", "object", "error", "etc"
           reason_type: "",
-          // reason_type이 "error" 또는 "etc"일 때만, reason 출력. 그외의 경우에는 출력하지 않음
         },
       };
       if (this.stopOpt == "차") {
@@ -814,7 +751,6 @@ let operateMixin = {
     getTasioCall() {
       var msg = {
         what: "EVENT",
-        // where: "sejong_datahub",
         who: "tasio_id",
         how: {
           current_station_eta: "['{'4': 25.0, '5': 29.0}']",

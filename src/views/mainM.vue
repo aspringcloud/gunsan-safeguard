@@ -259,7 +259,7 @@
             </div>
 
             <div class="box-title">마지막 전원 OFF</div>
-            <div class="infobox-txt">{{ lastOn }}</div>
+            <div class="infobox-txt">{{ lastOff }}</div>
             <div class="box-title">운행시간</div>
             <div class="infobox-txt">{{ drivetime }}</div>
           </div>

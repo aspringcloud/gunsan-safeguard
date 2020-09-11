@@ -281,7 +281,7 @@
             <div class="infobox-divider" />
             <div class="infobx-col">
               <div class="box-title">마지막 전원 OFF</div>
-              <div class="infobox-txt">{{lastOn}}</div>
+              <div class="infobox-txt">{{lastOff}}</div>
             </div>
             <div class="infobox-divider" />
             <div class="infobx-col">
