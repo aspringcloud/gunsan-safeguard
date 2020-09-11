@@ -173,7 +173,7 @@ let operateMixin = {
         }
       } else if (this.socketMsg.how.vehicle_id == this.selectedCar.id) {
         if (this.socketMsg.how.type == "passenger") {
-          var tpsng = this.socketMsg.how.current_passenger;
+          tpsng = this.socketMsg.how.current_passenger;
           if(tpsng < 0) tpsng = 0;
           this.psng = tpsng;
           this.psngTemp = tpsng;
