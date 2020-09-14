@@ -79,7 +79,7 @@ let operateMixin = {
     isMsgToast: false,
   }),
   beforeCreate() {
-    if (!this.$session.exists()) {
+    if (!this.$session.get("user")) {
       this.$router.push({
         name: "Login",
       });

@@ -61,7 +61,7 @@ export default {
     errmsg2: "",
   }),
   beforeCreate() {
-    if (this.$session.exists()) {
+    if (this.$session.get("user")) {
       this.$router.push("/");
     }
   },
