@@ -116,7 +116,7 @@ let operateMixin = {
   watch: {
     tasioStatus: function () {
       var msg = {
-        who: ["safeGuard"],
+        who: "safeGuard",
         what: "EVENT",
         how: {
           type: "ondemand",
@@ -703,7 +703,7 @@ let operateMixin = {
       this.stopSMsg = "이벤트가 전송됐습니다.";
       var msg = {
         where: "sejong_datahub",
-        who: "tasio_id",
+        who: "safeGuard",
         what: "EVENT",
         how: {
           type: "reason_stop",
@@ -758,7 +758,7 @@ let operateMixin = {
     getTasioCall() {
       var msg = {
         what: "EVENT",
-        who: "tasio_id",
+        who: "safeGuard",
         how: {
           current_station_eta: "['{'4': 25.0, '5': 29.0}']",
           current_station_id: 11,
