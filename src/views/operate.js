@@ -46,6 +46,7 @@ let operateMixin = {
     isOn: 1,
     isSubmit: false,
     lastOff: " ",
+    lastOn: " ",
     location: "경기도 안성시 죽산면 죽산리 343-1",
     psng: 0,
     isAuto: 1,
@@ -182,8 +183,14 @@ let operateMixin = {
           this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
         else if (this.socketMsg.how.type == "parking")
           this.isPark = this.socketMsg.how.value == "true" ? true : false;
-        else if (this.socketMsg.how.type == "power")
-          this.isOn = this.socketMsg.how.value == "true" ? true : false;
+        else if (this.socketMsg.how.type == "power"){
+          if(this.socketMsg.how.value == "true"){
+            this.isOn = true;
+            this.lastOn = new Date()
+            // this.calcDrivetime(new Date());
+          }
+          else this.isOn = false;
+        }
       } else if (this.socketMsg.how.type == "door" && this.socketMsg.how.value == "false") {
         this.getNewSt()
       } else if (this.socketMsg.what == "PING") {
@@ -204,7 +211,7 @@ let operateMixin = {
     },
     clock: function () {
       if (this.drivetime != " ") {
-        this.calcDrivetime(this.lastOff);
+        this.calcDrivetime(this.lastOn);
       }
     },
     selectedCar: function () {
@@ -392,16 +399,17 @@ let operateMixin = {
 
 
           // 마지막 OFF **********************************
-          // var time = res.data.latest_power_off;
-          // console.log("latest_power_off",time);
-          // time = time.split("-").join("/");
-          // time = time.replace("T", " ");
-          // time = time.replace("Z", "");
-          // time = time.replace("+09:00", ""); 
-          // this.lastOff = time;
-
+          var time = new Date(res.data.latest_power_off);
+          this.lastOff = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate() + " "
+          + this.addZeros(time.getHours(), 2) + ":"
+      + this.addZeros(time.getMinutes(), 2) +":"
+      + this.addZeros(time.getSeconds(), 2)
+          
           // 최근 켜짐으로부터 운행 시간 계산 함수
-          // this.calcDrivetime(res.data.latest_power_on);
+          if(res.data.drive){
+            this.lastOn = res.data.latest_power_on;
+            this.calcDrivetime(res.data.latest_power_on);
+          } 
 
           if (res.data.site) {
             this.site.id = res.data.site;
@@ -464,9 +472,8 @@ let operateMixin = {
       var nowSec = this.addZeros(now.getSeconds(), 2);
       this.clock = nowH + ":" + nowMin + ":" + nowSec;
     },
-    calcDrivetime(time) {
-      if(!this.lastOff) return
-        var timediff = new Date() - new Date(time);
+    calcDrivetime(onTime) {
+        var timediff = new Date() - new Date(onTime);
         var diffD = parseInt(timediff / 86400000);
         timediff %= 86400000;
         var diffH = parseInt(timediff / 3600000);
