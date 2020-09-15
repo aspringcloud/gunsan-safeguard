@@ -184,7 +184,7 @@ let operateMixin = {
         else if (this.socketMsg.how.type == "parking")
           this.isPark = this.socketMsg.how.value == "true" ? true : false;
         else if (this.socketMsg.how.type == "power"){
-          if(this.socketMsg.how.value == "true"){
+          if(this.socketMsg.how.value == "on"){
             this.isOn = true;
             this.lastOn = new Date()
             // this.calcDrivetime(new Date());
@@ -553,7 +553,7 @@ let operateMixin = {
         return;
       } else if (this.modalTitle == "전원") {
         msg.how.type = "power";
-        msg.how.value = this.isOn ? "false" : "true";
+        msg.how.value = this.isOn ? "off" : "on";
       } else if (this.modalTitle == "주행모드") {
         msg.how.type = "drive";
         msg.how.value = this.isAuto == 1 ? "normal" : "auto";
