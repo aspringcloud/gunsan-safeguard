@@ -250,9 +250,13 @@
             </div>
             <div class="station-content">
               <div class="station-txt" v-if="selectedCar.station && stationList">
-                {{ stationList[selectedCar.station-1].name }}
+                <!-- {{ stationList[selectedCar.station-1].name }} -->
+                  {{nowStation.name}}
+
                 <br />
-                {{ stationList[selectedCar.station-1].mid }}
+                <!-- {{ stationList[selectedCar.station-1].mid }} -->
+                  {{nowStation.mid}}
+
               </div>
               <div class="empty-station-txt" v-else>차량의 현재 위치를 선택하세요</div>
               <button @click="stModal = true">변경</button>
