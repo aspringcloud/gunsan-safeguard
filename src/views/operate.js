@@ -346,22 +346,22 @@ let operateMixin = {
         })
         .catch((err) => console.log(err));
     },
-    getNewSt() {
-      console.log("getNewSt실행")
-      this.$http.get(this.$api + "vehicles/" + this.selectedCar.id + "/", {
-          headers: this.$headers,
-        })
-        .then((res) => {
-          console.log("getNewSt 받아오기", res.data)
-          console.log(this.nowSt);
-          this.selectedCar.station = res.data.passed_station;
-          this.$session.set("selectedCar", this.selectedCar)
-          console.log("station이"+res.data.passed_station+"으로 변경됩니다.")
-        }).catch((err) => {
-          console.log(err)
-          // alert("station 정보 api 오류입니다. 새로고침 해주세요.")
-        })
-    },
+    // getNewSt() {
+    //   console.log("getNewSt실행")
+    //   this.$http.get(this.$api + "vehicles/" + this.selectedCar.id + "/", {
+    //       headers: this.$headers,
+    //     })
+    //     .then((res) => {
+    //       console.log("getNewSt 받아오기", res.data)
+    //       console.log(this.nowSt);
+    //       this.selectedCar.station = res.data.passed_station;
+    //       this.$session.set("selectedCar", this.selectedCar)
+    //       console.log("station이"+res.data.passed_station+"으로 변경됩니다.")
+    //     }).catch((err) => {
+    //       console.log(err)
+    //       // alert("station 정보 api 오류입니다. 새로고침 해주세요.")
+    //     })
+    // },
     changeSt() {
       this.$http
         .patch(
@@ -451,7 +451,6 @@ let operateMixin = {
           this.isPark = res.data.isparked;	
           this.lat = res.data.lat;	
           this.lon = res.data.lon	
-        	
           // 마지막 OFF **********************************		
           var time = new Date(res.data.latest_power_off);		
           this.lastOff = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate() + " "		
