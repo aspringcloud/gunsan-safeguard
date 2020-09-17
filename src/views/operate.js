@@ -442,7 +442,7 @@ let operateMixin = {
           console.log("해당 차량 데이터 API로 불러오기", res.data);	
           this.selectedCar.station = res.data.passed_station;	
           this.getStation(res.data.passed_station);	
-          var tpsng = res.data.passensger;		
+          var tpsng = res.data.passenger;		
           if ( !tpsng || tpsng<0 ) tpsng = 0;		
           this.psng = tpsng;		
           this.psngTemp = tpsng;	

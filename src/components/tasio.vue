@@ -2,7 +2,7 @@
   <div id="Tasio" :class="ver">
     <div v-if="!isSimple" class="modal-back">
       <div v-if="status=='call'" class="modalBox tasio-alarm">
-        <h1>타시오 요청 알림</h1>
+        <h1>요청 알림</h1>
         <div class="loc-container">
           <div class="loc-box">
             <div class="tasio-content-title">출발지</div>
@@ -36,10 +36,10 @@
       </div>
 
       <div v-if="status=='denied' || status=='cancel'" class="modalBox tasio-denied">
-        <h1>타시오 요청 취소 알림</h1>
+        <h1>요청 취소 알림</h1>
         <div class="denied-txt">
           <span class="bold">{{tasioInfo.callTime}}</span> 발생한
-          <br />타시오 요청이
+          <br />요청이
           <span class="errmsg">{{status=='denied'?'자동 취소':'탑승자에 의해 취소'}}</span>됐습니다.
         </div>
         <div class="denied-info-container">
@@ -68,7 +68,7 @@
       >
         <button class="black-btn" @click="isSimple = true">최소화</button>
         <div class="tasio-moving-title">
-          <h1>타시오 배차 정보</h1>
+          <h1>배차 정보</h1>
           <div>{{statusTxt}}</div>
         </div>
         <div class="moving-loc-container">
@@ -165,7 +165,7 @@
     </modal>
 
     <div v-if="isSimple" class="tasio-simple-container">
-      <h1>타시오 배차 정보</h1>
+      <h1>배차 정보</h1>
       <div>{{statusTxt}}</div>
       <button class="black-btn" @click="isSimple = false">자세히</button>
     </div>
