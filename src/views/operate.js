@@ -165,7 +165,7 @@ let operateMixin = {
         this.socketMsg.how.type == "ondemand" &&
         this.socketMsg.how.site_id == this.site.id
       ) {
-        if (this.socketMsg.how.vehicle_id == this.selectedCar.id && this.socketMsg.how.function == "call") {
+        if (!this.tasioStatus && this.socketMsg.how.function == "call") {
           this.convertTasioInfo(this.socketMsg.how, this.socketMsg.when);
         } else if (
           this.tasioStatus &&
