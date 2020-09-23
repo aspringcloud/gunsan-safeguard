@@ -166,51 +166,6 @@
       </template>
     </modal>
 
-    <!-- request change station modal -->
-    <!-- <modal v-if="reqStation" width="442px" height="222px">
-      <template #content>
-        <div class="reqst-container">
-          <div class="reqst-txt">
-            탑승객 수를 변경하기 전,
-            <br />설정된 현재위치가 맞는지 다시 한번 확인해주세요.
-          </div>
-          <div class="reqst-stInfo">
-            현재 위치:
-            <span
-              v-if="selectedCar.station"
-            >{{stationList[selectedCar.station-1].name + " (" + stationList[selectedCar.station-1].mid + ")" }}</span>
-            <span v-else>차량의 현재 위치를 선택하세요</span>
-          </div>
-        </div>
-      </template>
-      <template #btn>
-        <button class="text-blue" @click="sameStPsng">이상 없음</button>
-        <button
-          class="blue text-white"
-          @click="
-            reqStation = false;
-            stModal = 1;
-          "
-        >현재위치 변경하기</button>
-      </template>
-    </modal> -->
-
-    <!-- 타시오 배차정보 -->
-    <tasio
-      v-if="tasioStatus"
-      :tasioStatus="tasioStatus"
-      :ver="ver"
-      @newStatus="updateTasio"
-      :tasioInfo="tasioInfo"
-    ></tasio>
-
-    <!-- <div
-      @click="getTasioCall"
-      v-if="!tasioStatus"
-      style="position:absolute; top:100px; left: 50px; padding: 10px; z-index:1;"
-      class="blue text-white bold"
-    >T</div>-->
-
     <!-- 차량 선택 화면 -->
     <div class="selectCar-container" v-if="!dashboard">
       <img src="@/assets/img/shuttle.png" alt="shuttle image" />
@@ -231,7 +186,11 @@
     </div>
 
     <div id="dashboard" v-else>
-      <div class="dashboard-container">
+      <div class="tab-container">
+        <div @click="tabFirst=true" :class="[ tabFirst? 'active-toptab':'inactive-toptab']">탑승 관리</div>
+        <div @click="tabFirst=false" :class="[ !tabFirst? 'active-toptab':'inactive-toptab']">운행 관리</div>
+      </div>
+      <div v-if="!tabFirst" class="dashboard-container">
         <div class="clock-box box-default">
           <div class="date text-333">{{today}}</div>
           <div class="time text-333 bold">{{clock}}</div>
@@ -385,12 +344,54 @@
           </div>
         </div>
       </div>
+      <div v-else class="calltab-container">
+        <div class="calltab-station-container">
+          <div class="calltab-station-header">
+            <div></div>
+            <div class="calltab-station-header-now"> 현재 정류장 </div>
+            <div class="calltab-station-header-next"> 다음 정류장 </div>
+          </div>
+          <div class="calltab-station-info">
+            <div></div>
+            <div class="calltab-station-now-info">{{nowStation.name}}</div>
+            <img src="@/assets/img/arrow_right.png" alt="left arrow">
+            <!-- <div class="calltab-station-next-info">{{stationList[nextStOrd].name}}</div> -->
+          </div>
+        </div>
+        <div class="calltab-call-container">
+        <div class="calltab-call-wrapper">
+        <div class="calltab-call-box">
+          <table v-if="calls.length">
+            <thead>
+              <th class="call-col1">탑승객 이름</th>
+              <th class="call-col2">총 인원</th>
+              <th class="call-col3">탑승 정류장</th>
+              <th class="call-col4">탑승 여부</th>
+            </thead>
+            <tbody>
+              <tr v-for="(row, i) in calls" :key="i" :class="{'call-even-row':!(i%2)}">
+                <td class="call-col1" >{{row.passenger_name}}</td>
+                <td class="call-col2">{{row.passenger}}</td>
+                <td class="call-col3">{{row.departName}}</td>
+                <td class="call-col4" v-if="row.status=='arrived'">탑승 완료</td>
+                <td class="call-col4" v-if="row.status=='go'">
+                  <button @click="sendCalltoSocket(row.uid, 'arrived')">탑승 확인</button>
+                  <button @click="sendCalltoSocket(row.uid, 'cancel_call')">미탑승</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+        </div>
+      </div>
     </div>
+
+
   </div>
 </template>
 
 <script>
-import Tasio from "@/components/tasio";
 import Modal from "@/components/modal";
 import Navbar from "@/components/Navbar";
 import operateMixin from "@/views/operate.js";
@@ -399,21 +400,242 @@ import "@/views/main.css";
 export default {
   mixins: [operateMixin],
   name: "Main",
-  components: { Modal, Navbar, Tasio },
+  components: { Modal, Navbar },
+  data(){
+    return{
+      tabFirst:false,
+    }
+  }
 };
 </script>
 
 <style scoped>
 #main {
+  position: relative;
   padding-top: 68px;
   height: 100vh;
   min-height: max-content;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #D8F1F9;
 }
 #dashboard {
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.tab-container {
+  display: flex;
+  background-color: #C0D4DA;
+  position: absolute;
+  top: 68px;
+  width: 100%;
+  justify-content: flex-end;
+  height: 46px;
+}
+.tab-container div {
+  font-size: 16px;
+  line-height: 46px;
+  width: 171px;
+  text-align: end;
+  background-repeat: no-repeat;
+  background-size:171px;
+  padding-right:34px;
+  cursor: pointer;
+}
+.tab-container div:first-child {
+  margin-right: -33px;
+  padding-right:40px;
+}
+.inactive-toptab {
+  color: #828282; 
+  background-image: url('../assets/img/tab_inact.png');
+}
+.active-toptab {
+  background-image: url('../assets/img/tab_act.png');
+  z-index: 1;
+  color: #333333; 
+  height: 50px;
+  font-weight: 500;
+}
+.calltab-container {
+  min-height: 883px;
+  padding-top: 70px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.calltab-station-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.calltab-station-header {
+  justify-content: center;
+  justify-items: center;
+  display: grid;
+  grid-template-columns: 146px 242px 146px;
+  column-gap: 24px;
+  width: 100%;
+  margin-bottom: 9px;
+}
+.calltab-station-header-now {
+  background: #4F4F4F;
+  color: #FFFFFF;
+  width: 86px;
+  height: 23.5px;
+  line-height: 23.5px;
+  text-align: center;
+  border-radius: 28.5px;
+  font-size: 12px;
+  letter-spacing: -0.05em;
+}
+.calltab-station-header-next {
+  color: #4F4F4F;
+  background: #E0E0E0;
+  width: 86px;
+  height: 23.5px;
+  line-height: 23.5px;
+  text-align: center;
+  border-radius: 28.5px;
+  font-size: 12px;
+  letter-spacing: -0.05em;
+}
+.calltab-station-info {
+  height: 53px;
+  background: #2E92B0;
+  justify-content: center;
+  justify-items: center;
+  display: grid;
+  grid-template-columns: 170px 242px 24px 146px;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.calltab-station-now-info {
+  font-weight: 500;
+  font-size: 24px;
+  letter-spacing: -0.05em;
+  color: #FFFFFF;
+  line-height: 53px;
+}
+.calltab-station-next-info {
+  font-size: 14px;
+  color: #FFFFFF;
+}
+.calltab-call-wrapper {
+ position:relative;
+  padding-top:60px;
+}
+.calltab-call-box {
+  max-height: 598px;
+  overflow-y: auto;
+}
+.calltab-call-container {
+  width: 568px;
+  height: 658px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  padding: 0 15px;
+}
+.calltab-call-box table{
+  width: 538px;
+  text-align: center;
+  border-collapse: collapse;
+}
+.calltab-call-box th {
+  height: 60px;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 60px;
+  color: #828282;
+}
+.calltab-call-box tr {
+  height: 52px;
+}
+.calltab-call-box td {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 52px;
+
+}
+.calltab-call-box thead {
+  display:inline-table;
+   position:absolute;
+  top:0;
+  left: 0;
+  width:calc(100% - 5px);
+}
+.call-even-row {
+  background: #FAFAFA;
+}
+.call-col1 {
+  width:102px;
+  color: #333333;
+ 
+}
+tr > .call-col1 {
+ padding: 0 15px;
+  text-overflow:ellipsis;
+  overflow: hidden;
+  white-space:nowrap;
+  display: block;
+}
+.call-col2 {
+  width:89px;
+  color: #333333;
+
+}
+.call-col3 {
+  width:127px;
+  color: #333333;
+
+}
+.call-col4 {
+  width:220px;
+}
+tr > .call-col4 {
+  font-weight: 500;
+  display: flex;
+  justify-content: space-evenly;
+  color: #828282;
+}
+.call-col4 button {
+  width: 81px;
+height: 32px;
+border-radius: 3px;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+}
+.call-col4 button:first-child {
+  color: #FFFFFF;
+  background: #2E92B0;
+}
+.call-col4 button:first-child:active {
+  color: #4F4F4F;
+  background: #85C9DD;
+}
+.call-col4 button:last-child {
+  color: #4F4F4F;
+  background: #FFFFFF;
+  border: 0.5px solid #828282;
+}
+.call-col4 button:last-child:active {
+  background: #85C9DD;
+  color: #333333;
+  border: none;
+}
+.dashboard-container {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  width: 952px;
+  min-width: 952px;
+  height: 500px;
+  
 }
 .selectCar-container img {
   margin-top: 34px;
@@ -423,7 +645,6 @@ export default {
   font-size: 34px;
   margin-bottom: 46px;
 }
-
 #msgtxt {
   width: 463px;
   height: 148px;
@@ -439,14 +660,6 @@ export default {
 }
 .box-title {
   font-size: 14px;
-}
-.dashboard-container {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  width: 952px;
-  min-width: 952px;
-  height: 500px;
 }
 .dashboard-col1 {
   display: flex;
@@ -470,7 +683,6 @@ export default {
   justify-content: space-between;
   width: 100%;
 }
-
 .stopMsg-container {
   width: 349px;
   height: 374px;
@@ -839,6 +1051,7 @@ export default {
     height: 838px;
     align-items: center;
     position: relative;
+    margin-top: 71px;
   }
   .dashboard-col1 {
     min-height: 510px;
