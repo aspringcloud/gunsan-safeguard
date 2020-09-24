@@ -1,5 +1,6 @@
 let operateMixin = {
   data: () => ({
+    isLoading:true,
     callUidChain:{},
     callsArrivalInfo:{},
     calls:[],
@@ -412,6 +413,7 @@ let operateMixin = {
       return h + "시 " + m + "분" + s + "초";
     },
     getStationListGunsan() {
+      this.isLoading = true;
       this.stationList = {};
       this.$http
         .get(this.$api + "stations/", {
@@ -426,8 +428,7 @@ let operateMixin = {
           }
           console.log("gunsanst",this.stationList)
           console.log(Object.keys(this.stationList).length)
-        })
-         
+        }).then(()=>this.isLoading = false)
         .catch((err) => console.log(err));
     },
     // getNewSt() {

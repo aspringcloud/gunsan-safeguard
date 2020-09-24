@@ -187,8 +187,10 @@
 
     <div id="dashboard" v-else>
       <div class="tab-container">
-        <div @click="tabFirst=true" :class="[ tabFirst? 'active-toptab':'inactive-toptab']">탑승 관리</div>
-        <div @click="tabFirst=false" :class="[ !tabFirst? 'active-toptab':'inactive-toptab']">운행 관리</div>
+        <button @click="tabFirst=true" :disabled="isLoading" :class="[ tabFirst? 'active-toptab':'inactive-toptab']">
+          탑승 관리
+        </button>
+        <button @click="tabFirst=false" :class="[ !tabFirst? 'active-toptab':'inactive-toptab']">운행 관리</button>
       </div>
       <div v-if="!tabFirst" class="dashboard-container">
         <div class="clock-box box-default">
@@ -349,13 +351,16 @@
           <div class="calltab-station-header">
             <div></div>
             <div class="calltab-station-header-now"> 현재 정류장 </div>
-            <!-- <div class="calltab-station-header-next"> 다음 정류장 </div> -->
+            <div class="calltab-station-header-next"> 다음 정류장 </div>
           </div>
           <div class="calltab-station-info">
             <div></div>
-            <div class="calltab-station-now-info">{{nowStation.name}}</div>
-            <!-- <img src="@/assets/img/arrow_right.png" alt="left arrow"> -->
-            <!-- <div class="calltab-station-next-info">{{stationList[nextStOrd].name}}</div> -->
+            <!-- <div class="calltab-station-now-info" >{{stationList.length&&selectedCar.station?stationList[(Number(nowStation.sta_Order)+1)%7].name:''}}</div> -->
+            <div class="calltab-station-now-info" >{{stationList[(Number(nowStation.sta_Order)+1)%7].name}}</div>
+            <!-- <div class="calltab-station-next-info">{{stationList[(Number(nowStation.sta_Order)+1)%stationList.length+1].name}}</div> -->
+            <img src="@/assets/img/arrow_right.png" alt="left arrow">
+            <div class="calltab-station-now-info" >{{stationList[(Number(nowStation.sta_Order)+2)%7].name}}</div>
+            <!-- <div class="calltab-station-next-info">{{stationList[(Number(nowStation.sta_Order)+2)%stationList.length+1].name}}</div> -->
           </div>
         </div>
         <div class="calltab-call-container">
@@ -433,7 +438,7 @@ export default {
   justify-content: flex-end;
   height: 46px;
 }
-.tab-container div {
+.tab-container>button {
   font-size: 16px;
   line-height: 46px;
   width: 171px;
@@ -443,7 +448,10 @@ export default {
   padding-right:34px;
   cursor: pointer;
 }
-.tab-container div:first-child {
+.tab-container>button:disabled {
+  cursor: none;
+}
+.tab-container button:first-child {
   margin-right: -33px;
   padding-right:40px;
 }
