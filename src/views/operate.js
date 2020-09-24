@@ -106,7 +106,7 @@ let operateMixin = {
         this.submitCar();
       }
       if (this.$session.get("site")) this.site = this.$session.get("site");
-      if (this.$session.get("calls")) {
+      if (this.$session.get("calls").length) {
         this.calls = this.$session.get("calls");
         this.callUidChain = this.$session.get("callUidChain");
         this.callsArrivalInfo = this.$session.get("callsArrivalInfo");
@@ -305,9 +305,12 @@ let operateMixin = {
         })		
     },
     convertCallInfo(msg) {
+      console.log("convertCallInfo", msg)
       this.$http.get(this.$api + "stations/"+msg.current_station_id,{headers:this.$headers})	
       .then((res) => {
+        console.log(this.callUidChain)
         this.callUidChain[msg.uid]=this.calls.length;
+        console.log(this.callUidChain)
         this.calls.push({
           uid:msg.uid,
           passenger:msg.passenger,
