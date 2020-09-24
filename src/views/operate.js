@@ -329,8 +329,8 @@ let operateMixin = {
         }));
         if(this.callsArrivalInfo[msg.target_station_id]) this.callsArrivalInfo[msg.target_station_id].push(msg.uid);
         else this.callsArrivalInfo[msg.target_station_id] = [msg.uid];
-        this.$session.set("callsArrivalInfo", this.calls);	
-        this.$session.set("callUidChain", this.calls);	
+        this.$session.set("callsArrivalInfo", this.callsArrivalInfo);	
+        this.$session.set("callUidChain", this.callUidChain);	
         this.$session.set("calls", this.calls);	
       }).catch(err=>{
         alert('신규 배차 받기 실패');

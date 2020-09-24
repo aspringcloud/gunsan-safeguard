@@ -349,12 +349,12 @@
           <div class="calltab-station-header">
             <div></div>
             <div class="calltab-station-header-now"> 현재 정류장 </div>
-            <div class="calltab-station-header-next"> 다음 정류장 </div>
+            <!-- <div class="calltab-station-header-next"> 다음 정류장 </div> -->
           </div>
           <div class="calltab-station-info">
             <div></div>
             <div class="calltab-station-now-info">{{nowStation.name}}</div>
-            <img src="@/assets/img/arrow_right.png" alt="left arrow">
+            <!-- <img src="@/assets/img/arrow_right.png" alt="left arrow"> -->
             <!-- <div class="calltab-station-next-info">{{stationList[nextStOrd].name}}</div> -->
           </div>
         </div>
@@ -418,7 +418,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #D8F1F9;
+  /* background: #D8F1F9; */
 }
 #dashboard {
   display: flex;
