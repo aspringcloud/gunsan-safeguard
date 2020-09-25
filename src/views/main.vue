@@ -366,7 +366,7 @@
         <div class="calltab-call-container">
         <div class="calltab-call-wrapper">
         <div class="calltab-call-box">
-          <table v-if="calls.length">
+          <table v-if="calls && calls.length">
             <thead>
               <th class="call-col1">탑승객 이름</th>
               <th class="call-col2">총 인원</th>
