@@ -107,7 +107,7 @@ let operateMixin = {
         this.submitCar();
       }
       if (this.$session.get("site")) this.site = this.$session.get("site");
-      if (this.$session.get("calls").length) {
+      if (this.$session.get("calls") && this.$session.get("calls").length) {
         this.calls = this.$session.get("calls");
         this.callUidChain = this.$session.get("callUidChain");
         this.callsArrivalInfo = this.$session.get("callsArrivalInfo");
