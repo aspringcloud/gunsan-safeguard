@@ -30,19 +30,19 @@ let operateMixin = {
     dashboard: false,
     isDash: false,
     cars: [{
-        id: 4,
+        id: 1,
         name: 1146,
       },
       {
-        id: 5,
+        id: 2,
         name: 1147,
       },
       {
-        id: 11,
+        id: 3,
         name: 6894,
       },
       {
-        id: 12,
+        id: 4,
         name: 6895,
       },
     ],
@@ -507,6 +507,7 @@ let operateMixin = {
       this.status = false;
     },
     getStation(id) {	
+      if(!id) return;
       this.$http.get(this.$api + "stations/"+id,{headers:this.$headers})	
       .then((res) => {	
         console.log("d",res.data)	
@@ -924,27 +925,7 @@ let operateMixin = {
       }
       setTimeout(this.clearStopMsg, 5000);
     },
-    getTasioCall() {
-      var msg = {
-        what: "EVENT",
-        who: "safeGuard",
-        how: {
-          current_station_eta: "['{'4': 25.0, '5': 29.0}']",
-          current_station_id: 11,
-          function: "call",
-          passenger: 1,
-          passenger_name: "Test",
-          site_id: 1,
-          target_station_eta: 4,
-          target_station_id: 18,
-          type: "ondemand",
-          uid: "fc3x860IvOf1eoq7AjPLPFCTV193",
-          vehicle_id: 4,
-          vehicle_mid: "SCN004",
-        },
-      };
-      this.socket.send(JSON.stringify(msg));
-    },
+   
   },
 };
 

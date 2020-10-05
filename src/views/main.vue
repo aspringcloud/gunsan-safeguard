@@ -350,16 +350,16 @@
         <div class="calltab-station-container">
           <div class="calltab-station-header">
             <div></div>
-            <div class="calltab-station-header-now"> 현재 정류장 </div>
+            <div class="calltab-station-header-now"> 이번 정류장 </div>
             <div class="calltab-station-header-next"> 다음 정류장 </div>
           </div>
           <div class="calltab-station-info">
             <div></div>
             <!-- <div class="calltab-station-now-info" >{{stationList.length&&selectedCar.station?stationList[(Number(nowStation.sta_Order)+1)%7].name:''}}</div> -->
-            <div class="calltab-station-now-info" >{{stationList[(Number(nowStation.sta_Order)+1)%7+1].name}}</div>
+            <div class="calltab-station-now-info" >{{stationList[(Number(nowStation.sta_Order))%7+1].name}}</div>
             <!-- <div class="calltab-station-next-info">{{stationList[(Number(nowStation.sta_Order)+1)%stationList.length+1].name}}</div> -->
             <img src="@/assets/img/arrow_right.png" alt="left arrow">
-            <div class="calltab-station-next-info" >{{stationList[(Number(nowStation.sta_Order)+2)%7+1].name}}</div>
+            <div class="calltab-station-next-info" >{{stationList[(Number(nowStation.sta_Order)+1)%7+1].name}}</div>
             <!-- <div class="calltab-station-next-info">{{stationList[(Number(nowStation.sta_Order)+2)%stationList.length+1].name}}</div> -->
           </div>
         </div>
