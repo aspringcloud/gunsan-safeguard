@@ -32,7 +32,7 @@ let navbarMixin = {
             if (rbyte > 12) {
                 return this.user.info.username.substr(0, rlen) + "...";
             } else {
-                return this.user.info.username + "...";
+                return this.user.info.username;
             }
         },
     },

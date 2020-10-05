@@ -46,7 +46,7 @@
           </div>
           <div class="input-box">
             <label for="team">이름</label>
-            <input name="team" type="text" :value="user.username" readonly />
+            <input name="team" type="text" :value="user.info.username" readonly />
           </div>
           <div class="input-box">
             <label for="team">팀</label>
