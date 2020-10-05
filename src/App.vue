@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!-- 군산 모바일 버전 삭제 -->
     <router-view v-if="!isMobile"></router-view>
     <router-view v-else name="mobile"></router-view>
   </div>

@@ -397,7 +397,7 @@ export default {
 }
 #dashboard {
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 .mainM-container {
   width: 312px;

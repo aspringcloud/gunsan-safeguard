@@ -1,5 +1,5 @@
 <template>
-  <div id="main">
+  <div id="main" :class="{'bg-sub':dashboard}">
     <navbar :user="user"></navbar>
 
     <!-- OPLOG!!!!20.07.10 -->
@@ -417,16 +417,13 @@ export default {
 <style scoped>
 #main {
   position: relative;
-  padding-top: 68px;
+  padding-top: 114px;
   height: 100vh;
   min-height: max-content;
   display: flex;
-  align-items: center;
   justify-content: center;
-  /* background: #D8F1F9; */
 }
 #dashboard {
-  display: flex;
   flex-direction: column;
 }
 .tab-container {
@@ -468,7 +465,6 @@ export default {
 }
 .calltab-container {
   min-height: 883px;
-  padding-top: 70px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -1059,7 +1055,6 @@ line-height: 20px;
     height: 838px;
     align-items: center;
     position: relative;
-    margin-top: 71px;
   }
   .dashboard-col1 {
     min-height: 510px;
