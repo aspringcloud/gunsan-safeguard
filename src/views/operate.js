@@ -30,19 +30,19 @@ let operateMixin = {
     dashboard: false,
     isDash: false,
     cars: [{
-        id: 1,
+        id: 4,
         name: 1146,
       },
       {
-        id: 2,
+        id: 5,
         name: 1147,
       },
       {
-        id: 3,
+        id: 11,
         name: 6894,
       },
       {
-        id: 4,
+        id: 12,
         name: 6895,
       },
     ],
