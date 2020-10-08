@@ -184,6 +184,7 @@ let operateMixin = {
           this.convertCallInfo(this.socketMsg.how);
         } else if (this.socketMsg.how.function == "cancel_call") {
           console.log(this.calls[this.callUidChain[this.socketMsg.how.uid]])
+
           this.calls.splice(this.callUidChain[this.socketMsg.how.uid], 1)
           this.$session.set("calls", this.calls);
         }
