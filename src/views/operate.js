@@ -1,10 +1,17 @@
 let operateMixin = {
   data: () => ({
-    isLoading:true,
-    callUidChain:{},
-    callsArrivalInfo:{},
-    calls:[],
-    nowStation:{id:'',name:'', mid:'', lat:'',lon:'',site:''},
+    isLoading: true,
+    callUidChain: {},
+    callsArrivalInfo: {},
+    calls: [],
+    nowStation: {
+      id: '',
+      name: '',
+      mid: '',
+      lat: '',
+      lon: '',
+      site: ''
+    },
     isTasioToast: false,
     lastPing: false,
     tasioStatus: false,
@@ -101,7 +108,7 @@ let operateMixin = {
       this.getStationListGunsan();
       if (this.$session.get("selectedCar")) {
         this.selectedCar = this.$session.get("selectedCar");
-        this.getStation(this.selectedCar.station)	
+        this.getStation(this.selectedCar.station)
         console.log("nowstation", this.nowStation)
         this.dashboard = true;
         this.submitCar();
@@ -160,7 +167,7 @@ let operateMixin = {
         this.socketMsg.how.vehicle_id == this.selectedCar.id
       ) {
         var tpsng = this.socketMsg.how.current_passenger
-        if(tpsng < 0 )tpsng = 0
+        if (tpsng < 0) tpsng = 0
         this.psng = tpsng;
         this.psngTemp = tpsng;
         this.isStation = false;
@@ -176,13 +183,14 @@ let operateMixin = {
         if (this.socketMsg.how.vehicle_id == this.selectedCar.id && this.socketMsg.how.function == "call") {
           this.convertCallInfo(this.socketMsg.how);
         } else if (this.socketMsg.how.function == "cancel_call") {
-            this.calls.splice(this.callUidChain[this.socketMsg.how.uid], 1)
-            this.$session.set("calls", this.calls);	
+          console.log(this.calls[this.callUidChain[this.socketMsg.how.uid]])
+          this.calls.splice(this.callUidChain[this.socketMsg.how.uid], 1)
+          this.$session.set("calls", this.calls);
         }
       } else if (this.socketMsg.how.vehicle_id == this.selectedCar.id) {
         if (this.socketMsg.how.type == "passenger") {
           tpsng = this.socketMsg.how.current_passenger;
-          if(tpsng < 0) tpsng = 0;
+          if (tpsng < 0) tpsng = 0;
           this.psng = tpsng;
           this.psngTemp = tpsng;
           this.isStation = false;
@@ -190,13 +198,12 @@ let operateMixin = {
           this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
         else if (this.socketMsg.how.type == "parking")
           this.isPark = this.socketMsg.how.value == "true" ? true : false;
-        else if (this.socketMsg.how.type == "power"){
-          if(this.socketMsg.how.value == "true"){
+        else if (this.socketMsg.how.type == "power") {
+          if (this.socketMsg.how.value == "true") {
             this.isOn = true;
             this.lastOn = new Date()
             // this.calcDrivetime(new Date());
-          }
-          else this.isOn = false;
+          } else this.isOn = false;
         }
       } else if (this.socketMsg.how.type == "door" && this.socketMsg.how.value == "false") {
         this.getNewSt()
@@ -222,12 +229,12 @@ let operateMixin = {
       }
     },
     selectedCar: function () {
-      this.getStation(this.selectedCar.station)	
-      if (this.selectedCar && !this.dashboard) {	
-      this.isDash = true;	
-     }	
-      if (!this.selectedCar.station) this.selectedCar.station = false;	
-      
+      this.getStation(this.selectedCar.station)
+      if (this.selectedCar && !this.dashboard) {
+        this.isDash = true;
+      }
+      if (!this.selectedCar.station) this.selectedCar.station = false;
+
     },
     windowWidth: function () {
       if (this.windowWidth < 900) {
@@ -253,9 +260,9 @@ let operateMixin = {
     this.status = false;
   },
   computed: {
-    nextStOrd: function() {
-      if(!this.nowStation || this.nowStation.sta_Order==7) return 1;
-      else return this.nowStation.sta_Order+1
+    nextStOrd: function () {
+      if (!this.nowStation || this.nowStation.sta_Order == 7) return 1;
+      else return this.nowStation.sta_Order + 1
     },
     blockStopSubmit: function () {
       if (
@@ -268,81 +275,83 @@ let operateMixin = {
     },
   },
   methods: {
-    getLatnLon(){	
-      this.$http	
-        .get(this.$api + "vehicles/" + this.selectedCar.id, {	
-          headers: this.$headers,	
-        })	
-        .then((res) => {	
-          this.lat = res.data.lat;	
-          this.lon = res.data.lon	
-        })	
-        .catch((err) => {	
-          console.log(err);	
-        });	
-    },	
-    getNewSt() {		
-      console.log("getNewSt실행")		
-      this.$http.get(this.$api + "vehicles/" + this.selectedCar.id + "/", {		
-          headers: this.$headers,		
-        })		
-        .then((res) => {		
-          console.log("getNewSt 받아오기", res.data)		
-          console.log(this.nowSt);		
-          this.selectedCar.station = res.data.passed_station;		
+    getLatnLon() {
+      this.$http
+        .get(this.$api + "vehicles/" + this.selectedCar.id, {
+          headers: this.$headers,
+        })
+        .then((res) => {
+          this.lat = res.data.lat;
+          this.lon = res.data.lon
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getNewSt() {
+      console.log("getNewSt실행")
+      this.$http.get(this.$api + "vehicles/" + this.selectedCar.id + "/", {
+          headers: this.$headers,
+        })
+        .then((res) => {
+          console.log("getNewSt 받아오기", res.data)
+          console.log(this.nowSt);
+          this.selectedCar.station = res.data.passed_station;
 
           //콜 도착 알림
-          if(this.callsArrivalInfo[res.data.passed_station]){
-            for(var uid of this.callsArrivalInfo[res.data.passed_station]) {
+          if (this.callsArrivalInfo[res.data.passed_station]) {
+            for (var uid of this.callsArrivalInfo[res.data.passed_station]) {
               this.sendCalltoSocket(uid, "end")
             }
           }
-        this.getStation(res.data.passed_station)	
-          this.$session.set("selectedCar", this.selectedCar)		
-          console.log("station이"+res.data.passed_station+"으로 변경됩니다.")		
-        }).catch((err) => {		
-          console.log(err)		
+          this.getStation(res.data.passed_station)
+          this.$session.set("selectedCar", this.selectedCar)
+          console.log("station이" + res.data.passed_station + "으로 변경됩니다.")
+        }).catch((err) => {
+          console.log(err)
           // alert("station 정보 api 오류입니다. 새로고침 해주세요.")		
-        })		
+        })
     },
     convertCallInfo(msg) {
       console.log("convertCallInfo", msg)
-      this.$http.get(this.$api + "stations/"+msg.current_station_id,{headers:this.$headers})	
-      .then((res) => {
-        console.log(this.callUidChain)
-        this.callUidChain[msg.uid]=this.calls.length;
-        console.log(this.callUidChain)
-        this.calls.push({
-          uid:msg.uid,
-          passenger:msg.passenger,
-          passenger_name:msg.passenger_name,
-          departName: res.data.name,
-          arrivalId:msg.target_station_id,
-          status:"go"
+      this.$http.get(this.$api + "stations/" + msg.current_station_id, {
+          headers: this.$headers
         })
-        this.socket.send(JSON.stringify({
-          who: "safeGuard",
-          what: "EVENT",
-          how: {
-            type: "ondemand",
-            vehicle_id: this.selectedCar.id,
-            function: "go",
+        .then((res) => {
+          console.log(this.callUidChain)
+          this.callUidChain[msg.uid] = this.calls.length;
+          console.log(this.callUidChain)
+          this.calls.push({
             uid: msg.uid,
             passenger: msg.passenger,
-          }
-        }));
-        if(this.callsArrivalInfo[msg.target_station_id]) this.callsArrivalInfo[msg.target_station_id].push(msg.uid);
-        else this.callsArrivalInfo[msg.target_station_id] = [msg.uid];
-        this.$session.set("callsArrivalInfo", this.callsArrivalInfo);	
-        this.$session.set("callUidChain", this.callUidChain);	
-        this.$session.set("calls", this.calls);	
-      }).catch(err=>{
-        alert('신규 배차 받기 실패');
-        console.log(err);
-      })
+            passenger_name: msg.passenger_name,
+            departName: res.data.name,
+            arrivalId: msg.target_station_id,
+            status: "go",
+            when: this.timeFormatting(new Date())
+          })
+          this.socket.send(JSON.stringify({
+            who: "safeGuard",
+            what: "EVENT",
+            how: {
+              type: "ondemand",
+              vehicle_id: this.selectedCar.id,
+              function: "go",
+              uid: msg.uid,
+              passenger: msg.passenger,
+            }
+          }));
+          if (this.callsArrivalInfo[msg.target_station_id]) this.callsArrivalInfo[msg.target_station_id].push(msg.uid);
+          else this.callsArrivalInfo[msg.target_station_id] = [msg.uid];
+          this.$session.set("callsArrivalInfo", this.callsArrivalInfo);
+          this.$session.set("callUidChain", this.callUidChain);
+          this.$session.set("calls", this.calls);
+        }).catch(err => {
+          alert('신규 배차 받기 실패');
+          console.log(err);
+        })
     },
-
-    sendCalltoSocket(uid,status){
+    sendCalltoSocket(uid, status) {
       console.log("uid : ", uid, status);
       this.socket.send(JSON.stringify({
         who: "safeGuard",
@@ -356,17 +365,16 @@ let operateMixin = {
         }
       }));
       //출발지 도착 + 탑승
-      if(status=="arrived"){
+      if (status == "arrived") {
         this.calls[this.callUidChain[uid]].status = "arrived"
-        this.$session.set("calls", this.calls);	
+        this.$session.set("calls", this.calls);
       }
       //미탑승 or 도착
-      else if(status!="go"){
+      else if (status != "go") {
         this.calls.splice(this.callUidChain[uid], 1)
-        this.$session.set("calls", this.calls);	
+        this.$session.set("calls", this.calls);
       }
     },
-
     // convertTasioInfo(msg, timestamp) {
     //   this.$http.get(this.$api + "stations/"+msg.current_station_id,{headers:this.$headers})	
     //   .then((res1) => {	
@@ -393,7 +401,6 @@ let operateMixin = {
     //   eta = JSON.parse(eta);
     //   return eta[this.selectedCar.id];
     // },
-
     timeFormatting(date) {
       var h = date.getHours();
       var m = date.getMinutes();
@@ -421,14 +428,14 @@ let operateMixin = {
         })
         .then((res) => {
           // this.stationList = res.data;
-          for(var station of res.data){
-            if(station.site==1){
+          for (var station of res.data) {
+            if (station.site == 1) {
               this.stationList[station.sta_Order] = station;
             }
           }
-          console.log("gunsanst",this.stationList)
+          console.log("gunsanst", this.stationList)
           console.log(Object.keys(this.stationList).length)
-        }).then(()=>this.isLoading = false)
+        }).then(() => this.isLoading = false)
         .catch((err) => console.log(err));
     },
     // getNewSt() {
@@ -506,97 +513,99 @@ let operateMixin = {
       // console.log("socket close");
       this.status = false;
     },
-    getStation(id) {	
-      if(!id) return;
-      this.$http.get(this.$api + "stations/"+id,{headers:this.$headers})	
-      .then((res) => {	
-        console.log("d",res.data)	
-        this.nowStation.name = res.data.name;	
-        this.nowStation.mid = res.data.mid;	
-        this.nowStation.lat = res.data.lat;	
-        this.nowStation.lon = res.data.lon;	
-        this.nowStation.site = res.data.site;	
-        this.nowStation.sta_Order = res.data.sta_Order;	
-      }).catch((err)=> console.log(err))	
+    getStation(id) {
+      if (!id) return;
+      this.$http.get(this.$api + "stations/" + id, {
+          headers: this.$headers
+        })
+        .then((res) => {
+          console.log("d", res.data)
+          this.nowStation.name = res.data.name;
+          this.nowStation.mid = res.data.mid;
+          this.nowStation.lat = res.data.lat;
+          this.nowStation.lon = res.data.lon;
+          this.nowStation.site = res.data.site;
+          this.nowStation.sta_Order = res.data.sta_Order;
+        }).catch((err) => console.log(err))
     },
-    submitCar() {	
-      this.$http	
-        .get(this.$api + "vehicles/" + this.selectedCar.id, {	
-          headers: this.$headers,	
-        })	
-        .then((res) => {	
-          this.$session.set("selectedCar", this.selectedCar);	
-          console.log("해당 차량 데이터 API로 불러오기", res.data);	
-          this.selectedCar.station = res.data.passed_station;	
-          this.getStation(res.data.passed_station);	
-          var tpsng = res.data.passenger;		
-          if ( !tpsng || tpsng<0 ) tpsng = 0;		
-          this.psng = tpsng;		
-          this.psngTemp = tpsng;	
-          this.isOn = res.data.drive;	
-          this.isAuto = res.data.drive_mode;	
-          this.isPark = res.data.isparked;	
-          this.lat = res.data.lat;	
-          this.lon = res.data.lon	
+    submitCar() {
+      this.$http
+        .get(this.$api + "vehicles/" + this.selectedCar.id, {
+          headers: this.$headers,
+        })
+        .then((res) => {
+          this.$session.set("selectedCar", this.selectedCar);
+          console.log("해당 차량 데이터 API로 불러오기", res.data);
+          this.selectedCar.station = res.data.passed_station;
+          this.getStation(res.data.passed_station);
+          var tpsng = res.data.passenger;
+          if (!tpsng || tpsng < 0) tpsng = 0;
+          this.psng = tpsng;
+          this.psngTemp = tpsng;
+          this.isOn = res.data.drive;
+          this.isAuto = res.data.drive_mode;
+          this.isPark = res.data.isparked;
+          this.lat = res.data.lat;
+          this.lon = res.data.lon
           // 마지막 OFF **********************************		
-          var time = new Date(res.data.latest_power_off);		
-          this.lastOff = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate() + " "		
-          + this.addZeros(time.getHours(), 2) + ":"		
-      + this.addZeros(time.getMinutes(), 2) +":"		
-      + this.addZeros(time.getSeconds(), 2)		
-      // 최근 켜짐으로부터 운행 시간 계산 함수		
-          if(res.data.drive){		
-            this.lastOn = res.data.latest_power_on;		
-            this.calcDrivetime(res.data.latest_power_on);		
-          } 	
-          if (res.data.site) {	
-            this.site.id = res.data.site;	
-            this.$http	
-              .get(this.$api + "sites/" + res.data.site, {	
-                headers: this.$headers,	
-              })	
-              .then((res) => {	
-                this.site.name = res.data.name;	
-                this.site.mid = res.data.mid;	
-                if (this.siteDict[res.data.mid])	
-                  this.site.alias = this.siteDict[res.data.mid];	
-                else this.site.alias = this.siteDict.none;	
-                console.log(this.site);	
-              })	
-              .catch((err) => {	
-                console.log(err);	
-                this.site.name = "서비스 에러";	
-              });	
-          }	
-        })	
-        .catch((err) => {	
-          console.log(err);	
-        });	
-      this.$http	
-        .get(this.$api + "oplogs/vehicle/" + this.selectedCar.id, {	
-          headers: this.$headers,	
-        })	
-        .then((res) => {	
-          var i = res.data.length;	
-          if (i) {	
-            var time = res.data[i - 1].time_start;	
-            console.log(time);	
-            time = time.split("-").join("/");	
-            time = time.replace("T", " ");	
-            time = time.replace("Z", "");	
-            time = time.replace("+09:00", "");	
-            this.lastOn = time;	
-            this.calcDrivetime(time);	
-          } else {	
-            this.lastOn = " ";	
-            this.drivetime = " ";	
-          }	
-        })	
-        .catch((err) => {	
-          console.log(err);	
-        });	
-      this.isDash = false;	
-      this.dashboard = true;	
+          var time = new Date(res.data.latest_power_off);
+          this.lastOff = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate() + " " +
+            this.addZeros(time.getHours(), 2) + ":" +
+            this.addZeros(time.getMinutes(), 2) + ":" +
+            this.addZeros(time.getSeconds(), 2)
+          // 최근 켜짐으로부터 운행 시간 계산 함수		
+          if (res.data.drive) {
+            this.lastOn = res.data.latest_power_on;
+            this.calcDrivetime(res.data.latest_power_on);
+          }
+          if (res.data.site) {
+            this.site.id = res.data.site;
+            this.$http
+              .get(this.$api + "sites/" + res.data.site, {
+                headers: this.$headers,
+              })
+              .then((res) => {
+                this.site.name = res.data.name;
+                this.site.mid = res.data.mid;
+                if (this.siteDict[res.data.mid])
+                  this.site.alias = this.siteDict[res.data.mid];
+                else this.site.alias = this.siteDict.none;
+                console.log(this.site);
+              })
+              .catch((err) => {
+                console.log(err);
+                this.site.name = "서비스 에러";
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.$http
+        .get(this.$api + "oplogs/vehicle/" + this.selectedCar.id, {
+          headers: this.$headers,
+        })
+        .then((res) => {
+          var i = res.data.length;
+          if (i) {
+            var time = res.data[i - 1].time_start;
+            console.log(time);
+            time = time.split("-").join("/");
+            time = time.replace("T", " ");
+            time = time.replace("Z", "");
+            time = time.replace("+09:00", "");
+            this.lastOn = time;
+            this.calcDrivetime(time);
+          } else {
+            this.lastOn = " ";
+            this.drivetime = " ";
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.isDash = false;
+      this.dashboard = true;
     },
     addZeros(num, digit) {
       var zero = "";
@@ -613,8 +622,8 @@ let operateMixin = {
 
       //socket 재 연결
       // if (this.socket && now.getTime() - new Date(this.lastPing).getTime() > 70000)
-        // this.connectSocket();
-        // alert("웹소켓 연결이 끊어졌습니다. 새로고침해주세요.")
+      // this.connectSocket();
+      // alert("웹소켓 연결이 끊어졌습니다. 새로고침해주세요.")
 
       var day = now.getDay();
       var week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -633,14 +642,14 @@ let operateMixin = {
       this.clock = nowH + ":" + nowMin + ":" + nowSec;
     },
     calcDrivetime(onTime) {
-        var timediff = new Date() - new Date(onTime);
-        var diffD = parseInt(timediff / 86400000);
-        timediff %= 86400000;
-        var diffH = parseInt(timediff / 3600000);
-        timediff %= 3600000;
-        var diffM = parseInt(timediff / 60000);
-        this.drivetime = `${diffH}시간 ${diffM}분`;
-        if (diffD) this.drivetime = `${diffD}일 ` + this.drivetime;
+      var timediff = new Date() - new Date(onTime);
+      var diffD = parseInt(timediff / 86400000);
+      timediff %= 86400000;
+      var diffH = parseInt(timediff / 3600000);
+      timediff %= 3600000;
+      var diffM = parseInt(timediff / 60000);
+      this.drivetime = `${diffH}시간 ${diffM}분`;
+      if (diffD) this.drivetime = `${diffD}일 ` + this.drivetime;
     },
     calcbyte(maxByte, str) {
       var str_len = str.length;
@@ -704,8 +713,8 @@ let operateMixin = {
           vehicle_id: this.selectedCar.id,
           site_id: this.site.id,
           value: "",
-          lat:this.lat,	
-          lon:this.lon
+          lat: this.lat,
+          lon: this.lon
         },
       };
       if (this.modalTitle == "차량") {
@@ -754,7 +763,7 @@ let operateMixin = {
           vehicle_id: this.selectedCar.id,
           site_id: this.site.id,
           value: "off",
-          
+
         },
       };
       this.socket.send(JSON.stringify(msg));
@@ -776,8 +785,8 @@ let operateMixin = {
           site_id: this.site.id,
           current_passenger: this.psngTemp,
           accumulated_passenger: this.psng + this.psngTemp,
-          lat:this.lat,	
-          lon:this.lon
+          lat: this.lat,
+          lon: this.lon
         },
       };
       this.socket.send(JSON.stringify(msg));
@@ -878,8 +887,8 @@ let operateMixin = {
           site_id: this.site.id,
           vehicle_id: this.selectedCar.id,
           reason_type: "",
-          lat:this.lat,	
-          lon:this.lon
+          lat: this.lat,
+          lon: this.lon
         },
       };
       if (this.stopOpt == "차") {
@@ -925,7 +934,7 @@ let operateMixin = {
       }
       setTimeout(this.clearStopMsg, 5000);
     },
-   
+
   },
 };
 
