@@ -1,6 +1,6 @@
 <template>
-  <div id="cancelCall" :class="ver">
-    <div v-if="!isSimple" class="modal-back">
+  <div id="cancelCall">
+    <div class="modal-back">
       <div class="modalBox tasio-denied">
         <h1>배차 요청 취소 알림</h1>
         <div class="denied-txt">
@@ -31,7 +31,7 @@
 </template>
 <script>
 export default {
-  name: "cancelCall",
+  name: "cancel-call",
   props: ["ver", "call"],
   data: () => ({
     isSimple: false,

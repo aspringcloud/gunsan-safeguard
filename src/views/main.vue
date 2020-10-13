@@ -1,5 +1,5 @@
 <template>
-  <div id="main" :class="{'bg-sub':dashboard}">
+  <div id="main" :class="{ 'bg-sub': dashboard }">
     <navbar :user="user"></navbar>
 
     <!-- OPLOG!!!!20.07.10 -->
@@ -71,7 +71,7 @@
           </div>
         </div>
         <div class="oplog-btn-container">
-          <button class="text-blue" @click="isOplog=false;">취소</button>
+          <button class="text-blue" @click="isOplog = false">취소</button>
           <button class="text-white blue" @click="submitOplog">저장하기</button>
         </div>
       </div>
@@ -88,10 +88,8 @@
       <template #content>
         <b>차량</b>
         <div>
-          <b class="text-blue" style="font-size: 24px;">
-            {{
-            selectedCar.name
-            }}
+          <b class="text-blue" style="font-size: 24px">
+            {{ selectedCar.name }}
           </b>
           을 선택합니까?
         </div>
@@ -107,10 +105,16 @@
     ></modal>
 
     <!-- msg 모달 -->
-    <modal v-if="isMsg" :selectedCar="selectedCar" title="msg" @close="closeMsg" @submit="sendMsg">
+    <modal
+      v-if="isMsg"
+      :selectedCar="selectedCar"
+      title="msg"
+      @close="closeMsg"
+      @submit="sendMsg"
+    >
       <template #content>
         <div class="msg-title">
-          <b>{{site.name}}</b> 통합관제 화면으로 전송
+          <b>{{ site.name }}</b> 통합관제 화면으로 전송
         </div>
         <textarea
           @keydown="getbyte"
@@ -124,18 +128,9 @@
         <div class="msg-byte">{{ msgbyte }}/200bytes</div>
       </template>
     </modal>
-    <div class="msg-toast" :class="{'show-msg-toast':isMsgToast}">
-      <h1>
-        <span>SpringGo</span> 안전요원
-      </h1>
+    <div class="msg-toast" :class="{ 'show-msg-toast': isMsgToast }">
+      <h1><span>SpringGo</span> 안전요원</h1>
       <div>메시지를 전송했습니다.</div>
-    </div>
-
-    <div class="msg-toast" :class="{'show-msg-toast':isTasioToast}">
-      <h1>
-        <span>SpringGo</span> 안전요원
-      </h1>
-      <div>배차를 취소했습니다.</div>
     </div>
 
     <!-- passed station modal -->
@@ -145,23 +140,34 @@
         <div class="passedst-select-container">
           <div
             class="passedst-select-list"
-            :class="{'hide-st':stationInfo.site != site.id,'active-station':nowSt==stationInfo}"
+            :class="{
+              'hide-st': stationInfo.site != site.id,
+              'active-station': nowSt == stationInfo,
+            }"
             @click="nowSt = stationInfo"
             v-for="(stationInfo, i) in stationList"
             :key="i"
           >
             {{
-            stationInfo.site == site.id
-            ? stationInfo.name + " (" + stationInfo.mid + ")"
-            : ""
+              stationInfo.site == site.id
+                ? stationInfo.name + " (" + stationInfo.mid + ")"
+                : ""
             }}
             <!-- {{stationInfo.name}}{{ stationInfo.site}} -->
-            <div v-if="nowSt==stationInfo" class="active-station"></div>
+            <div v-if="nowSt == stationInfo" class="active-station"></div>
           </div>
         </div>
       </template>
       <template #btn>
-        <button class="text-blue" @click="stModal = false; nowSt = false;">취소</button>
+        <button
+          class="text-blue"
+          @click="
+            stModal = false;
+            nowSt = false;
+          "
+        >
+          취소
+        </button>
         <button class="blue text-white" @click="changeSt">선택</button>
       </template>
     </modal>
@@ -177,9 +183,7 @@
         <select v-model="selectedCar" name="selectCar" id="selectCar">
           <option value selected>차량을 선택하세요.</option>
           <option v-for="car in cars" :key="car.name" :value="car">
-            {{
-            car.name
-            }}
+            {{ car.name }}
           </option>
         </select>
       </div>
@@ -187,15 +191,24 @@
 
     <div id="dashboard" v-else>
       <div class="tab-container">
-        <button @click="tabFirst=true" :disabled="isLoading" :class="[ tabFirst? 'active-toptab':'inactive-toptab']">
+        <button
+          @click="tabFirst = true"
+          :disabled="isLoading"
+          :class="[tabFirst ? 'active-toptab' : 'inactive-toptab']"
+        >
           탑승 관리
         </button>
-        <button @click="tabFirst=false" :class="[ !tabFirst? 'active-toptab':'inactive-toptab']">운행 관리</button>
+        <button
+          @click="tabFirst = false"
+          :class="[!tabFirst ? 'active-toptab' : 'inactive-toptab']"
+        >
+          운행 관리
+        </button>
       </div>
       <div v-if="!tabFirst" class="dashboard-container">
         <div class="clock-box box-default">
-          <div class="date text-333">{{today}}</div>
-          <div class="time text-333 bold">{{clock}}</div>
+          <div class="date text-333">{{ today }}</div>
+          <div class="time text-333 bold">{{ clock }}</div>
         </div>
         <div class="dashboard-col1">
           <div class="dashboard-col1-row1">
@@ -210,16 +223,20 @@
                 <div class="box-tohide"></div>
                 <div class="box-title">차량 전원</div>
                 <img
-                  @click="isOn?powerOff():powerOn()"
+                  @click="isOn ? powerOff() : powerOn()"
                   height="31px"
-                  :src=" isOn? require('@/assets/img/switchOn.png'):require('@/assets/img/switchOff.png')"
+                  :src="
+                    isOn
+                      ? require('@/assets/img/switchOn.png')
+                      : require('@/assets/img/switchOff.png')
+                  "
                   alt="차량 전원On"
                 />
               </div>
               <div class="msgTo-container">
-                <div class="site-box">{{site.alias}} 통합관제</div>
+                <div class="site-box">{{ site.alias }} 통합관제</div>
                 <!-- <select name="msgTo" id="msgTo">사이트 통합관제</select> -->
-                <button @click="isMsg=true">메시지 보내기</button>
+                <button @click="isMsg = true">메시지 보내기</button>
               </div>
             </div>
           </div>
@@ -227,36 +244,45 @@
             <div class="infobx-col">
               <div class="box-title station-title">
                 현재위치
-                <img v-if="!selectedCar.station" src="@/assets/img/warnP.png" alt="warning" />
+                <img
+                  v-if="!selectedCar.station"
+                  src="@/assets/img/warnP.png"
+                  alt="warning"
+                />
               </div>
               <div class="station-content">
-                <div class="station-txt" v-if="selectedCar.station && stationList">
+                <div
+                  class="station-txt"
+                  v-if="selectedCar.station && stationList"
+                >
                   <!-- {{ stationList[selectedCar.station-1].name }} -->
-                  {{nowStation.name}}
+                  {{ nowStation.name }}
                   <br />
-                  {{nowStation.mid}}
+                  {{ nowStation.mid }}
                   <!-- {{ stationList[selectedCar.station-1].mid }} -->
                 </div>
-                <div class="empty-station-txt" v-else>차량의 현재 위치를 선택하세요</div>
+                <div class="empty-station-txt" v-else>
+                  차량의 현재 위치를 선택하세요
+                </div>
                 <button @click="stModal = true">변경</button>
               </div>
             </div>
             <div class="infobox-divider" />
             <div class="infobx-col">
               <div class="box-title">마지막 전원 OFF</div>
-              <div class="infobox-txt">{{lastOff}}</div>
+              <div class="infobox-txt">{{ lastOff }}</div>
             </div>
             <div class="infobox-divider" />
             <div class="infobx-col">
               <div class="box-title">운행시간</div>
-              <div class="infobox-txt">{{isOn?drivetime:''}}</div>
+              <div class="infobox-txt">{{ isOn ? drivetime : "" }}</div>
             </div>
           </div>
           <div class="dashboard-col1-row3">
             <div class="box-default">
               <div class="box-title">탑승객 수</div>
               <div class="psng-txt">
-                <span>{{psng}}</span>
+                <span>{{ psng }}</span>
                 명
               </div>
               <div class="psng-form">
@@ -278,21 +304,33 @@
                 class="btn-toggle"
                 :class="{ 'btn-toggle-active': isAuto == 1 }"
                 @click="autoOn"
-              >자동주행</button>
+              >
+                자동주행
+              </button>
               <button
                 class="btn-toggle"
                 :class="{ 'btn-toggle-active': isAuto == 2 }"
                 @click="autoOff"
-              >수동주행</button>
+              >
+                수동주행
+              </button>
             </div>
             <div class="box-default">
               <div class="box-title">주차여부</div>
-              <button class="btn-toggle" :class="{ 'btn-toggle-active': isPark }" @click="parkOn">예</button>
+              <button
+                class="btn-toggle"
+                :class="{ 'btn-toggle-active': isPark }"
+                @click="parkOn"
+              >
+                예
+              </button>
               <button
                 class="btn-toggle"
                 :class="{ 'btn-toggle-active': !isPark }"
                 @click="parkOff"
-              >아니오</button>
+              >
+                아니오
+              </button>
             </div>
           </div>
         </div>
@@ -317,86 +355,117 @@
               <div class="box-title">정지사유</div>
               <div class="dashboard-col2-gunsan-container">
                 <button
-                  v-for="(opt,i) in stopOptList"
+                  v-for="(opt, i) in stopOptList"
                   :key="i"
                   @click="pickOpt(opt)"
                   class="btn-toggle"
-                  :class="{'btn-toggle-active': stopOpt==opt}"
-                >{{opt}}</button>
+                  :class="{ 'btn-toggle-active': stopOpt == opt }"
+                >
+                  {{ opt }}
+                </button>
               </div>
             </div>
             <div class="dashboard-col2-row3">
               <textarea
-                :disabled="!(stopOpt=='오류' || stopOpt=='기타')"
+                :disabled="!(stopOpt == '오류' || stopOpt == '기타')"
                 name="stopMsg"
                 id="stopMsg"
                 v-model="stopReason"
                 rows="2"
               ></textarea>
-              <button class="stopBtn" :class="blockStopSubmit" @click="beforeSubmitStop()">전송하기</button>
+              <button
+                class="stopBtn"
+                :class="blockStopSubmit"
+                @click="beforeSubmitStop()"
+              >
+                전송하기
+              </button>
               <div class="errmsg-container">
                 <transition name="fade">
                   <div
-                    :class="[stopSMsg? 'text-blue':'errmsg']"
+                    :class="[stopSMsg ? 'text-blue' : 'errmsg']"
                     v-if="stopEMsg || stopSMsg"
-                  >{{stopEMsg}}{{stopSMsg}}</div>
+                  >
+                    {{ stopEMsg }}{{ stopSMsg }}
+                  </div>
                 </transition>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div v-else class="calltab-container">
         <div class="calltab-station-container">
           <div class="calltab-station-header">
             <div></div>
-            <div class="calltab-station-header-now"> 이번 정류장 </div>
-            <div class="calltab-station-header-next"> 다음 정류장 </div>
+            <div class="calltab-station-header-now">이번 정류장</div>
+            <div class="calltab-station-header-next">다음 정류장</div>
           </div>
           <div class="calltab-station-info">
             <div></div>
             <!-- <div class="calltab-station-now-info" >{{stationList.length&&selectedCar.station?stationList[(Number(nowStation.sta_Order)+1)%7].name:''}}</div> -->
-            <div class="calltab-station-now-info" >{{stationList[(Number(nowStation.sta_Order))%7+1].name}}</div>
+            <div class="calltab-station-now-info">
+              {{ stationList[(Number(nowStation.sta_Order) % 7) + 1].name }}
+            </div>
             <!-- <div class="calltab-station-next-info">{{stationList[(Number(nowStation.sta_Order)+1)%stationList.length+1].name}}</div> -->
-            <img src="@/assets/img/arrow_right.png" alt="left arrow">
-            <div class="calltab-station-next-info" >{{stationList[(Number(nowStation.sta_Order)+1)%7+1].name}}</div>
+            <img src="@/assets/img/arrow_right.png" alt="left arrow" />
+            <div class="calltab-station-next-info">
+              {{
+                stationList[((Number(nowStation.sta_Order) + 1) % 7) + 1].name
+              }}
+            </div>
             <!-- <div class="calltab-station-next-info">{{stationList[(Number(nowStation.sta_Order)+2)%stationList.length+1].name}}</div> -->
           </div>
         </div>
         <div class="calltab-call-container">
-        <div class="calltab-call-wrapper">
-        <div class="calltab-call-box">
-          <table v-if="calls && calls.length">
-            <thead>
-              <th class="call-col1">탑승객 이름</th>
-              <th class="call-col2">총 인원</th>
-              <th class="call-col3">탑승 정류장</th>
-              <th class="call-col4">탑승 여부</th>
-            </thead>
-            <tbody>
-              <tr v-for="(row, i) in calls" :key="i" :class="{'call-even-row':!(i%2)}">
-                <td class="call-col1" >{{row.passenger_name}}</td>
-                <td class="call-col2">{{row.passenger}}</td>
-                <td class="call-col3">{{row.departName}}</td>
-                <td class="call-col4" v-if="row.status=='arrived'">탑승 완료</td>
-                <td class="call-col4" v-if="row.status=='go'">
-                  <button @click="sendCalltoSocket(row.uid, 'arrived')">탑승 확인</button>
-                  <button @click="sendCalltoSocket(row.uid, 'cancel_call')">미탑승</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="calltab-call-wrapper">
+            <div class="calltab-call-box">
+              <table v-if="calls && calls.length">
+                <thead>
+                  <th class="call-col1">탑승객 이름</th>
+                  <th class="call-col2">총 인원</th>
+                  <th class="call-col3">탑승 정류장</th>
+                  <th class="call-col4">탑승 여부</th>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="(row, i) in calls"
+                    :key="i"
+                    :class="{ 'call-even-row': !(i % 2) }"
+                  >
+                    <td class="call-col1">{{ row.passenger_name }}</td>
+                    <td class="call-col2">{{ row.passenger }}</td>
+                    <td class="call-col3">{{ row.departName }}</td>
+                    <td class="call-col4" v-if="row.status == 'arrived'">
+                      탑승 완료
+                    </td>
+                    <td class="call-col4" v-if="row.status == 'go'">
+                      <button @click="sendCalltoSocket(row.uid, 'arrived')">
+                        탑승 확인
+                      </button>
+                      <button @click="sendCalltoSocket(row.uid, 'cancel_call')">
+                        미탑승
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        </div>
-        </div>
+        <cancel-call
+          v-if="cancelCall"
+          :call="cancelCall"
+          @close="cancelCall = ''"
+        ></cancel-call>
       </div>
     </div>
-
-
   </div>
 </template>
 
 <script>
+import CancelCall from "@/components/cancelCall";
 import Modal from "@/components/modal";
 import Navbar from "@/components/Navbar";
 import operateMixin from "@/views/operate.js";
@@ -405,12 +474,12 @@ import "@/views/main.css";
 export default {
   mixins: [operateMixin],
   name: "Main",
-  components: { Modal, Navbar },
-  data(){
-    return{
-      tabFirst:false,
-    }
-  }
+  components: { Modal, Navbar, CancelCall },
+  data() {
+    return {
+      tabFirst: false,
+    };
+  },
 };
 </script>
 
@@ -428,38 +497,38 @@ export default {
 }
 .tab-container {
   display: flex;
-  background-color: #C0D4DA;
+  background-color: #c0d4da;
   position: absolute;
   top: 68px;
   width: 100%;
   justify-content: flex-end;
   height: 46px;
 }
-.tab-container>button {
+.tab-container > button {
   font-size: 16px;
   line-height: 46px;
   width: 171px;
   text-align: end;
   background-repeat: no-repeat;
-  background-size:171px;
-  padding-right:34px;
+  background-size: 171px;
+  padding-right: 34px;
   cursor: pointer;
 }
-.tab-container>button:disabled {
+.tab-container > button:disabled {
   cursor: none;
 }
 .tab-container button:first-child {
   margin-right: -33px;
-  padding-right:40px;
+  padding-right: 40px;
 }
 .inactive-toptab {
-  color: #828282; 
-  background-image: url('../assets/img/tab_inact.png');
+  color: #828282;
+  background-image: url("../assets/img/tab_inact.png");
 }
 .active-toptab {
-  background-image: url('../assets/img/tab_act.png');
+  background-image: url("../assets/img/tab_act.png");
   z-index: 1;
-  color: #333333; 
+  color: #333333;
   height: 50px;
   font-weight: 500;
 }
@@ -485,8 +554,8 @@ export default {
   margin-bottom: 9px;
 }
 .calltab-station-header-now {
-  background: #4F4F4F;
-  color: #FFFFFF;
+  background: #4f4f4f;
+  color: #ffffff;
   width: 86px;
   height: 23.5px;
   line-height: 23.5px;
@@ -496,8 +565,8 @@ export default {
   letter-spacing: -0.05em;
 }
 .calltab-station-header-next {
-  color: #4F4F4F;
-  background: #E0E0E0;
+  color: #4f4f4f;
+  background: #e0e0e0;
   width: 86px;
   height: 23.5px;
   line-height: 23.5px;
@@ -508,7 +577,7 @@ export default {
 }
 .calltab-station-info {
   height: 53px;
-  background: #2E92B0;
+  background: #2e92b0;
   justify-content: center;
   justify-items: center;
   display: grid;
@@ -521,16 +590,16 @@ export default {
   font-weight: 500;
   font-size: 24px;
   letter-spacing: -0.05em;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 53px;
 }
 .calltab-station-next-info {
   font-size: 14px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 .calltab-call-wrapper {
- position:relative;
-  padding-top:60px;
+  position: relative;
+  padding-top: 60px;
 }
 .calltab-call-box {
   max-height: 598px;
@@ -539,12 +608,12 @@ export default {
 .calltab-call-container {
   width: 568px;
   height: 658px;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
   padding: 0 15px;
 }
-.calltab-call-box table{
+.calltab-call-box table {
   width: 538px;
   text-align: center;
   border-collapse: collapse;
@@ -563,42 +632,38 @@ export default {
   font-weight: normal;
   font-size: 14px;
   line-height: 52px;
-
 }
 .calltab-call-box thead {
-  display:inline-table;
-   position:absolute;
-  top:0;
+  display: inline-table;
+  position: absolute;
+  top: 0;
   left: 0;
-  width:calc(100% - 5px);
+  width: calc(100% - 5px);
 }
 .call-even-row {
-  background: #FAFAFA;
+  background: #fafafa;
 }
 .call-col1 {
-  width:102px;
+  width: 102px;
   color: #333333;
- 
 }
 tr > .call-col1 {
- padding: 0 15px;
-  text-overflow:ellipsis;
+  padding: 0 15px;
+  text-overflow: ellipsis;
   overflow: hidden;
-  white-space:nowrap;
+  white-space: nowrap;
   display: block;
 }
 .call-col2 {
-  width:89px;
+  width: 89px;
   color: #333333;
-
 }
 .call-col3 {
-  width:127px;
+  width: 127px;
   color: #333333;
-
 }
 .call-col4 {
-  width:220px;
+  width: 220px;
 }
 tr > .call-col4 {
   font-weight: 500;
@@ -608,27 +673,27 @@ tr > .call-col4 {
 }
 .call-col4 button {
   width: 81px;
-height: 32px;
-border-radius: 3px;
-font-weight: 500;
-font-size: 14px;
-line-height: 20px;
+  height: 32px;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
 }
 .call-col4 button:first-child {
-  color: #FFFFFF;
-  background: #2E92B0;
+  color: #ffffff;
+  background: #2e92b0;
 }
 .call-col4 button:first-child:active {
-  color: #4F4F4F;
-  background: #85C9DD;
+  color: #4f4f4f;
+  background: #85c9dd;
 }
 .call-col4 button:last-child {
-  color: #4F4F4F;
-  background: #FFFFFF;
+  color: #4f4f4f;
+  background: #ffffff;
   border: 0.5px solid #828282;
 }
 .call-col4 button:last-child:active {
-  background: #85C9DD;
+  background: #85c9dd;
   color: #333333;
   border: none;
 }
@@ -639,7 +704,6 @@ line-height: 20px;
   width: 952px;
   min-width: 952px;
   height: 500px;
-  
 }
 .selectCar-container img {
   margin-top: 34px;
