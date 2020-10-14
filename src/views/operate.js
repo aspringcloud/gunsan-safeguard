@@ -109,6 +109,7 @@ let operateMixin = {
         console.log("nowstation", this.nowStation);
         this.dashboard = true;
         this.submitCar();
+        if (this.isOn) this.calcDrivetime(this.lastOn);
       }
       if (this.$session.get("site")) this.site = this.$session.get("site");
       if (this.$session.get("calls") && this.$session.get("calls").length) {
@@ -199,7 +200,23 @@ let operateMixin = {
         if (this.socketMsg.how.value == "on") {
           this.isOn = true;
           this.lastOn = new Date();
-        } else this.isOn = false;
+          this.calcDrivetime(new Date());
+        } else {
+          this.isOn = false;
+          var time = new Date();
+          this.lastOff =
+            time.getFullYear() +
+            "/" +
+            (time.getMonth() + 1) +
+            "/" +
+            time.getDate() +
+            " " +
+            this.addZeros(time.getHours(), 2) +
+            ":" +
+            this.addZeros(time.getMinutes(), 2) +
+            ":" +
+            this.addZeros(time.getSeconds(), 2);
+        }
       } else if (
         this.socketMsg.how.type == "door" &&
         this.socketMsg.how.value == "false"
@@ -386,32 +403,6 @@ let operateMixin = {
         this.$session.set("calls", this.calls);
       }
     },
-    // convertTasioInfo(msg, timestamp) {
-    //   this.$http.get(this.$api + "stations/"+msg.current_station_id,{headers:this.$headers})
-    //   .then((res1) => {
-    //     this.$http.get(this.$api + "stations/"+msg.target_station_id,{headers:this.$headers})
-    //     .then((res2) => {
-    //       var info = {
-    //           psngCnt: msg.passenger + "명",
-    //           psngName: msg.passenger_name,
-    //           currentETA: this.getTasioCurrentETA(msg.current_station_eta),
-    //           uid: msg.uid,
-    //           targetETA: parseInt(msg.target_station_eta),
-    //           callTime: this.timeFormatting(new Date(timestamp * 1000)),
-    //           depart: res1.data.name,
-    //           arrival: res2.data.name,
-    //       };
-    //       this.tasioStatus = "call";
-    //       this.tasioInfo = info;
-    //       this.$session.set("tasioStatus", "call");
-    //       this.$session.set("tasioInfo", info);
-    //     }).catch((err2)=> console.log(err2))
-    //   }).catch((err1)=> console.log(err1))
-    // },
-    // getTasioCurrentETA(eta) {
-    //   eta = JSON.parse(eta);
-    //   return eta[this.selectedCar.id];
-    // },
     timeFormatting(date) {
       var h = date.getHours();
       var m = date.getMinutes();
@@ -450,22 +441,6 @@ let operateMixin = {
         .then(() => (this.isLoading = false))
         .catch((err) => console.log(err));
     },
-    // getNewSt() {
-    //   console.log("getNewSt실행")
-    //   this.$http.get(this.$api + "vehicles/" + this.selectedCar.id + "/", {
-    //       headers: this.$headers,
-    //     })
-    //     .then((res) => {
-    //       console.log("getNewSt 받아오기", res.data)
-    //       console.log(this.nowSt);
-    //       this.selectedCar.station = res.data.passed_station;
-    //       this.$session.set("selectedCar", this.selectedCar)
-    //       console.log("station이"+res.data.passed_station+"으로 변경됩니다.")
-    //     }).catch((err) => {
-    //       console.log(err)
-    //       // alert("station 정보 api 오류입니다. 새로고침 해주세요.")
-    //     })
-    // },
     changeSt() {
       this.$http
         .patch(
@@ -701,7 +676,6 @@ let operateMixin = {
         return str;
       }
     },
-
     getTime() {
       var date = new Date();
       var timeString =
@@ -720,7 +694,6 @@ let operateMixin = {
         "일 ";
       return timeString + dateString;
     },
-
     openSubmit(v) {
       this.modalTitle = v;
       this.isSubmit = true;
@@ -766,29 +739,13 @@ let operateMixin = {
         this.modalValue = "ON";
       }
     },
-
     powerOff() {
       if (!this.isOn) return;
       else {
-        // this.isOplog = true;
         this.isSubmit = true;
         this.modalTitle = "전원";
         this.modalValue = "OFF";
       }
-    },
-    submitOplog() {
-      var msg = {
-        what: "EVENT",
-        who: "safeGuard",
-        how: {
-          type: "power",
-          vehicle_id: this.selectedCar.id,
-          site_id: this.site.id,
-          value: "off",
-        },
-      };
-      this.socket.send(JSON.stringify(msg));
-      this.isOplog = false;
     },
     savePsng() {
       if (this.psngTemp >= 16) {
@@ -812,7 +769,6 @@ let operateMixin = {
       };
       this.socket.send(JSON.stringify(msg));
     },
-
     autoOn() {
       if (this.isAuto == 2) {
         this.isSubmit = true;
@@ -820,7 +776,6 @@ let operateMixin = {
         this.modalValue = "자동주행";
       }
     },
-
     autoOff() {
       if (this.isAuto == 1) {
         this.isSubmit = true;
@@ -828,7 +783,6 @@ let operateMixin = {
         this.modalValue = "수동주행";
       }
     },
-
     parkOn() {
       if (this.isPark) return;
       else {
@@ -837,7 +791,6 @@ let operateMixin = {
         this.modalValue = "예";
       }
     },
-
     parkOff() {
       if (!this.isPark) return;
       else {
@@ -846,7 +799,6 @@ let operateMixin = {
         this.modalValue = "아니오";
       }
     },
-
     decrease() {
       this.psngTemp = parseInt(this.psngTemp);
       if (this.psngTemp > 0) {
@@ -859,7 +811,6 @@ let operateMixin = {
         this.psngTemp += 1;
       } else alert("입력값이 초과되었습니다.");
     },
-
     sendMsg() {
       if (!this.msgtxt) {
         alert("메세지를 입력해주세요.");
@@ -895,7 +846,6 @@ let operateMixin = {
       this.stopSMsg = "";
       this.stopEMsg = "";
     },
-
     submitStop() {
       this.getLatnLon();
       this.stopSMsg = "이벤트가 전송됐습니다.";
@@ -957,5 +907,4 @@ let operateMixin = {
     },
   },
 };
-
 export default operateMixin;
