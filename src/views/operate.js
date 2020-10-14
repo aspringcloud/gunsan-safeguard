@@ -159,28 +159,22 @@ let operateMixin = {
     },
     socketMsg: function() {
       console.log(this.socketMsg);
-      if (
-        this.socketMsg.how.type == "passenger" &&
-        this.socketMsg.how.vehicle_id == this.selectedCar.id
-      ) {
-        var tpsng = this.socketMsg.how.current_passenger;
-        if (tpsng < 0) tpsng = 0;
-        this.psng = tpsng;
-        this.psngTemp = tpsng;
-        this.isStation = false;
-      }
-
+      if (this.socketMsg.what == "PING") {
+        console.log(
+          new Date(this.socketMsg.when * 1000).getTime() -
+            new Date(this.lastPing).getTime()
+        );
+        this.lastPing = new Date(this.socketMsg.when * 1000);
+        console.log("ping!", new Date(this.lastPing));
+      } else if (this.socketMsg.how.vehicle_id != this.selectedCar.id) return;
       // 배차 받기 (200923 신규)
-      if (
+      else if (
         this.isOn &&
         this.socketMsg.what == "EVENT" &&
         this.socketMsg.how.type == "ondemand" &&
         this.socketMsg.how.site_id == this.site.id
       ) {
-        if (
-          this.socketMsg.how.vehicle_id == this.selectedCar.id &&
-          this.socketMsg.how.function == "call"
-        ) {
+        if (this.socketMsg.how.function == "call") {
           this.convertCallInfo(this.socketMsg.how);
         } else if (this.socketMsg.how.function == "cancel_call") {
           console.log(this.calls[this.callUidChain[this.socketMsg.how.uid]]);
@@ -191,37 +185,26 @@ let operateMixin = {
           this.calls.splice(this.callUidChain[this.socketMsg.how.uid], 1);
           this.$session.set("calls", this.calls);
         }
-      } else if (this.socketMsg.how.vehicle_id == this.selectedCar.id) {
-        if (this.socketMsg.how.type == "passenger") {
-          tpsng = this.socketMsg.how.current_passenger;
-          if (tpsng < 0) tpsng = 0;
-          this.psng = tpsng;
-          this.psngTemp = tpsng;
-          this.isStation = false;
-        } else if (this.socketMsg.how.type == "drive")
-          this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
-        else if (this.socketMsg.how.type == "parking")
-          this.isPark = this.socketMsg.how.value == "true" ? true : false;
-        else if (this.socketMsg.how.type == "power") {
-          if (this.socketMsg.how.value == "on") {
-            this.isOn = true;
-            this.lastOn = new Date();
-            // this.calcDrivetime(new Date());
-          } else this.isOn = false;
-        }
+      } else if (this.socketMsg.how.type == "passenger") {
+        var tpsng = this.socketMsg.how.current_passenger;
+        if (tpsng < 0) tpsng = 0;
+        this.psng = tpsng;
+        this.psngTemp = tpsng;
+        this.isStation = false;
+      } else if (this.socketMsg.how.type == "drive")
+        this.isAuto = this.socketMsg.how.value == "auto" ? 1 : 2;
+      else if (this.socketMsg.how.type == "parking")
+        this.isPark = this.socketMsg.how.value == "true" ? true : false;
+      else if (this.socketMsg.how.type == "power") {
+        if (this.socketMsg.how.value == "on") {
+          this.isOn = true;
+          this.lastOn = new Date();
+        } else this.isOn = false;
       } else if (
         this.socketMsg.how.type == "door" &&
         this.socketMsg.how.value == "false"
-      ) {
+      )
         this.getNewSt();
-      } else if (this.socketMsg.what == "PING") {
-        console.log(
-          new Date(this.socketMsg.when * 1000).getTime() -
-            new Date(this.lastPing).getTime()
-        );
-        this.lastPing = new Date(this.socketMsg.when * 1000);
-        console.log("ping!", new Date(this.lastPing));
-      }
     },
     stopReason: function() {
       var L = this.stopReason.length;
