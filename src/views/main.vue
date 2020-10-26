@@ -1089,6 +1089,9 @@ tr > .call-col4 {
   #main {
     height: 970px;
   }
+  #dashboard {
+    min-height: 900px;
+  }
   #oplog {
     height: 633px;
     top: calc(50vh - 350px);

@@ -578,29 +578,6 @@ let operateMixin = {
         .catch((err) => {
           console.log(err);
         });
-      this.$http
-        .get(this.$api + "oplogs/vehicle/" + this.selectedCar.id, {
-          headers: this.$headers,
-        })
-        .then((res) => {
-          var i = res.data.length;
-          if (i) {
-            var time = res.data[i - 1].time_start;
-            console.log(time);
-            time = time.split("-").join("/");
-            time = time.replace("T", " ");
-            time = time.replace("Z", "");
-            time = time.replace("+09:00", "");
-            this.lastOn = time;
-            this.calcDrivetime(time);
-          } else {
-            this.lastOn = " ";
-            this.drivetime = " ";
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
       this.isDash = false;
       this.dashboard = true;
     },
