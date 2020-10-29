@@ -117,7 +117,7 @@ export default {
         })
         .catch((err) => {
           this.errmsg1 = "일치하는 사용자가 없습니다.";
-          this.errmsg2 = "이름 또는 이메일 아이디를 확인해주세요.";
+          this.errmsg2 = "이메일 또는 비밀번호를 확인해주세요.";
           console.log(err);
         });
     },
