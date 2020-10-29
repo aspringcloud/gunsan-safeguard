@@ -184,7 +184,10 @@ let operateMixin = {
           ];
           console.log("cancel~!~!~!", this.cancelCall);
           this.calls.splice(this.callUidChain[this.socketMsg.how.uid], 1);
+          this.callsArrivalInfo[this.cancelCall.arrivalId].splice(this.callsArrivalInfo[this.cancelCall.arrivalId].indexOf(this.socketMsg.how.uid),1)
+          console.log("callsArrivalInfo",this.callsArrivalInfo)
           this.$session.set("calls", this.calls);
+          this.$session.set("callsArrivalInfo", this.callsArrivalInfo);
         }
       } else if (this.socketMsg.how.type == "passenger") {
         var tpsng = this.socketMsg.how.current_passenger;
@@ -308,7 +311,7 @@ let operateMixin = {
           //콜 도착 알림
           if (this.callsArrivalInfo[res.data.passed_station]) {
             for (var uid of this.callsArrivalInfo[res.data.passed_station]) {
-              this.sendCalltoSocket(uid, "end");
+              this.sendCalltoSocket(uid, res.data.passed_station, "end");
             }
           }
           this.getStation(res.data.passed_station);
@@ -377,7 +380,7 @@ let operateMixin = {
           console.log(err);
         });
     },
-    sendCalltoSocket(uid, status) {
+    sendCalltoSocket(uid, stID, status) {
       console.log("uid : ", uid, status);
       this.socket.send(
         JSON.stringify({
@@ -399,8 +402,11 @@ let operateMixin = {
       }
       //미탑승 or 도착
       else if (status != "go") {
+        console.log("확인해이애애애ㅔ0",stID)
         this.calls.splice(this.callUidChain[uid], 1);
+        this.callsArrivalInfo[stID] = []
         this.$session.set("calls", this.calls);
+        this.$session.set("callsArrivalInfo", this.callsArrivalInfo);
       }
     },
     timeFormatting(date) {

@@ -444,7 +444,7 @@
                       <button @click="sendCalltoSocket(row.uid, 'arrived')">
                         탑승 확인
                       </button>
-                      <button @click="sendCalltoSocket(row.uid, 'cancel_call')">
+                      <button @click="sendCalltoSocket(row.uid, row.arrivalId, 'cancel_call')">
                         미탑승
                       </button>
                     </td>
