@@ -441,7 +441,7 @@
                       탑승 완료
                     </td>
                     <td class="call-col4" v-if="row.status == 'go'">
-                      <button @click="sendCalltoSocket(row.uid, 'arrived')">
+                      <button @click="sendCalltoSocket(row.uid, '', 'arrived')">
                         탑승 확인
                       </button>
                       <button @click="sendCalltoSocket(row.uid, row.arrivalId, 'cancel_call')">
