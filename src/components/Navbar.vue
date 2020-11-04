@@ -103,7 +103,6 @@
 </template>
 <script>
 import navbarMixin from "@/components/navfunc.js";
-import "@/components/navbar.css";
 
 export default {
   name: "Navbar",
@@ -115,13 +114,30 @@ export default {
 .main-header {
   height: 68px;
   padding: 0 36px;
+  position: fixed;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f4f4f4;
+  box-shadow: 0px 0.5px 0px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(27.1828px);
 }
 .header-title {
+  font-weight: 500;
   font-size: 18px;
 }
 .header-right {
   display: inline-flex;
   align-items: center;
+}
+.header-title span {
+  font-weight: 800;
+  font-size: 24px;
+  font-family: "NanumSquareRound", sans-serif;
 }
 .header-right button {
   border: none;
@@ -184,8 +200,31 @@ export default {
   width: 270px;
   margin-bottom: 10px;
 }
+.setting-username {
+  font-weight: 500;
+  font-size: 16px;
+  color: #333333;
+  margin-bottom: 15px;
+}
 .setting-content {
+  width: 100%;
+  display: inline-flex;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-top: 30px;
+}
+.setting-content input {
+  background-color: #f8f8f8;
+  border: 0.2px solid #e0e0e0;
+  border-radius: 2px;
+  height: 30px;
+  color: #333333;
+}
+.setting-content input::placeholder {
+  color: #bdbdbd;
+  font-size: 12px;
 }
 .setting-content label {
   font-size: 13px;
@@ -193,7 +232,6 @@ export default {
   color: #555555;
   display: inline-block;
 }
-
 .input-box {
   width: 324px;
   display: flex;
@@ -210,6 +248,7 @@ export default {
   padding-left: 10px;
 }
 .errmsg-pos {
+  position: absolute;
   top: 149px;
   left: 132px;
   font-size: 12px;
@@ -221,6 +260,7 @@ export default {
   font-size: 12px;
   margin-top: 30px;
   margin-left: 102px;
+  color: #828282;
 }
 .setting-btn {
   margin-left: 102px;
@@ -234,8 +274,7 @@ export default {
   font-weight: 500;
   font-size: 13px;
 }
-
-@media (min-width: 601px) and (max-width: 960px) {
+@media (max-width: 960px) {
   .modalBox-setting {
     margin: 0 auto;
     top: 219px;

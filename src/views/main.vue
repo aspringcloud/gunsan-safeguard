@@ -2,81 +2,6 @@
   <div id="main" :class="{ 'bg-sub': dashboard }">
     <navbar :user="user"></navbar>
 
-    <!-- OPLOG!!!!20.07.10 -->
-    <div v-if="isOplog" class="modal-back oplog-back">
-      <div id="oplog">
-        <h1>운행기록</h1>
-        <div class="oplog-row">
-          <div class="oplog-box">
-            <div class="oplog-label">시작시간</div>
-            <input type="datetime-local" />
-          </div>
-          <div class="oplog-box">
-            <div class="oplog-label">종료시간</div>
-            <input type="datetime-local" />
-          </div>
-        </div>
-        <div class="oplog-row">
-          <div class="oplog-box">
-            <div class="oplog-label">주요이슈</div>
-            <select name id></select>
-          </div>
-          <div class="oplog-box">
-            <div class="oplog-label">주요질문</div>
-            <select name id></select>
-          </div>
-        </div>
-        <div class="oplog-row">
-          <div class="oplog-box two-box-container">
-            <div class="oplog-sbox">
-              <div class="oplog-label">주행거리</div>
-              <input type="number" id="driveDist" /> km
-            </div>
-            <div class="oplog-sbox totalpsng-box">
-              <div class="oplog-label">탑승객 수</div>
-              <input type="number" id="totalPsng" /> 명
-            </div>
-          </div>
-          <div class="oplog-box two-box-container">
-            <div class="oplog-sbox">
-              <div class="oplog-label">날씨</div>
-              <select name id="weather"></select>
-            </div>
-            <div class="oplog-sbox">
-              <div class="oplog-label">온도</div>
-              <input type="number" id="climate" /> ˚C
-            </div>
-          </div>
-        </div>
-        <div class="oplog-row">
-          <div class="oplog-box">
-            <div class="oplog-label">이벤트</div>
-            <select name id></select>
-          </div>
-          <div class="oplog-box two-box-container">
-            <div class="oplog-sbox">
-              <div class="oplog-label">DTG size</div>
-              <input type="number" id="DTG" class="sbox-input-wide" /> KB
-            </div>
-            <div class="oplog-sbox">
-              <div class="oplog-label">DVR size</div>
-              <input type="number" id="DVR" class="sbox-input-wide" /> GB
-            </div>
-          </div>
-        </div>
-        <div class="oplog-row">
-          <div class="textarea-box">
-            <div class="oplog-label">Task</div>
-            <textarea name id></textarea>
-          </div>
-        </div>
-        <div class="oplog-btn-container">
-          <button class="text-blue" @click="isOplog = false">취소</button>
-          <button class="text-white blue" @click="submitOplog">저장하기</button>
-        </div>
-      </div>
-    </div>
-
     <!-- 차량 선택 모달 -->
     <modal
       v-if="isDash"
@@ -235,7 +160,6 @@
               </div>
               <div class="msgTo-container">
                 <div class="site-box">{{ site.alias }} 통합관제</div>
-                <!-- <select name="msgTo" id="msgTo">사이트 통합관제</select> -->
                 <button @click="isMsg = true">메시지 보내기</button>
               </div>
             </div>
@@ -255,11 +179,9 @@
                   class="station-txt"
                   v-if="selectedCar.station && stationList"
                 >
-                  <!-- {{ stationList[selectedCar.station-1].name }} -->
                   {{ nowStation.name }}
                   <br />
                   {{ nowStation.mid }}
-                  <!-- {{ stationList[selectedCar.station-1].mid }} -->
                 </div>
                 <div class="empty-station-txt" v-else>
                   차량의 현재 위치를 선택하세요
@@ -336,21 +258,6 @@
         </div>
         <div class="dashboard-col2">
           <div class="box-default stopMsg-container">
-            <!-- <div class="dashboard-col2-row1">
-              <div class="box-title">구분</div>
-              <div class="dashboard-col2-btn-container">
-                <button
-                  @click="pickOpt('출발')"
-                  class="btn-toggle"
-                  :class="{'btn-toggle-active': stopOpt=='출발'}"
-                >출발</button>
-                <button
-                  @click="pickOpt('도착')"
-                  class="btn-toggle"
-                  :class="{'btn-toggle-active': stopOpt=='도착'}"
-                >도착</button>
-              </div>
-            </div>-->
             <div class="dashboard-col2-row2">
               <div class="box-title">정지사유</div>
               <div class="dashboard-col2-gunsan-container">
@@ -404,18 +311,15 @@
           </div>
           <div class="calltab-station-info">
             <div></div>
-            <!-- <div class="calltab-station-now-info" >{{stationList.length&&selectedCar.station?stationList[(Number(nowStation.sta_Order)+1)%7].name:''}}</div> -->
             <div class="calltab-station-now-info">
               {{ stationList[(Number(nowStation.sta_Order) % 7) + 1].name }}
             </div>
-            <!-- <div class="calltab-station-next-info">{{stationList[(Number(nowStation.sta_Order)+1)%stationList.length+1].name}}</div> -->
             <img src="@/assets/img/arrow_right.png" alt="left arrow" />
             <div class="calltab-station-next-info">
               {{
                 stationList[((Number(nowStation.sta_Order) + 1) % 7) + 1].name
               }}
             </div>
-            <!-- <div class="calltab-station-next-info">{{stationList[(Number(nowStation.sta_Order)+2)%stationList.length+1].name}}</div> -->
           </div>
         </div>
         <div class="calltab-call-container">
@@ -454,11 +358,13 @@
             </div>
           </div>
         </div>
+
         <cancel-call
           v-if="cancelCall"
           :call="cancelCall"
           @close="cancelCall = ''"
         ></cancel-call>
+
       </div>
     </div>
   </div>
@@ -469,7 +375,6 @@ import CancelCall from "@/components/cancelCall";
 import Modal from "@/components/modal";
 import Navbar from "@/components/Navbar";
 import operateMixin from "@/views/operate.js";
-import "@/views/main.css";
 
 export default {
   mixins: [operateMixin],
@@ -494,6 +399,12 @@ export default {
 }
 #dashboard {
   flex-direction: column;
+  background: #d8f1f9;
+  padding: 30px 0;
+  width: 100%;
+  min-width: max-content;
+  display: flex;
+  align-items: center;
 }
 .tab-container {
   display: flex;
@@ -705,15 +616,41 @@ tr > .call-col4 {
   min-width: 952px;
   height: 500px;
 }
+#selectCar {
+    width: 302px;
+    border: 1px solid #e0e0e0;
+    border-left: none;
+    border-right: none;
+    background-color: transparent;
+    height: 44px;
+    font-size: 16px;
+    color: #828282;
+    padding-left: 10px;
+    background: url("../assets/img/dropdown.png") no-repeat 95% 50%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+.selectCar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .selectCar-container img {
   margin-top: 34px;
   margin-right: 140px;
 }
 .selectCar-title {
   font-size: 34px;
+  font-weight: 500;
   margin-bottom: 46px;
 }
 #msgtxt {
+  border: none;
+  background: #fafafa;
+  box-shadow: inset -5px -5px 30px #ffffff, inset 4px 4px 8px #ededed;
+  border-radius: 4px;
+  resize: none;
   width: 463px;
   height: 148px;
   font-size: 18px;
@@ -722,12 +659,24 @@ tr > .call-col4 {
 }
 .msg-byte {
   width: 463px;
+  color: #828282;
+  font-size: 14px;
+  text-align: end;
 }
 .box-default {
   padding: 12px;
+  background: #ffffff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .box-title {
   font-size: 14px;
+  font-weight: 500;
+  color: #bdbdbd;
+  text-align: center;
 }
 .dashboard-col1 {
   display: flex;
@@ -791,6 +740,11 @@ tr > .call-col4 {
   top: 0;
   width: 182px;
   height: 86px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+  border-radius: 14px;
+  align-items: center;
 }
 .time {
   font-size: 36px;
@@ -939,6 +893,13 @@ tr > .call-col4 {
 }
 .btn-toggle {
   font-size: 16px;
+  background: #e0e0e0;
+  color: #333333;
+  font-weight: 500;
+}
+.btn-toggle-active {
+    background: #3bbae2;
+    color: #ffffff;
 }
 .dashboard-col1-row3 .btn-toggle {
   border-radius: 24px;
@@ -1005,86 +966,196 @@ tr > .call-col4 {
   left: 9px;
   top: 72px;
 }
+.errmsg-container .fade-enter-active,
+.errmsg-container .fade-leave-active {
+    transition: opacity 0.5s;
+}
+.errmsg-container .fade-enter,
+.errmsg-container .fade-leave-to {
+    opacity: 0;
+}
 .stopBtn {
   height: 42px;
+  width: 80px;
+  border: 0.5px solid #4f4f4f;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #4f4f4f;
+}
+.stopBtn:active {
+  border: none;
+  color: #ffffff;
+  background: #2e92b0;
+}
+.disabled-stopBtn,
+.disabled-stopBtn:active {
+    color: #bdbdbd;
+    background-color: #ffFFFf;
+    border: 0.5px solid #bdbdbd;
 }
 .site-box {
   width: 141px;
+  height: 34px;
+  background: #ffffff;
+  border: 0.5px solid #828282;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #333333;
+  text-align: center;
+  line-height: 34px;
 }
 .station-title {
+  display: flex;
+  align-items: center;
   justify-content: center;
   margin-bottom: 6px;
 }
+.station-title img {
+    margin-left: 4px;
+}
 .empty-station-txt {
+font-size: 14px;
+  text-decoration-line: underline;
+  color: #eb5757;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+}
+.station-txt {
   font-size: 14px;
+  line-height: 21px;
+  color: #333333;
 }
 .station-content {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 .station-content button {
+  width: 52px;
+  height: 32px;
+  color: #4f4f4f;
+  font-weight: 500;
+  font-size: 14px;
+  border: 0.5px solid #828282;
+  border-radius: 3px;
   margin-left: 10px;
+}
+.station-content button:active {
+  border: none;
+  color: #ffffff;
+  background: #2e92b0;
 }
 .passedst-modal h5 {
   font-size: 18px;
   height: 52px;
   line-height: 52px;
+  margin: 0 10px;
+  font-weight: 500;
+  color: #333333;
+  border-bottom: 0.5px solid #e0e0e0;
 }
 .passedst-select-container {
   height: 256px;
+  margin-top: 8px;
+  margin-bottom: 13px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 .passedst-select-list {
-  width: 310px;
   font-size: 16px;
+  text-align: center;
+  line-height: 48px;
+  width: 310px;
+  height: 48px;
+  position: relative;
+}
+.active-station {
+  background: #d8f1f9;
+}
+.hide-st {
+  display: none;
 }
 .reqst-stInfo {
   font-weight: 500;
   margin-top: 26px;
 }
 .msg-toast {
+  position: fixed;
+  background: #FFFFFF;
+  box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 24px 38px rgba(0, 0, 0, 0.14);
+  z-index: 10;
+  border-radius: 2px;
+  visibility: hidden;
+  opacity: 0;
   top: 204px;
   left: calc(50vw - 148px);
   width: 296px;
   height: 124px;
 }
+.show-msg-toast {
+  visibility: visible;
+  animation: fade 2s linear;
+}
+@keyframes fade {
+  0%,
+  100% {
+      opacity: 0
+  }
+
+  20%,
+  80% {
+      opacity: 1
+  }
+}
 .msg-toast h1 {
   height: 35px;
   line-height: 35px;
+  color: #3BBAE2;
+  font-weight: 500;
+  font-size: 14px;
+  padding-left: 13px;
+  border-bottom: 0.5px solid #3BBAE2;
+}
+.msg-toast span {
+  font-family: "NanumSquareRound", sans-serif;
+  font-weight: 800;
+  font-size: 16px;
 }
 .msg-toast div {
   font-size: 18px;
+  color: #333333;
+  text-align: center;
+  line-height: 89px;
 }
-#oplog {
-  padding: 13px 20px 0 20px;
-  width: 544px;
-  top: 30px;
-  left: calc(50vw - 272px);
-  height: 559px;
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
 }
-#oplog textarea {
-  height: 64px;
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
 }
-.oplog-row {
-  margin-top: 16px;
-  margin-bottom: 6px;
-  display: flex;
-  justify-content: space-between;
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #c4c4c4;
+    border-radius: 2px;
 }
-.totalpsng-box {
-  margin-right: 47px;
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #828282;
 }
-.oplog-btn-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+::-webkit-calendar-picker-indicator {
+    background: url("../assets/img/calendar.png") no-repeat;
+    cursor: pointer;
 }
-.oplog-btn-container button {
-  height: 60px;
-  font-size: 18px;
-}
-.oplog-label {
-  margin-bottom: 6px;
-}
+
 @media (max-width: 900px) {
   #main {
     height: 970px;
@@ -1102,6 +1173,8 @@ tr > .call-col4 {
   .msg-toast {
     top: 345px;
   }
+  
+
   .selectCar-container {
     flex-direction: column;
     align-items: center;
