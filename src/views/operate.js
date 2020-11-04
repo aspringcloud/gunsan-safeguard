@@ -127,37 +127,6 @@ let operateMixin = {
     }
   },
   watch: {
-    tasioStatus: function() {
-      var msg = {
-        who: "safeGuard",
-        what: "EVENT",
-        how: {
-          type: "ondemand",
-          vehicle_id: this.selectedCar.id,
-          function: "go",
-          uid: this.tasioInfo.uid,
-          passenger: "명수",
-        },
-      };
-      if (this.tasioStatus == "go") {
-        this.$session.set("tasioStatus", "go");
-        this.socket.send(JSON.stringify(msg));
-        console.log("여기!!!go!!", msg);
-      } else if (this.tasioStatus == "toEnd") {
-        msg.how.function = "arrived";
-        this.socket.send(JSON.stringify(msg));
-        console.log(msg);
-      } else if (this.tasioStatus == false) {
-        this.tasioInfo = false;
-      } else if (this.tasioStatus == "noRide") {
-        msg.how.function = "cancel_call";
-        this.socket.send(JSON.stringify(msg));
-        this.isTasioToast = true;
-        setTimeout(() => (this.isTasioToast = false), 2000);
-        this.tasioStatus = "sentCancel";
-        console.log("미탑승", msg);
-      }
-    },
     socketMsg: function() {
       console.log(this.socketMsg);
       if (this.socketMsg.what == "PING") {
@@ -402,7 +371,6 @@ let operateMixin = {
       }
       //미탑승 or 도착
       else if (status != "go") {
-        console.log("확인해이애애애ㅔ0",stID)
         this.calls.splice(this.callUidChain[uid], 1);
         this.callsArrivalInfo[stID] = []
         this.$session.set("calls", this.calls);

@@ -1,132 +1,27 @@
 <template>
   <div id="resetpw" class="login">
-    <button class="btn-back" @click="goback()"></button>
+    <a class="btn-back" @click="$router.push({ name: 'Login' })"></a>
     <div>
       <div class="text-blue resetpw-title1">SpringGo</div>
       <div class="text-blue resetpw-title2">비밀번호 재설정</div>
     </div>
-    <!-- <div class="mobile-justify"> -->
     <div class="resetpw-txt text-gray2">
       임시비밀번호 발급을 원하시면<br />
       bcchoi@aspringcloud.com 으로<br />
       이메일 아이디, 이름을 보내주시기 바랍니다.
     </div>
-    <!-- <div class="login-form">
-        <form @submit.prevent="resetpw">
-          <label for="name" class="text-gray2">이름</label>
-          <input
-            v-model="username"
-            type="text"
-            id="username"
-            name="username"
-            placeholder="이름을 입력해주세요."
-          />
-          <label for="emailID" class="text-gray2">이메일 아이디</label>
-          <input
-            v-model="email"
-            id="emailID"
-            type="text"
-            name="emailID"
-            placeholder="이메일 아이디를 입력해주세요."
-          />
-          <button type="submit" class="login-btn resetpw-btn-pos">
-            임시 비밀번호 받기
-          </button>
-        </form>
-      </div>
-      <div class="errmsg resetpw-errmsg">
-        {{ errmsg1 }}
-        <br />
-        {{ errmsg2 }}
-      </div>
-    </div>
-    <div v-if="!resetpage">
-      <div class="resetpw2-txt text-gray2">
-        <span>{{ email }}</span> 으로 <br />임시 비밀번호를 발송하였습니다.
-      </div>
-      <button @click="goLogin()" class="login-btn resetpw2-btn-pos">
-        로그인 하기
-      </button>
-    </div> -->
-    <!-- </div> -->
     <div class="copyright">Copyright ⓒ GUNSANCITY. All right reserved</div>
   </div>
 </template>
 <script>
-import axios from "axios";
-import router from "../router";
 export default {
   name: "respetpw",
-  data() {
-    return {
-      username: "",
-      email: "",
-      errmsg1: "",
-      errmsg2: "",
-      resetpage: true,
-    };
-  },
-  methods: {
-    resetpw() {
-      var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-      if (!this.email) {
-        this.errmsg1 = "이메일 아이디를 입력해주세요.";
-        this.errmsg2 = "";
-        return;
-      } else if (!this.email.match(regExp)) {
-        this.errmsg1 = "이메일 아이디를 올바르게 입력해주세요.";
-        this.errmsg2 = "";
-        return;
-      } else if (!this.username) {
-        this.errmsg1 = "이름을 입력해주세요.";
-        this.errmsg2 = "";
-        return;
-      } else if (this.username == "admin1@aspringcloud.com") {
-        this.errmsg1 = "해당 계정은 개발자에게 문의해주세요.";
-        this.errmsg2 = "";
-      } else {
-        // alert("API(이름,이메일 검증, 메일발송) 확인 필요");
-        axios
-          .post(
-            "http://115.93.143.2:9103/api/users/resetpassword/",
-            { email: this.email },
-            {
-              headers: {
-                authorization:
-                  "Basic YWRtaW4xQGFzcHJpbmdjbG91ZC5jb206c3ByaW5nIzAwNw==",
-              },
-            }
-          )
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            alert(err, "관리자에게 문의해주세요.");
-            console.log(err);
-          });
-        this.resetpage = false;
-      }
-    },
-    goback() {
-      if (this.resetpage) {
-        router.push({ name: "Login" });
-      } else if (!this.resetpage) {
-        this.username = "";
-        this.email = "";
-        this.errmsg1 = "";
-        this.errmsg2 = "";
-        this.resetpage = true;
-      }
-    },
-    goLogin() {
-      router.push({ name: "Login" });
-    },
-  },
 };
 </script>
 <style>
 .btn-back {
   background-color: transparent;
+  cursor: pointer;
   border: none;
   position: absolute;
   top: 11px;
@@ -156,38 +51,7 @@ export default {
   text-align: center;
   color: #4f4f4f;
 }
-@media (max-width: 600px) {
-  .btn-back {
-    top: 21px;
-    left: 24px;
-    background-image: url("../assets/img/back_mobile.png");
-    width: 18px;
-    height: 14px;
-  }
-  .btn-back img {
-    width: 18px;
-    height: 14px;
-  }
-  .resetpw-title1 {
-    margin-top: 46px;
-  }
-  .resetpw-title2 {
-    font-size: 24px;
-    margin-top: 12px;
-  }
-  .resetpw-txt {
-    text-align: center;
-    font-weight: normal;
-    font-size: 14px;
-  }
-  .mobile-justify {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-@media (min-width: 601px) and (max-width: 960px) {
+@media (max-width: 960px) {
   .btn-back {
     top: 60px;
     width: 25px;

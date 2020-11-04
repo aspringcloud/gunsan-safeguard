@@ -1,5 +1,5 @@
 <template>
-  <div id="login" class="login">
+  <div id="login">
     <div class="login-logos">
       <img src="@/assets/img/logo_gs.png" alt="군산시 로고" />
       <img src="@/assets/img/Logo_SC.png" alt="스프링클라우드 로고" />
@@ -42,7 +42,6 @@
   </div>
 </template>
 <script>
-import router from "../router";
 
 export default {
   name: "login",
@@ -51,9 +50,6 @@ export default {
     user: {
       email: "",
       pw: "",
-      username: "",
-      first_name: "",
-      last_name: "",
       token: "",
       basic: "",
     },
@@ -113,7 +109,7 @@ export default {
           this.$session.set("user", this.user);
           this.$headers.authorization = "Basic " + this.user.basic;
 
-          router.push({ name: "Main" });
+          this.$router.push({ name: "Main" });
         })
         .catch((err) => {
           this.errmsg1 = "일치하는 사용자가 없습니다.";
@@ -125,7 +121,7 @@ export default {
 };
 </script>
 <style>
-.login {
+#login {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -266,52 +262,8 @@ input[id="saveID"]:checked + label:before {
   margin-left: auto;
   text-align: center;
 }
-/* 모바일 */
-@media (max-width: 600px) {
-  .login-logos {
-    margin-top: 71px;
-  }
-  .login-title2 {
-    font-size: 16px;
-    margin-bottom: 64px;
-  }
-  .login-form input {
-    width: 311px;
-    height: 48px;
-  }
-  .login-btn {
-    width: 311px;
-    height: 50px;
-    font-weight: normal;
-  }
-  .login-btn-pos {
-    margin-top: 51px;
-  }
-  .login-chkandpw {
-    width: 311px;
-    font-size: 13px;
-    top: 455px;
-  }
-  .login-chkbox {
-    font-weight: normal;
-  }
-  .login-errmsg {
-    top: 551px;
-    width: 311px;
-    font-size: 13px;
-  }
-  .join {
-    display: none;
-  }
-  .copyright {
-    top: 688px;
-    font-size: 10px;
-    margin-bottom: 14px;
-    width: 311px;
-  }
-}
 /* 태블릿 세로 */
-@media (min-width: 601px) and (max-width: 960px) {
+@media (max-width: 960px) {
   .login-logos {
     margin-top: 200px;
   }

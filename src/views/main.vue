@@ -1085,7 +1085,7 @@ tr > .call-col4 {
 .oplog-label {
   margin-bottom: 6px;
 }
-@media (min-width: 601px) and (max-width: 900px) {
+@media (max-width: 900px) {
   #main {
     height: 970px;
   }
