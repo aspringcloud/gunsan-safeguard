@@ -13,11 +13,7 @@ let operateMixin = {
       lon: "",
       site: "",
     },
-    isTasioToast: false,
     lastPing: false,
-    tasioStatus: false,
-    tasioInfo: false,
-    isOplog: false,
     stationList: {},
     stModal: false,
     nowSt: false,
@@ -73,7 +69,6 @@ let operateMixin = {
     msgbyte: 0,
     today: "",
     clock: "",
-    windowWidth: 0,
     psngTemp: 0,
     stopSMsg: "",
     stopEMsg: "",
@@ -81,7 +76,6 @@ let operateMixin = {
     stopReason: "",
     stopReasonL: 0,
     stopOptList: ["차", "사람", "환경요소", "오류", "기타"],
-    ver: "",
     socket: false,
     status: false,
     socketMsg: "",
@@ -98,9 +92,6 @@ let operateMixin = {
     this.connectSocket();
     if (this.$session.exists()) {
       this.user = this.$session.get("user");
-
-      console.log("here", this.$session.get("user").info);
-
       this.$headers.authorization = "Basic " + this.$session.get("user").basic;
       this.getStationListGunsan();
       if (this.$session.get("selectedCar")) {
@@ -119,12 +110,6 @@ let operateMixin = {
       }
     }
     setInterval(this.showClock, 1000);
-    this.windowWidth = window.innerWidth;
-    if (this.windowWidth < 900) {
-      this.ver = "pad ver";
-    } else {
-      this.ver = "pad hor";
-    }
   },
   watch: {
     socketMsg: function() {
@@ -214,21 +199,8 @@ let operateMixin = {
       }
       if (!this.selectedCar.station) this.selectedCar.station = false;
     },
-    windowWidth: function() {
-      if (this.windowWidth < 900) {
-        this.ver = "pad verti";
-      } else {
-        this.ver = "pad hori";
-      }
-    },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      window.addEventListener("resize", this.onResize);
-    });
   },
   beforeDestroy() {
-    window.removeEventListener("resize", this.onResize);
     clearInterval(this.showClock);
     if (this.socket) {
       this.socket.close();
@@ -291,7 +263,6 @@ let operateMixin = {
         })
         .catch((err) => {
           console.log(err);
-          // alert("station 정보 api 오류입니다. 새로고침 해주세요.")
         });
     },
     convertCallInfo(msg) {
@@ -403,7 +374,6 @@ let operateMixin = {
           headers: this.$headers,
         })
         .then((res) => {
-          // this.stationList = res.data;
           for (var station of res.data) {
             if (station.site == 1) {
               this.stationList[station.sta_Order] = station;
@@ -442,9 +412,6 @@ let operateMixin = {
           this.stModal = false;
         });
     },
-    updateTasio(status) {
-      this.tasioStatus = status;
-    },
     getbyte() {
       var str = document.getElementById("msgtxt").value;
       document.getElementById("msgtxt").value = this.calcbyte(200, str);
@@ -464,14 +431,9 @@ let operateMixin = {
         console.log(err);
       };
     },
-    onResize() {
-      this.windowWidth = window.innerWidth;
-    },
     resetCar() {
       this.selectedCar = "";
       this.isDash = false;
-      // this.socket.close();
-      // console.log("socket close");
       this.status = false;
     },
     getStation(id) {
@@ -567,12 +529,6 @@ let operateMixin = {
     },
     showClock() {
       var now = new Date();
-
-      //socket 재 연결
-      // if (this.socket && now.getTime() - new Date(this.lastPing).getTime() > 70000)
-      // this.connectSocket();
-      // alert("웹소켓 연결이 끊어졌습니다. 새로고침해주세요.")
-
       var day = now.getDay();
       var week = ["일", "월", "화", "수", "목", "금", "토"];
       this.today =
