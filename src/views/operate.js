@@ -130,6 +130,7 @@ let operateMixin = {
         this.socketMsg.how.site_id == this.site.id
       ) {
         if (this.socketMsg.how.function == "call") {
+          this.playAudio();
           alert("신규 배차 등록")
           this.convertCallInfo(this.socketMsg.how);
         } else if (this.socketMsg.how.function == "cancel_call") {
@@ -140,7 +141,7 @@ let operateMixin = {
           console.log("cancel~!~!~!", this.cancelCall);
           this.calls.splice(this.callUidChain[this.socketMsg.how.uid], 1);
           this.callsArrivalInfo[this.cancelCall.arrivalId].splice(this.callsArrivalInfo[this.cancelCall.arrivalId].indexOf(this.socketMsg.how.uid),1)
-          console.log("callsArrivalInfo",this.callsArrivalInfo)
+          // console.log("callsArrivalInfo",this.callsArrivalInfo)
           this.$session.set("calls", this.calls);
           this.$session.set("callsArrivalInfo", this.callsArrivalInfo);
         }
@@ -226,6 +227,10 @@ let operateMixin = {
     },
   },
   methods: {
+    playAudio(){
+      var audio = document.getElementById('audio')
+      audio.play();
+    },
     getLatnLon() {
       this.$http
         .get(this.$api + "vehicles/" + this.selectedCar.id, {
@@ -322,7 +327,7 @@ let operateMixin = {
         });
     },
     sendCalltoSocket(uid, stID, status) {
-      console.log("uid : ", uid, status);
+      // console.log("uid : ", uid, status);
       this.socket.send(
         JSON.stringify({
           who: "safeGuard",
@@ -444,7 +449,7 @@ let operateMixin = {
           headers: this.$headers,
         })
         .then((res) => {
-          console.log("d", res.data);
+          // console.log("d", res.data);
           this.nowStation.name = res.data.name;
           this.nowStation.mid = res.data.mid;
           this.nowStation.lat = res.data.lat;

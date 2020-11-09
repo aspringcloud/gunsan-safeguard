@@ -115,6 +115,7 @@
     </div>
 
     <div id="dashboard" v-else>
+        <audio preload id="audio" src="../assets/audio/alarm.mp3" type="audio/mpeg"/>
       <div class="tab-container">
         <button
           @click="tabFirst = true"
