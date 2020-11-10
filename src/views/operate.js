@@ -80,6 +80,7 @@ let operateMixin = {
     status: false,
     socketMsg: "",
     isMsgToast: false,
+    callModal:false,
   }),
   beforeCreate() {
     if (!this.$session.get("user")) {
@@ -132,7 +133,8 @@ let operateMixin = {
         if (this.socketMsg.how.function == "call") {
           this.convertCallInfo(this.socketMsg.how);
           this.playAudio();
-          alert("신규 배차 등록")
+          // alert("신규 배차 등록")
+          this.callModal = true;
         } else if (this.socketMsg.how.function == "cancel_call") {
           console.log(this.calls[this.callUidChain[this.socketMsg.how.uid]]);
           this.cancelCall = this.calls[

@@ -53,11 +53,19 @@
         <div class="msg-byte">{{ msgbyte }}/200bytes</div>
       </template>
     </modal>
+    
     <div class="msg-toast" :class="{ 'show-msg-toast': isMsgToast }">
       <h1><span>SpringGo</span> 안전요원</h1>
       <div>메시지를 전송했습니다.</div>
     </div>
 
+    <!-- 배차 모달 -->
+    <modal v-if="callModal">
+      <template #content>신규 배차 등록</template>
+      <template #btn>
+        <button @click="callModal=false" class="blue text-white" style="width:100%">확인</button>
+      </template>
+    </modal>
     <!-- passed station modal -->
     <modal class="passedst-modal" v-if="stModal" width="330px" height="391px">
       <template #content>
