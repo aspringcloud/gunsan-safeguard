@@ -80,7 +80,7 @@ let operateMixin = {
     status: false,
     socketMsg: "",
     isMsgToast: false,
-    callModal:true,
+    callModal:false,
     audio:'',
   }),
   beforeCreate() {
