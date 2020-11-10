@@ -80,7 +80,8 @@ let operateMixin = {
     status: false,
     socketMsg: "",
     isMsgToast: false,
-    callModal:false,
+    callModal:true,
+    audio:'',
   }),
   beforeCreate() {
     if (!this.$session.get("user")) {
@@ -90,6 +91,7 @@ let operateMixin = {
     }
   },
   created() {
+    this.audio = new Audio(require('@/assets/audio/alarm.mp3'));
     this.connectSocket();
     if (this.$session.exists()) {
       this.user = this.$session.get("user");
@@ -132,7 +134,8 @@ let operateMixin = {
       ) {
         if (this.socketMsg.how.function == "call") {
           this.convertCallInfo(this.socketMsg.how);
-          this.showCallModal();
+          this.audio.play()
+          this.callModal = true;
           // alert("신규 배차 등록")
         } else if (this.socketMsg.how.function == "cancel_call") {
           console.log(this.calls[this.callUidChain[this.socketMsg.how.uid]]);
@@ -228,11 +231,6 @@ let operateMixin = {
     },
   },
   methods: {
-    showCallModal(){
-      var audio = document.getElementById('audio')
-      audio.play();
-      this.callModal = true;
-    },
     getLatnLon() {
       this.$http
         .get(this.$api + "vehicles/" + this.selectedCar.id, {
