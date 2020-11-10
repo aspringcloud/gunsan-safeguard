@@ -130,9 +130,9 @@ let operateMixin = {
         this.socketMsg.how.site_id == this.site.id
       ) {
         if (this.socketMsg.how.function == "call") {
+          this.convertCallInfo(this.socketMsg.how);
           this.playAudio();
           alert("신규 배차 등록")
-          this.convertCallInfo(this.socketMsg.how);
         } else if (this.socketMsg.how.function == "cancel_call") {
           console.log(this.calls[this.callUidChain[this.socketMsg.how.uid]]);
           this.cancelCall = this.calls[
