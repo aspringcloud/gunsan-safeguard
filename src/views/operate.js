@@ -661,7 +661,7 @@ let operateMixin = {
       }
     },
     savePsng() {
-      if (this.psngTemp >= 7) {
+      if (this.psngTemp >= 8) {
         alert("탑승객 수를 확인해주세요.");
         this.psngTemp = this.psng;
         return;
@@ -720,7 +720,7 @@ let operateMixin = {
     },
     increase() {
       this.psngTemp = parseInt(this.psngTemp);
-      if (this.psngTemp < 6) {
+      if (this.psngTemp < 7) {
         this.psngTemp += 1;
       } else alert("입력값이 초과되었습니다.");
     },
