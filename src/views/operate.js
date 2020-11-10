@@ -132,9 +132,8 @@ let operateMixin = {
       ) {
         if (this.socketMsg.how.function == "call") {
           this.convertCallInfo(this.socketMsg.how);
-          this.playAudio();
+          this.showCallModal();
           // alert("신규 배차 등록")
-          this.callModal = true;
         } else if (this.socketMsg.how.function == "cancel_call") {
           console.log(this.calls[this.callUidChain[this.socketMsg.how.uid]]);
           this.cancelCall = this.calls[
@@ -229,9 +228,10 @@ let operateMixin = {
     },
   },
   methods: {
-    playAudio(){
+    showCallModal(){
       var audio = document.getElementById('audio')
       audio.play();
+      this.callModal = true;
     },
     getLatnLon() {
       this.$http

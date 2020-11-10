@@ -1,6 +1,8 @@
 <template>
   <div id="main" :class="{ 'bg-sub': dashboard }">
     <navbar :user="user"></navbar>
+    <audio preload id="audio" src="../assets/audio/alarm.mp3" type="audio/mpeg"/>
+
 
     <!-- 차량 선택 모달 -->
     <modal
@@ -123,7 +125,6 @@
     </div>
 
     <div id="dashboard" v-else>
-        <audio preload id="audio" src="../assets/audio/alarm.mp3" type="audio/mpeg"/>
       <div class="tab-container">
         <button
           @click="tabFirst = true"
