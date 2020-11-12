@@ -398,6 +398,12 @@ let operateMixin = {
           console.log("station 변경", res);
           if (res.data.passed_station == this.nowSt.id) {
             this.selectedCar.station = this.nowSt.id;
+            //콜 도착 알림
+            if (this.callsArrivalInfo[res.data.passed_station]) {
+              for (var uid of this.callsArrivalInfo[res.data.passed_station]) {
+                this.sendCalltoSocket(uid, res.data.passed_station, "end");
+              }
+            }
             this.$session.set("selectedCar", this.selectedCar);
             this.getStation(this.nowSt.id);
             this.nowSt = false;
