@@ -318,7 +318,8 @@ let operateMixin = {
         });
     },
     sendCalltoSocket(uid, stID, status) {
-      // console.log("uid : ", uid, status);
+      console.log("uid : ", uid, status);
+      console.log("hreeeeeeeeeeeeee",this.calls[uid])
       this.socket.send(
         JSON.stringify({
           who: "safeGuard",
