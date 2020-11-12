@@ -2,9 +2,8 @@ let operateMixin = {
   data: () => ({
     cancelCall: "",
     isLoading: true,
-    callUidChain: {},
     callsArrivalInfo: {},
-    calls: [],
+    calls: {},
     nowStation: {
       id: "",
       name: "",
@@ -106,9 +105,8 @@ let operateMixin = {
         if (this.isOn) this.calcDrivetime(this.lastOn);
       }
       if (this.$session.get("site")) this.site = this.$session.get("site");
-      if (this.$session.get("calls") && this.$session.get("calls").length) {
+      if (this.$session.get("calls")) {
         this.calls = this.$session.get("calls");
-        this.callUidChain = this.$session.get("callUidChain");
         this.callsArrivalInfo = this.$session.get("callsArrivalInfo");
       }
     }
@@ -138,14 +136,10 @@ let operateMixin = {
           this.callModal = true;
           // alert("신규 배차 등록")
         } else if (this.socketMsg.how.function == "cancel_call") {
-          console.log(this.calls[this.callUidChain[this.socketMsg.how.uid]]);
-          this.cancelCall = this.calls[
-            this.callUidChain[this.socketMsg.how.uid]
-          ];
+          this.cancelCall = this.calls[this.socketMsg.how.uid]
           console.log("cancel~!~!~!", this.cancelCall);
-          this.calls.splice(this.callUidChain[this.socketMsg.how.uid], 1);
+          delete this.calls[this.socketMsg.how.uid];
           this.callsArrivalInfo[this.cancelCall.arrivalId].splice(this.callsArrivalInfo[this.cancelCall.arrivalId].indexOf(this.socketMsg.how.uid),1)
-          // console.log("callsArrivalInfo",this.callsArrivalInfo)
           this.$session.set("calls", this.calls);
           this.$session.set("callsArrivalInfo", this.callsArrivalInfo);
         }
@@ -285,9 +279,7 @@ let operateMixin = {
             .then((res2) => {
               console.log(res1);
               console.log(res2);
-              this.callUidChain[msg.uid] = this.calls.length;
-              this.calls.push({
-                uid: msg.uid,
+              this.calls[msg.uid] = {
                 passenger: msg.passenger,
                 passenger_name: msg.passenger_name,
                 departName: res1.data.name,
@@ -295,7 +287,7 @@ let operateMixin = {
                 arrivalName: res2.data.name,
                 status: "go",
                 when: this.timeFormatting(new Date()),
-              });
+              };
               this.socket.send(
                 JSON.stringify({
                   who: "safeGuard",
@@ -313,7 +305,6 @@ let operateMixin = {
                 this.callsArrivalInfo[msg.target_station_id].push(msg.uid);
               else this.callsArrivalInfo[msg.target_station_id] = [msg.uid];
               this.$session.set("callsArrivalInfo", this.callsArrivalInfo);
-              this.$session.set("callUidChain", this.callUidChain);
               this.$session.set("calls", this.calls);
             })
             .catch((err) => {
@@ -337,18 +328,18 @@ let operateMixin = {
             vehicle_id: this.selectedCar.id,
             function: status,
             uid: uid,
-            passenger: this.calls[this.callUidChain[uid]].passenger,
+            passenger: this.calls[uid].passenger,
           },
         })
       );
       //출발지 도착 + 탑승
       if (status == "arrived") {
-        this.calls[this.callUidChain[uid]].status = "arrived";
+        this.calls[uid].status = "arrived";
         this.$session.set("calls", this.calls);
       }
       //미탑승 or 도착
       else if (status != "go") {
-        this.calls.splice(this.callUidChain[uid], 1);
+        delete this.calls[uid]
         this.callsArrivalInfo[stID] = []
         this.$session.set("calls", this.calls);
         this.$session.set("callsArrivalInfo", this.callsArrivalInfo);
