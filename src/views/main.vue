@@ -367,11 +367,35 @@
           </div>
         </div>
 
-        <cancel-call
-          v-if="cancelCall"
-          :call="cancelCall"
-          @close="cancelCall = ''"
-        ></cancel-call>
+        <modal v-if="cancelCall" width="385px" height="314px">
+          <template #content>
+            <h1 class="cancel-title">배차 요청 취소 알림</h1>
+            <div class="cancel-txt">
+              <span class="bold">{{ cancelCall.when }}</span>에 발생한 <br />배차 요청이
+              <span class="errmsg">탑승자에 의해 취소</span>됐습니다.
+            </div>
+            <div class="cancel-info-container">
+              <div>
+                <div class="cancel-content-title">
+                  출발
+                  <span class="cancel-content-default">{{ cancelCall.departName }}</span>
+                </div>
+
+                <div class="cancel-content-title">
+                  도착
+                  <span class="cancel-content-default">{{ cancelCall.arrivalName }}</span>
+                </div>
+              </div>
+              <div>
+                <div class="cancel-content-title">인원</div>
+                <div class="cancel-content-default">{{ cancelCall.passenger }}</div>
+              </div>
+            </div>
+          </template>
+          <template #btn>
+            <button @click="cancelCall = ''" class="blue text-white" style="width:100%">확인</button>
+          </template>
+        </modal>
 
       </div>
     </div>
@@ -379,7 +403,6 @@
 </template>
 
 <script>
-import CancelCall from "@/components/cancelCall";
 import Modal from "@/components/modal";
 import Navbar from "@/components/Navbar";
 import operateMixin from "@/views/operate.js";
@@ -387,7 +410,7 @@ import operateMixin from "@/views/operate.js";
 export default {
   mixins: [operateMixin],
   name: "Main",
-  components: { Modal, Navbar, CancelCall },
+  components: { Modal, Navbar },
   data() {
     return {
       tabFirst: false,
@@ -521,12 +544,12 @@ export default {
   padding-top: 60px;
 }
 .calltab-call-box {
-  max-height: 598px;
+  max-height: 312px;
   overflow-y: auto;
 }
 .calltab-call-container {
   width: 568px;
-  height: 658px;
+  height: 372px;
   background: #ffffff;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
@@ -1239,5 +1262,46 @@ font-size: 14px;
   .dashboard-col2-gunsan-container .btn-toggle {
     width: 100px;
   }
+  .calltabo-call-box {
+    max-height: 598px;
+  }
+  .calltab-call-container {
+    height: 658px;
+  }
+}
+
+.cancel-title {
+  width: 345px;
+  font-weight: 500;
+  font-size: 18px;
+  color: #333333;
+  margin-top: -10px;
+  padding: 0 0 13px 9px;
+  border-bottom: 0.5px solid #e0e0e0;
+}
+.cancel-txt {
+  text-align: center;
+  font-size: 18px;
+  padding: 24px 0;
+}
+.cancel-info-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 15px;
+}
+.cancel-info-container span{
+  margin-left: 10px;
+}
+.cancel-content-title {
+  color: #bdbdbd;
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+.cancel-content-default {
+  font-weight: 500;
+  font-size: 18px;
+  color: #333333;
 }
 </style>
