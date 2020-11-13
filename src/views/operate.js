@@ -254,7 +254,7 @@ let operateMixin = {
           if (this.callsArrivalInfo[res.data.passed_station]) {
             for (var uid of this.callsArrivalInfo[res.data.passed_station]) {
               for(var idx in this.calls){
-                if(this.calls[idx].uid==uid) 
+                if(this.calls[idx].uid==uid && this.calls[idx].status=='arrived') 
                   this.sendCalltoSocket(uid,res.data.passed_station,'end',idx )
               }
             }
@@ -407,10 +407,14 @@ let operateMixin = {
           if (res.data.passed_station == this.nowSt.id) {
             this.selectedCar.station = this.nowSt.id;
             //콜 도착 알림
+            console.log("여기",res.data.passed_station)
+
             if (this.callsArrivalInfo[res.data.passed_station]) {
               for (var uid of this.callsArrivalInfo[res.data.passed_station]) {
                 for(var idx in this.calls){
-                  if(this.calls[idx].uid==uid) 
+                  console.log('idx',idx)
+                  console.log('call', this.calls[idx])
+                  if(this.calls[idx].uid==uid && this.calls[idx].status=='arrived') 
                     this.sendCalltoSocket(uid,res.data.passed_station,'',idx )
                 }
               }
