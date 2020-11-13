@@ -1,9 +1,10 @@
 let operateMixin = {
   data: () => ({
+    callsList:[],
     cancelCall: "",
     isLoading: true,
     callsArrivalInfo: {},
-    calls: {},
+    calls: [],
     nowStation: {
       id: "",
       name: "",
@@ -134,11 +135,10 @@ let operateMixin = {
           this.convertCallInfo(this.socketMsg.how);
           this.audio.play()
           this.callModal = true;
-          // alert("신규 배차 등록")
         } else if (this.socketMsg.how.function == "cancel_call") {
-          this.cancelCall = this.calls[this.socketMsg.how.uid]
+          this.cancelCall = this.calls[this.getCallIdx(this.socketMsg.how.uid)]
           console.log("cancel~!~!~!", this.cancelCall);
-          delete this.calls[this.socketMsg.how.uid];
+          this.calls.splice(this.getCallIdx(this.socket.how.uid),1)
           this.callsArrivalInfo[this.cancelCall.arrivalId].splice(this.callsArrivalInfo[this.cancelCall.arrivalId].indexOf(this.socketMsg.how.uid),1)
           this.$session.set("calls", this.calls);
           this.$session.set("callsArrivalInfo", this.callsArrivalInfo);
@@ -199,6 +199,7 @@ let operateMixin = {
       }
       if (!this.selectedCar.station) this.selectedCar.station = false;
     },
+    
   },
   beforeDestroy() {
     clearInterval(this.showClock);
@@ -252,7 +253,10 @@ let operateMixin = {
           //콜 도착 알림
           if (this.callsArrivalInfo[res.data.passed_station]) {
             for (var uid of this.callsArrivalInfo[res.data.passed_station]) {
-              this.sendCalltoSocket(uid, res.data.passed_station, "end");
+              for(var idx in this.calls){
+                if(this.calls[idx].uid==uid) 
+                  this.sendCalltoSocket(uid,res.data.passed_station,'end',idx )
+              }
             }
           }
           this.getStation(res.data.passed_station);
@@ -279,7 +283,8 @@ let operateMixin = {
             .then((res2) => {
               console.log(res1);
               console.log(res2);
-              this.calls[msg.uid] = {
+              this.calls.push({
+                uid: msg.uid,
                 passenger: msg.passenger,
                 passenger_name: msg.passenger_name,
                 departName: res1.data.name,
@@ -287,7 +292,7 @@ let operateMixin = {
                 arrivalName: res2.data.name,
                 status: "go",
                 when: this.timeFormatting(new Date()),
-              };
+              });
               this.socket.send(
                 JSON.stringify({
                   who: "safeGuard",
@@ -317,9 +322,7 @@ let operateMixin = {
           console.log(err);
         });
     },
-    sendCalltoSocket(uid, stID, status) {
-      console.log("uid : ", uid, status);
-      console.log("hreeeeeeeeeeeeee",this.calls[uid])
+    sendCalltoSocket(uid, stID, status, idx) {
       this.socket.send(
         JSON.stringify({
           who: "safeGuard",
@@ -329,21 +332,26 @@ let operateMixin = {
             vehicle_id: this.selectedCar.id,
             function: status,
             uid: uid,
-            passenger: this.calls[uid].passenger,
+            passenger: this.calls[idx].passenger,
           },
         })
       );
       //출발지 도착 + 탑승
       if (status == "arrived") {
-        this.calls[uid].status = "arrived";
+        this.calls[idx].status = "arrived";
         this.$session.set("calls", this.calls);
       }
       //미탑승 or 도착
       else if (status != "go") {
-        delete this.calls[uid]
+        this.calls.splice(idx,1)
         this.callsArrivalInfo[stID] = []
         this.$session.set("calls", this.calls);
         this.$session.set("callsArrivalInfo", this.callsArrivalInfo);
+      }
+    },
+    getCallIdx(uid){
+      for(var idx of this.calls){
+        if (this.calls[idx].uid==uid) return idx 
       }
     },
     timeFormatting(date) {
@@ -401,7 +409,10 @@ let operateMixin = {
             //콜 도착 알림
             if (this.callsArrivalInfo[res.data.passed_station]) {
               for (var uid of this.callsArrivalInfo[res.data.passed_station]) {
-                this.sendCalltoSocket(uid, res.data.passed_station, "end");
+                for(var idx in this.calls){
+                  if(this.calls[idx].uid==uid) 
+                    this.sendCalltoSocket(uid,res.data.passed_station,'',idx )
+                }
               }
             }
             this.$session.set("selectedCar", this.selectedCar);

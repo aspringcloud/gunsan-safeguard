@@ -333,7 +333,7 @@
         <div class="calltab-call-container">
           <div class="calltab-call-wrapper">
             <div class="calltab-call-box">
-              <table v-if="calls && Object.keys(calls).length">
+              <table v-if="calls && calls.length">
                 <thead>
                   <th class="call-col1">탑승객 이름</th>
                   <th class="call-col2">총 인원</th>
@@ -342,7 +342,7 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="(row, k, i) in calls"
+                    v-for="(row, i) in calls"
                     :key="i"
                     :class="{ 'call-even-row': !(i % 2) }"
                   >
@@ -353,10 +353,10 @@
                       탑승 완료
                     </td>
                     <td class="call-col4" v-if="row.status == 'go'">
-                      <button @click="sendCalltoSocket(k, '', 'arrived')">
+                      <button @click="sendCalltoSocket(row.uid, '', 'arrived', i)">
                         탑승 확인
                       </button>
-                      <button @click="sendCalltoSocket(k, row.arrivalId, 'cancel_call')">
+                      <button @click="sendCalltoSocket(row.uid, row.arrivalId, 'cancel_call', i)">
                         미탑승
                       </button>
                     </td>
