@@ -48,7 +48,6 @@ let operateMixin = {
     selectedCar: "",
     date: "",
     isOn: 1,
-    isSubmit: false,
     lastOff: " ",
     lastOn: " ",
     psng: 0,
@@ -620,10 +619,6 @@ let operateMixin = {
         "일 ";
       return timeString + dateString;
     },
-    openSubmit(v) {
-      this.modalTitle = v;
-      this.isSubmit = true;
-    },
     submitModal_socket() {
       this.getLatnLon();
       var msg = {
@@ -642,7 +637,7 @@ let operateMixin = {
         this.selectedCar = "";
         this.$session.set("selectedCar", false);
         this.dashboard = false;
-        this.isSubmit = false;
+        this.modalTitle = false;
         return;
       } else if (this.modalTitle == "전원") {
         msg.how.type = "power";
@@ -655,12 +650,11 @@ let operateMixin = {
         msg.how.value = this.isPark ? "false" : "true";
       }
       this.socket.send(JSON.stringify(msg));
-      this.isSubmit = false;
+      this.modalTitle = false;
     },
     powerOn() {
       if (this.isOn) return;
       else {
-        this.isSubmit = true;
         this.modalTitle = "전원";
         this.modalValue = "ON";
       }
@@ -668,7 +662,6 @@ let operateMixin = {
     powerOff() {
       if (!this.isOn) return;
       else {
-        this.isSubmit = true;
         this.modalTitle = "전원";
         this.modalValue = "OFF";
       }
@@ -697,14 +690,12 @@ let operateMixin = {
     },
     autoOn() {
       if (this.isAuto == 2) {
-        this.isSubmit = true;
         this.modalTitle = "주행모드";
         this.modalValue = "자동주행";
       }
     },
     autoOff() {
       if (this.isAuto == 1) {
-        this.isSubmit = true;
         this.modalTitle = "주행모드";
         this.modalValue = "수동주행";
       }
@@ -712,7 +703,6 @@ let operateMixin = {
     parkOn() {
       if (this.isPark) return;
       else {
-        this.isSubmit = true;
         this.modalTitle = "주차여부";
         this.modalValue = "예";
       }
@@ -720,7 +710,6 @@ let operateMixin = {
     parkOff() {
       if (!this.isPark) return;
       else {
-        this.isSubmit = true;
         this.modalTitle = "주차여부";
         this.modalValue = "아니오";
       }

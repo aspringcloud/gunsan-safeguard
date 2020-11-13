@@ -4,7 +4,7 @@ import router from './router'
 import VueSession from 'vue-session'
 import axios from "axios";
 
-import "@/assets/css/mainStyle.css";
+import "@/assets/css/style.css";
 
 const VueCookie = require('vue-cookie');
 

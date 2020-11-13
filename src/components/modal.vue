@@ -3,21 +3,16 @@
     <div
       class="modalBox modal-container"
       :style="{width:width, height:height}"
-      :class="[title=='msg'? 'modal-msg':'modal-submit']"
     >
       <div class="modal-content">
         <slot name="content">
-          <div v-if="selectedCar" class="modal-car">{{selectedCar.name}}</div>
-          <div>
-            <b>{{title}}</b> 변경하시겠습니까?
-          </div>
+          <div>내용을 입력하세요</div>
         </slot>
       </div>
       <div class="modal-footer">
         <slot name="btn">
-          <button class="text-blue" @click="closeModal()">취소</button>
-          <button v-if="title=='msg'" @click="submitModal()" class="blue text-white">보내기</button>
-          <button v-else @click="submitModal()" class="blue text-white">변경하기</button>
+          <button class="btn-white btn-w50" @click="closeModal()">취소</button>
+          <button class="btn-blue btn-w50" @click="submitModal()" >확인</button>
         </slot>
       </div>
     </div>
@@ -27,7 +22,7 @@
 <script>
 export default {
   name: "Modal",
-  props: ["selectedCar", "title", "width", "height"],
+  props: ["width", "height"],
   methods: {
     closeModal() {
       this.$emit("close");
@@ -61,17 +56,12 @@ export default {
 .modal-container {
   display: flex;
   flex-direction: column;
-}
-.modal-submit {
+  position: relative;
   width: 323px;
   height: 191px;
+
 }
-.modal-msg {
-  position: relative;
-  width: 563px;
-  height: 333px;
-  padding-top: 22px;
-}
+
 .modal-content {
   color: #333333;
   margin: auto auto;
@@ -82,24 +72,20 @@ export default {
 .modal-footer button {
   border: none;
   border-top: 0.5px solid #3bbae2;
-  width: 50%;
   height: 60px;
   font-weight: 500;
 }
-.modal-car {
-  font-weight: 500;
+.btn-blue {
+  color: #FFFFFF;
+  background-color:  #3bbae2;
 }
-@media (max-width: 600px) {
-  .modal-submit {
-    width: 290px;
-  }
-  .modal-footer button {
-    font-size: 16px;
-  }
-  .modal-msg {
-    width: 312px;
-    height: 270px;
-    padding-top: 10px;
-  }
+.btn-white {
+  color: #3bbae2;
+}
+.btn-w100 {
+  width: 100%;
+}
+.btn-w50{
+  width: 50%;
 }
 </style>

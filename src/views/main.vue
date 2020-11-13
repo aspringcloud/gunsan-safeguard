@@ -3,13 +3,7 @@
     <navbar :user="user"></navbar>
 
     <!-- 차량 선택 모달 -->
-    <modal
-      v-if="isDash"
-      :selectedCar="selectedCar"
-      :title="false"
-      @close="resetCar"
-      @submit="submitCar"
-    >
+    <modal v-if="isDash">
       <template #content>
         <b>차량</b>
         <div>
@@ -19,26 +13,30 @@
           을 선택합니까?
         </div>
       </template>
+      <template #btn>
+        <button @click="resetCar" class="btn-white btn-w50" >취소</button>
+        <button @click="submitCar" class="btn-blue btn-w50">선택하기</button>
+      </template>
     </modal>
+
     <!-- submit 모달 -->
-    <modal
-      v-if="isSubmit"
-      :selectedCar="selectedCar"
-      :title="modalTitle"
-      @close="isSubmit = false"
-      @submit="submitModal_socket"
-    ></modal>
+    <modal v-if="modalTitle" >
+      <template #content>
+        <div class="font-500">{{selectedCar.name}}</div>
+        <div>
+          <b>{{modalTitle}}</b> 변경하시겠습니까?
+        </div>
+      </template>
+      <template #btn>
+        <button @click="modalTitle = ''" class="btn-white btn-w50">취소</button>
+        <button @click="submitModal_socket" class="btn-blue btn-w50">변경하기</button>
+      </template>
+    </modal>
 
     <!-- msg 모달 -->
-    <modal
-      v-if="isMsg"
-      :selectedCar="selectedCar"
-      title="msg"
-      @close="closeMsg"
-      @submit="sendMsg"
-    >
+    <modal v-if="isMsg" width="563px" height="333px">
       <template #content>
-        <div class="msg-title">
+        <div>
           <b>{{ site.name }}</b> 통합관제 화면으로 전송
         </div>
         <textarea
@@ -52,6 +50,11 @@
         ></textarea>
         <div class="msg-byte">{{ msgbyte }}/200bytes</div>
       </template>
+      <template #btn>
+        <button class="btn-white btn-w50" @click="closeMsg">취소</button>
+        <button class="btn-blue btn-w50" @click="sendMsg" >보내기</button>
+      </template>
+
     </modal>
     
     <div class="msg-toast" :class="{ 'show-msg-toast': isMsgToast }">
@@ -60,12 +63,13 @@
     </div>
 
     <!-- 배차 모달 -->
-    <modal v-if="callModal">
+    <modal v-if="callModal" width="300px" height="180px">
       <template #content>신규 배차 등록</template>
       <template #btn>
-        <button @click="callModal=false" class="blue text-white" style="width:100%">확인</button>
+        <button @click="callModal=false" class="btn-blue btn-w100">확인</button>
       </template>
     </modal>
+
     <!-- passed station modal -->
     <modal class="passedst-modal" v-if="stModal" width="330px" height="391px">
       <template #content>
@@ -86,14 +90,13 @@
                 ? stationInfo.name + " (" + stationInfo.mid + ")"
                 : ""
             }}
-            <!-- {{stationInfo.name}}{{ stationInfo.site}} -->
             <div v-if="nowSt == stationInfo" class="active-station"></div>
           </div>
         </div>
       </template>
       <template #btn>
         <button
-          class="text-blue"
+          class="btn-white btn-w50"
           @click="
             stModal = false;
             nowSt = false;
@@ -101,7 +104,7 @@
         >
           취소
         </button>
-        <button class="blue text-white" @click="changeSt">선택</button>
+        <button class="btn-blue btn-w50" @click="changeSt">선택</button>
       </template>
     </modal>
 
@@ -149,7 +152,7 @@
               <div class="box-title">차량</div>
               <img src="@/assets/img/shuttle2.png" alt="shuttle image" />
               <div class="carselect-txt">{{ selectedCar.name }}</div>
-              <button @click="openSubmit('차량')">차량 변경하기</button>
+              <button @click="modalTitle='차량'">차량 변경하기</button>
             </div>
             <div class="dashboard-col1-row1-col2">
               <div class="box-power box-default">
