@@ -54,7 +54,8 @@
       </div>
     </div>
     <div id="reset" v-else>
-      <button class="btn-back" @click="loginPage = 1"></button>
+      <!-- <button class="btn-back" @click="loginPage = 1"></button> -->
+      <a href="#login" class="btn-back" @click="loginPage = 1"></a>
 
       <div class="auth-title">
         <h1 class="title-springgo">SpringGo</h1>
@@ -169,6 +170,7 @@ export default {
   align-items: center;
   position: relative;
 }
+
 .login-logos img:first-child {
   margin-right: 19px;
 }

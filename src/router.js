@@ -13,7 +13,7 @@ export default new Router({
         },
         {
             path: '/login',
-            name: 'Login',
+            name: 'Auth',
             component: Auth
         },
        
