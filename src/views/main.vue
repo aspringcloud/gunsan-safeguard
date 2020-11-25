@@ -14,22 +14,24 @@
         </div>
       </template>
       <template #btn>
-        <button @click="resetCar" class="btn-white btn-w50" >취소</button>
+        <button @click="resetCar" class="btn-white btn-w50">취소</button>
         <button @click="submitCar" class="btn-blue btn-w50">선택하기</button>
       </template>
     </modal>
 
     <!-- submit 모달 -->
-    <modal v-if="modalTitle" >
+    <modal v-if="modalTitle">
       <template #content>
-        <div class="font-500">{{selectedCar.name}}</div>
+        <div class="font-500">{{ selectedCar.name }}</div>
         <div>
-          <b>{{modalTitle}}</b> 변경하시겠습니까?
+          <b>{{ modalTitle }}</b> 변경하시겠습니까?
         </div>
       </template>
       <template #btn>
         <button @click="modalTitle = ''" class="btn-white btn-w50">취소</button>
-        <button @click="submitModal_socket" class="btn-blue btn-w50">변경하기</button>
+        <button @click="submitModal_socket" class="btn-blue btn-w50">
+          변경하기
+        </button>
       </template>
     </modal>
 
@@ -52,11 +54,11 @@
       </template>
       <template #btn>
         <button class="btn-white btn-w50" @click="closeMsg">취소</button>
-        <button class="btn-blue btn-w50" @click="sendMsg" >보내기</button>
+        <button class="btn-blue btn-w50" @click="sendMsg">보내기</button>
       </template>
-
     </modal>
-    
+
+    <!-- msg sent Toast -->
     <div class="msg-toast" :class="{ 'show-msg-toast': isMsgToast }">
       <h1><span>SpringGo</span> 안전요원</h1>
       <div>메시지를 전송했습니다.</div>
@@ -66,7 +68,9 @@
     <modal v-if="callModal" width="300px" height="180px">
       <template #content>신규 배차 등록</template>
       <template #btn>
-        <button @click="callModal=false" class="btn-blue btn-w100">확인</button>
+        <button @click="callModal = false" class="btn-blue btn-w100">
+          확인
+        </button>
       </template>
     </modal>
 
@@ -152,7 +156,7 @@
               <div class="box-title">차량</div>
               <img src="@/assets/img/shuttle2.png" alt="shuttle image" />
               <div class="carselect-txt">{{ selectedCar.name }}</div>
-              <button @click="modalTitle='차량'">차량 변경하기</button>
+              <button @click="modalTitle = '차량'">차량 변경하기</button>
             </div>
             <div class="dashboard-col1-row1-col2">
               <div class="box-power box-default">
@@ -356,10 +360,21 @@
                       탑승 완료
                     </td>
                     <td class="call-col4" v-if="row.status == 'go'">
-                      <button @click="sendCalltoSocket(row.uid, '', 'arrived', i)">
+                      <button
+                        @click="sendCalltoSocket(row.uid, '', 'arrived', i)"
+                      >
                         탑승 확인
                       </button>
-                      <button @click="sendCalltoSocket(row.uid, row.arrivalId, 'cancel_call', i)">
+                      <button
+                        @click="
+                          sendCalltoSocket(
+                            row.uid,
+                            row.arrivalId,
+                            'cancel_call',
+                            i
+                          )
+                        "
+                      >
                         미탑승
                       </button>
                     </td>
@@ -370,36 +385,49 @@
           </div>
         </div>
 
+        <!-- 배차 취소 모달 -->
         <modal v-if="cancelCall" width="385px" height="314px">
           <template #content>
             <h1 class="cancel-title">배차 요청 취소 알림</h1>
             <div class="cancel-txt">
-              <span class="bold">{{ cancelCall.when }}</span>에 발생한 <br />배차 요청이
+              <span class="bold">{{ cancelCall.when }}</span
+              >에 발생한 <br />배차 요청이
               <span class="errmsg">탑승자에 의해 취소</span>됐습니다.
             </div>
             <div class="cancel-info-container">
               <div>
                 <div class="cancel-content-title">
                   출발
-                  <span class="cancel-content-default">{{ cancelCall.departName }}</span>
+                  <span class="cancel-content-default">{{
+                    cancelCall.departName
+                  }}</span>
                 </div>
 
                 <div class="cancel-content-title">
                   도착
-                  <span class="cancel-content-default">{{ cancelCall.arrivalName }}</span>
+                  <span class="cancel-content-default">{{
+                    cancelCall.arrivalName
+                  }}</span>
                 </div>
               </div>
               <div>
                 <div class="cancel-content-title">인원</div>
-                <div class="cancel-content-default">{{ cancelCall.passenger }}</div>
+                <div class="cancel-content-default">
+                  {{ cancelCall.passenger }}
+                </div>
               </div>
             </div>
           </template>
           <template #btn>
-            <button @click="cancelCall = ''" class="blue text-white" style="width:100%">확인</button>
+            <button
+              @click="cancelCall = ''"
+              class="blue text-white"
+              style="width: 100%"
+            >
+              확인
+            </button>
           </template>
         </modal>
-
       </div>
     </div>
   </div>
@@ -651,19 +679,19 @@ tr > .call-col4 {
   height: 500px;
 }
 #selectCar {
-    width: 302px;
-    border: 1px solid #e0e0e0;
-    border-left: none;
-    border-right: none;
-    background-color: transparent;
-    height: 44px;
-    font-size: 16px;
-    color: #828282;
-    padding-left: 10px;
-    background: url("../assets/img/dropdown.png") no-repeat 95% 50%;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+  width: 302px;
+  border: 1px solid #e0e0e0;
+  border-left: none;
+  border-right: none;
+  background-color: transparent;
+  height: 44px;
+  font-size: 16px;
+  color: #828282;
+  padding-left: 10px;
+  background: url("../assets/img/dropdown.png") no-repeat 95% 50%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 .selectCar-container {
   display: flex;
@@ -932,8 +960,8 @@ tr > .call-col4 {
   font-weight: 500;
 }
 .btn-toggle-active {
-    background: #3bbae2;
-    color: #ffffff;
+  background: #3bbae2;
+  color: #ffffff;
 }
 .dashboard-col1-row3 .btn-toggle {
   border-radius: 24px;
@@ -941,7 +969,6 @@ tr > .call-col4 {
   width: 120px;
   height: 48px;
 }
-
 .dashboard-col2-btn-container {
   display: grid;
   grid-template-columns: max-content max-content max-content;
@@ -1002,11 +1029,11 @@ tr > .call-col4 {
 }
 .errmsg-container .fade-enter-active,
 .errmsg-container .fade-leave-active {
-    transition: opacity 0.5s;
+  transition: opacity 0.5s;
 }
 .errmsg-container .fade-enter,
 .errmsg-container .fade-leave-to {
-    opacity: 0;
+  opacity: 0;
 }
 .stopBtn {
   height: 42px;
@@ -1024,9 +1051,9 @@ tr > .call-col4 {
 }
 .disabled-stopBtn,
 .disabled-stopBtn:active {
-    color: #bdbdbd;
-    background-color: #ffFFFf;
-    border: 0.5px solid #bdbdbd;
+  color: #bdbdbd;
+  background-color: #ffffff;
+  border: 0.5px solid #bdbdbd;
 }
 .site-box {
   width: 141px;
@@ -1046,10 +1073,10 @@ tr > .call-col4 {
   margin-bottom: 6px;
 }
 .station-title img {
-    margin-left: 4px;
+  margin-left: 4px;
 }
 .empty-station-txt {
-font-size: 14px;
+  font-size: 14px;
   text-decoration-line: underline;
   color: #eb5757;
   line-height: 19px;
@@ -1118,8 +1145,9 @@ font-size: 14px;
 }
 .msg-toast {
   position: fixed;
-  background: #FFFFFF;
-  box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 24px 38px rgba(0, 0, 0, 0.14);
+  background: #ffffff;
+  box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12),
+    0px 24px 38px rgba(0, 0, 0, 0.14);
   z-index: 10;
   border-radius: 2px;
   visibility: hidden;
@@ -1136,22 +1164,21 @@ font-size: 14px;
 @keyframes fade {
   0%,
   100% {
-      opacity: 0
+    opacity: 0;
   }
-
   20%,
   80% {
-      opacity: 1
+    opacity: 1;
   }
 }
 .msg-toast h1 {
   height: 35px;
   line-height: 35px;
-  color: #3BBAE2;
+  color: #3bbae2;
   font-weight: 500;
   font-size: 14px;
   padding-left: 13px;
-  border-bottom: 0.5px solid #3BBAE2;
+  border-bottom: 0.5px solid #3bbae2;
 }
 .msg-toast span {
   font-family: "NanumSquareRound", sans-serif;
@@ -1166,28 +1193,28 @@ font-size: 14px;
 }
 
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+  width: 5px;
+  height: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #c4c4c4;
-    border-radius: 2px;
+  background: #c4c4c4;
+  border-radius: 2px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #828282;
+  background: #828282;
 }
 ::-webkit-calendar-picker-indicator {
-    background: url("../assets/img/calendar.png") no-repeat;
-    cursor: pointer;
+  background: url("../assets/img/calendar.png") no-repeat;
+  cursor: pointer;
 }
 
 @media (max-width: 900px) {
@@ -1207,7 +1234,6 @@ font-size: 14px;
   .msg-toast {
     top: 345px;
   }
-  
 
   .selectCar-container {
     flex-direction: column;
@@ -1292,7 +1318,7 @@ font-size: 14px;
   justify-content: space-between;
   padding: 4px 15px;
 }
-.cancel-info-container span{
+.cancel-info-container span {
   margin-left: 10px;
 }
 .cancel-content-title {

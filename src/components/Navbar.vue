@@ -7,7 +7,8 @@
         </div>
       </div>
       <div class="header-right">
-        <span>{{ calcUserName}}</span>님 안녕하세요!
+        <span>{{ calcUserName }}</span
+        >님 안녕하세요!
         <button @click="openSetting">
           <img src="@/assets/img/setting.png" alt="setting button" />
           환경설정
@@ -23,7 +24,7 @@
     <div v-if="isSetting" class="modal-back">
       <div></div>
       <div class="modalBox modalBox-setting">
-        <button class="setting-closebtn" @click="isSetting=false">
+        <button class="setting-closebtn" @click="isSetting = false">
           <img src="@/assets/img/closebtn.png" alt="close button" />
         </button>
         <div class="setting-tab">
@@ -31,13 +32,17 @@
             class="setting-tab-login"
             :class="{ 'setting-activetab': loginInfo }"
             @click="loginInfo = true"
-          >로그인 정보</button>
+          >
+            로그인 정보
+          </button>
           <div class="setting-tab-divider"></div>
           <button
             class="setting-tab-pw"
             :class="{ 'setting-activetab': !loginInfo }"
             @click="loginInfo = false"
-          >비밀번호 변경</button>
+          >
+            비밀번호 변경
+          </button>
         </div>
         <div v-if="loginInfo" class="setting-content setting-loginInfo">
           <div class="input-box">
@@ -46,24 +51,44 @@
           </div>
           <div class="input-box">
             <label for="team">이름</label>
-            <input name="team" type="text" :value="user.info.username" readonly />
+            <input
+              name="team"
+              type="text"
+              :value="user.info.username"
+              readonly
+            />
           </div>
           <div class="input-box">
             <label for="team">팀</label>
-            <input name="team" type="text" :value="user.profile.team" readonly />
+            <input
+              name="team"
+              type="text"
+              :value="user.profile.team"
+              readonly
+            />
           </div>
           <div class="input-box">
             <label for="phone">휴대폰</label>
-            <input name="phone" type="text" :value="user.profile.phone" readonly />
+            <input
+              name="phone"
+              type="text"
+              :value="user.profile.phone"
+              readonly
+            />
           </div>
           <div class="input-box">
             <label for="auth">권한</label>
-            <input name="auth" type="text" :value="user.profile.level" readonly />
+            <input
+              name="auth"
+              type="text"
+              :value="user.profile.level"
+              readonly
+            />
           </div>
         </div>
 
         <div v-if="!loginInfo" class="setting-content">
-          <form class="resetpw-container" @submit.prevent=" resetPw">
+          <form class="resetpw-container" @submit.prevent="resetPw">
             <div class="input-box">
               <label for="currentPw">현재 비밀번호</label>
               <input
@@ -76,7 +101,12 @@
             </div>
             <div class="input-box">
               <label for="newPw">새 비밀번호</label>
-              <input v-model="newpw" type="password" name="newPw" placeholder="새로운 비밀번호를 입력하세요." />
+              <input
+                v-model="newpw"
+                type="password"
+                name="newPw"
+                placeholder="새로운 비밀번호를 입력하세요."
+              />
             </div>
             <div class="input-box">
               <label for="renewPw">새 비밀번호 확인</label>
@@ -88,11 +118,13 @@
               />
             </div>
             <div v-if="errmsg" class="errmsg errmsg-pos">{{ errmsg }}</div>
-            <div v-if="successmsg" class="text-blue errmsg-pos">{{ successmsg }}</div>
+            <div v-if="successmsg" class="text-blue errmsg-pos">
+              {{ successmsg }}
+            </div>
             <div class="setting-pwrule">
               ※ 이메일ID, 이름을 포함할 수 없습니다.
-              <br />※ 8글자 이상이어야 합니다.
-              <br />※ 숫자로만 입력은 불가능합니다.
+              <br />※ 8글자 이상이어야 합니다. <br />※ 숫자로만 입력은
+              불가능합니다.
             </div>
             <button class="setting-btn" type="submit">변경하기</button>
           </form>
@@ -274,7 +306,7 @@ export default {
   font-weight: 500;
   font-size: 13px;
 }
-@media (max-width: 960px) {
+@media (max-width: 900px) {
   .modalBox-setting {
     margin: 0 auto;
     top: 219px;

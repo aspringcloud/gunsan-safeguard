@@ -1,4 +1,4 @@
-<template>
+<template >
   <div id="modal">
     <div
       class="modalBox modal-container"
@@ -59,9 +59,7 @@ export default {
   position: relative;
   width: 323px;
   height: 191px;
-
 }
-
 .modal-content {
   color: #333333;
   margin: auto auto;

@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Main from './views/main.vue'
-import Login from './views/login.vue'
-import Resetpw from './views/resetpw.vue'
+import Main from '@/views/main.vue'
+import Auth from '@/views/auth.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -15,14 +14,9 @@ export default new Router({
         {
             path: '/login',
             name: 'Login',
-            component: Login
+            component: Auth
         },
-        {
-            path: '/resetpw',
-            name: 'Resetpw',
-            component: Resetpw
-            
-        },
+       
 
 
     ]
