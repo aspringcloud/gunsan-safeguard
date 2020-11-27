@@ -54,7 +54,6 @@
       </div>
     </div>
     <div id="reset" v-else>
-      <!-- <button class="btn-back" @click="loginPage = 1"></button> -->
       <a href="#login" class="btn-back" @click="loginPage = 1"></a>
 
       <div class="auth-title">
@@ -84,6 +83,13 @@ export default {
     errmsg1: "",
     errmsg2: "",
   }),
+  beforeCreate() {
+    if (this.$session.get("user")) {
+      this.$router.push({
+        name: "Main",
+      });
+    }
+  },
   created() {
     if (this.$cookie.get("saveID")) {
       this.saveID = true;

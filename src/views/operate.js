@@ -85,7 +85,7 @@ let operateMixin = {
   beforeCreate() {
     if (!this.$session.get("user")) {
       this.$router.push({
-        name: "Login",
+        name: "Auth",
       });
     }
   },
