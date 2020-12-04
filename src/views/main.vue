@@ -163,14 +163,14 @@
                 <div class="box-tohide"></div>
                 <div class="box-title">차량 전원</div>
                 <img
-                  @click="isOn ? powerOff() : powerOn()"
+                  @click="modalTitle = '전원'"
                   height="31px"
                   :src="
                     isOn
                       ? require('@/assets/img/switchOn.png')
                       : require('@/assets/img/switchOff.png')
                   "
-                  alt="차량 전원On"
+                  :alt="isOn ? '차량 전원 On' : '차량 전원 off'"
                 />
               </div>
               <div class="msgTo-container">
@@ -240,14 +240,14 @@
               <button
                 class="btn-toggle"
                 :class="{ 'btn-toggle-active': isAuto == 1 }"
-                @click="autoOn"
+                @click="if (isAuto == 2) modalTitle = '주행모드';"
               >
                 자동주행
               </button>
               <button
                 class="btn-toggle"
                 :class="{ 'btn-toggle-active': isAuto == 2 }"
-                @click="autoOff"
+                @click="if (isAuto == 1) modalTitle = '주행모드';"
               >
                 수동주행
               </button>
@@ -257,14 +257,14 @@
               <button
                 class="btn-toggle"
                 :class="{ 'btn-toggle-active': isPark }"
-                @click="parkOn"
+                @click="if (!isPark) modalTitle = '주차여부';"
               >
                 예
               </button>
               <button
                 class="btn-toggle"
                 :class="{ 'btn-toggle-active': !isPark }"
-                @click="parkOff"
+                @click="if (isPark) modalTitle = '주차여부';"
               >
                 아니오
               </button>
