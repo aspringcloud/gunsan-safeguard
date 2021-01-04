@@ -74,7 +74,7 @@ let navbarMixin = {
                     console.log(res.data.detail);
                     this.$session.destroy();
                     this.$router.push({
-                        name: "Login"
+                        name: "Auth"
                     });
                 })
                 .catch(err => {
